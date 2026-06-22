@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Cuestionario de pareja · Método Gottman</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F5F4; --card:#FFFFFF; --ink:#22302E; --ink-soft:#5C6B68;
+  --line:#DDE5E3; --primary:#16544E; --primary-soft:#E3EEEC; --primary-deep:#0E3B37;
+  --gold:#B98A4B; --radius:18px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html{font-size:16px;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.45; padding-bottom:110px;
+}
+.serif{font-family:"Fraunces",Georgia,serif;}
+header.top{
+  position:sticky; top:0; z-index:20; background:rgba(242,245,244,.92);
+  backdrop-filter:blur(8px); padding:10px 16px 8px;
+  border-bottom:1px solid var(--line);
+}
+.top-row{display:flex; justify-content:space-between; align-items:baseline; gap:8px;}
+.top-title{font-size:.78rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:600;}
+.top-step{font-size:.78rem; color:var(--primary); font-weight:700;}
+.bar{height:5px; background:var(--line); border-radius:99px; margin-top:8px; overflow:hidden;}
+.bar > div{height:100%; background:linear-gradient(90deg,var(--primary),#2E7A72); border-radius:99px; transition:width .35s ease;}
+main{max-width:560px; margin:0 auto; padding:18px 16px 0;}
+.eyebrow{font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); font-weight:700; margin:4px 0 2px;}
+h1.bignum{font-size:3.2rem; line-height:1; margin:0 0 4px; color:var(--primary-deep); font-weight:650;}
+h2.sect{font-size:1.45rem; line-height:1.2; margin:0 0 10px; color:var(--primary-deep); font-weight:650;}
+p.hint{color:var(--ink-soft); font-size:.92rem; margin:6px 0 16px;}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; margin-bottom:14px; box-shadow:0 1px 2px rgba(20,50,46,.04);}
+/* Dual path header choice */
+.path{display:block; width:100%; text-align:left; background:var(--card); border:1.5px solid var(--line); border-radius:var(--radius); padding:14px 14px 14px 46px; margin-bottom:10px; font:inherit; color:var(--ink); position:relative; cursor:pointer; transition:border-color .15s, background .15s;}
+.path .tick{position:absolute; left:14px; top:15px; width:20px; height:20px; border-radius:50%; border:2px solid #B9C6C3; transition:.15s;}
+.path.sel{border-color:var(--primary); background:var(--primary-soft);}
+.path.sel .tick{border-color:var(--primary); background:var(--primary); box-shadow:inset 0 0 0 4px var(--primary-soft);}
+.path .lbl{display:block; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--ink-soft); margin-bottom:3px;}
+.path.sel .lbl{color:var(--primary);}
+/* Statement rows */
+.stmt{padding:13px 0; border-top:1px solid var(--line);}
+.stmt:first-of-type{border-top:none; padding-top:2px;}
+.stmt p{margin:0 0 9px; font-size:.97rem;}
+.seg{display:flex; gap:8px;}
+.seg button, .seg3 button{flex:1; font:inherit; font-size:.86rem; font-weight:600; padding:10px 6px; border-radius:12px; border:1.5px solid var(--line); background:#FBFCFC; color:var(--ink-soft); cursor:pointer; transition:.15s;}
+.seg button.sel, .seg3 button.sel{background:var(--primary); border-color:var(--primary); color:#fff;}
+.seg3{display:flex; gap:6px;}
+.seg3 button{font-size:.76rem; padding:10px 4px; line-height:1.15;}
+textarea{width:100%; min-height:88px; font:inherit; font-size:.95rem; padding:12px; border:1.5px solid var(--line); border-radius:12px; background:#FBFCFC; resize:vertical; color:var(--ink);}
+textarea:focus, input:focus{outline:2px solid var(--primary); outline-offset:1px; border-color:var(--primary);}
+input[type=text]{width:100%; font:inherit; font-size:1rem; padding:12px; border:1.5px solid var(--line); border-radius:12px; background:#FBFCFC; color:var(--ink);}
+input.year{width:110px;}
+label.fld{display:block; font-size:.8rem; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em; margin:0 0 6px;}
+/* bottom nav */
+nav.bottom{position:fixed; left:0; right:0; bottom:0; z-index:30; background:rgba(255,255,255,.95); backdrop-filter:blur(10px); border-top:1px solid var(--line); padding:12px 16px calc(12px + env(safe-area-inset-bottom)); display:flex; gap:10px; max-width:100%;}
+nav.bottom .inner{display:flex; gap:10px; width:100%; max-width:560px; margin:0 auto;}
+.btn{font:inherit; font-weight:700; font-size:1rem; border-radius:14px; padding:14px 18px; cursor:pointer; border:1.5px solid var(--line); background:#fff; color:var(--ink); transition:.15s;}
+.btn.primary{background:var(--primary); border-color:var(--primary); color:#fff; flex:1;}
+.btn.primary:active{background:var(--primary-deep);}
+.btn.ghost{flex:0 0 auto;}
+.btn:disabled{opacity:.4; cursor:default;}
+.btn.export{background:var(--gold); border-color:var(--gold); width:100%; font-size:1.05rem; padding:16px;}
+/* commit options */
+.opt{display:block; width:100%; text-align:left; background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:13px 13px 13px 44px; margin-bottom:9px; font:inherit; font-size:.92rem; position:relative; cursor:pointer; color:var(--ink);}
+.opt .num{position:absolute; left:13px; top:12px; width:22px; height:22px; border-radius:50%; border:2px solid #B9C6C3; font-size:.78rem; font-weight:700; display:flex; align-items:center; justify-content:center; color:var(--ink-soft);}
+.opt.sel{border-color:var(--primary); background:var(--primary-soft);}
+.opt.sel .num{background:var(--primary); border-color:var(--primary); color:#fff;}
+.pill-state{display:inline-block; font-size:.78rem; font-weight:700; padding:4px 10px; border-radius:99px; background:var(--primary-soft); color:var(--primary);}
+.missing{color:#A8542F; font-weight:700;}
+.review-line{display:flex; justify-content:space-between; align-items:center; padding:11px 0; border-top:1px solid var(--line); font-size:.93rem;}
+.review-line:first-child{border-top:none;}
+.review-line a{color:var(--primary); font-weight:700; text-decoration:none;}
+.intro-quote{font-size:.95rem; color:var(--ink-soft); border-left:3px solid var(--gold); padding:2px 0 2px 12px; margin:14px 0;}
+.divider-label{font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:700; margin:18px 0 8px;}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+button:focus-visible{outline:3px solid var(--gold); outline-offset:2px;}
+.saved-note{font-size:.78rem; color:var(--ink-soft); text-align:center; margin:10px 0 0;}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <span class="top-title">Cuestionario de pareja</span>
+    <span class="top-step" id="stepLabel"></span>
+  </div>
+  <div class="bar"><div id="barFill" style="width:0%"></div></div>
+</header>
+<main id="main"></main>
+<nav class="bottom"><div class="inner" id="navInner"></div></nav>
+
+<script>
+const DATA = {"template": [["ESCALA GOTTMAN DE 17 ÁREAS", "", "", "", ""], ["¿Cómo están cambiando, o no, las cosas en su pareja?", "", "", "", ""], ["", "", "", "", ""], ["Por favor, tómese su tiempo para leer cada una de las áreas que hemos descrito de su vida en común y díganos si esa área está bien o necesita mejorar. Marque con una X la casilla que crea que se aplica a su relación en este momento. Luego, al final de cada área, añada comentarios y, si las cosas van bien, díganos brevemente cómo está gestionando esta área de su vida. Si las cosas no van bien, díganos qué obstáculos ve actualmente para mejorar esta área de su relación", "", "", "", ""], ["1. Nosotros permanecemos emocionalmente conectados □ o nos estamos distanciando □", "", "", "", "Comentarios que quiera agregar sobre esta área:"], ["Responda a todas las afirmaciones a continuación: ", "No es problema ", "Es problema", "", ""], ["Hablar entre nosotros.  ", "", "", "", ""], ["Mantener el contacto emocional. ", "", "", "", ""], ["Sentirme valorado.", "", "", "", ""], ["No siento que mi pareja me conozca muy bien en este momento. ", "", "", "", ""], ["Mi pareja está (o yo estoy) emocionalmente desvinculado/a.", "", "", "", ""], ["Pasar tiempo juntos. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["2. Sabemos manejar bien el estrés laboral y de otro tipo □ o sentimos que estos problemas afectan nuestra relación □", "", "", "", "Comentarios que quiera agregar sobre esta área:"], ["", "No es problema ", "Es problema", "", ""], ["Ayudarse mutuamente a reducir el estrés cotidiano. ", "", "", "", ""], ["Hablar juntos de estas tensiones.", "", "", "", ""], ["Hablar juntos sobre el estrés de forma útil. ", "", "", "", ""], ["Mi pareja escucha con comprensión mis tensiones y preocupaciones. ", "", "", "", ""], ["Mi pareja se desquita conmigo por el trabajo u otras tensiones. ", "", "", "", ""], ["Mi pareja descarga sus tensiones laborales o de otro tipo en nuestros hijos u otras personas de nuestra vida. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["3.Manejamos bien nuestros desacuerdos □ o  nos estamos estancandoen uno o más temas   □", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Han surgido diferencias básicas entre nosotros. ", "", "", "", ""], ["Estas diferencias parecen irresolubles.", "", "", "", ""], ["Vivimos el día a día con dolor.", "", "", "", ""], ["Nuestras posiciones se están enquistando. ", "", "", "", ""], ["Parece que nunca conseguiré lo que espero. ", "", "", "", ""], ["Me preocupa mucho que estos problemas puedan dañar nuestra relación. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["4.Nuestra relación es romántica y apasionada □ o se está volviendo rutinaria y sin pasión □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Mi pareja ha dejado de ser verbalmente afectuoso. ", "", "", "", ""], ["Mi pareja expresa amor o admiración con menos frecuencia. ", "", "", "", ""], ["Rara vez nos tocamos. ", "", "", "", ""], ["Mi pareja (o yo) hemos dejado de sentirnos muy románticos. ", "", "", "", ""], ["Rara vez nos abrazamos. ", "", "", "", ""], ["Tenemos pocos momentos tiernos o apasionados. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["5.Nuestra vida sexual está bien□   , o hay problemas en este ámbito   □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["La frecuencia de las relaciones sexuales. ", "", "", "", ""], ["La satisfacción que yo (o mi pareja) obtenemos del sexo.", "", "", "", ""], ["Poder hablar de los problemas sexuales. ", "", "", "", ""], ["Los dos deseamos cosas diferentes sexualmente. ", "", "", "", ""], ["La cuestión del deseo. ", "", "", "", ""], ["La cantidad de amor en nuestro acto sexual. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["6.Un acontecimiento importante (como el nacimiento de un hijo, la pérdida del empleo, cambios de trabajo o residencia, una enfermedad, la muerte de un ser querido) ha ocurrido en nuestras vidas  . La pareja lo está afrontando bien  □  o no lo está afrontando bien□.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Tenemos puntos de vista muy diferentes sobre cómo manejar las cosas. ", "", "", "", ""], ["Este acontecimiento ha llevado a mi pareja a estar muy distante. ", "", "", "", ""], ["Este acontecimiento nos ha irritado a los dos. ", "", "", "", ""], ["Este acontecimiento ha provocado muchas peleas. ", "", "", "", ""], ["Me preocupa cómo acabará todo esto. ", "", "", "", ""], ["Ahora estamos tomando posiciones muy diferentes. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["7.Han surgido problemas importantes en relación con los hijos (puede tratarse de tener o no un hijo)  . La pareja lo está llevando bien  □   o no lo está llevando bien.□.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Tenemos puntos de vista muy diferentes sobre los objetivos para los niños. ", "", "", "", ""], ["Tenemos posturas diferentes sobre por qué disciplinar a los niños. ", "", "", "", ""], ["Tenemos posturas diferentes sobre cómo disciplinar a los niños. ", "", "", "", ""], ["Tenemos problemas sobre cómo estar cerca de nuestros hijos. ", "", "", "", ""], ["No hablamos muy bien de estos temas. ", "", "", "", ""], ["Hay mucha tensión o enfado por estas diferencias. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["8.Han surgido problemas o acontecimientos importantes relacionados con la familia política, los suegros o algún pariente.  El matrimonio los está gesionando bien □   o no lo está gestionando bien □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["No me siento aceptado por la familia de mi pareja. ", "", "", "", ""], ["A veces me pregunto a qué familia pertenece mi pareja.", "", "", "", ""], ["No me siento aceptado por mi propia familia. ", "", "", "", ""], ["Hay tensión entre nosotros por lo que pueda pasar", "", "", "", ""], ["Este asunto ha generado mucha irritabilidad. ", "", "", "", ""], ["Me preocupa cómo va a acabar esto. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["9.Sentirse atraído por otras personas o los celos no son un problema □   o mi pareja coquetea o ha tenido una reciente infidelidad  □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Este tema es fuente de mucho dolor.", "", "", "", ""], ["Esta es un área que crea inseguridad.", "", "", "", ""], ["No puedo lidiar con las mentiras. ", "", "", "", ""], ["Es difícil restablecer la confianza. ", "", "", "", ""], ["Hay un sentimiento de traición. ", "", "", "", ""], ["Es difícil saber cómo curar esto", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["10.Cuando surgen desacuerdos, resolvemos bien los problemas□  o se han producido peleas desagradables □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Ahora hay más peleas. ", "", "", "", ""], ["Las peleas parecen surgir de la nada. ", "", "", "", ""], ["La ira y la irritabilidad se han colado en nuestra relación.", "", "", "", ""], ["Nos herimos mutuamente en nuestras discusiones.", "", "", "", ""], ["Últimamente no me siento muy respetado.", "", "", "", ""], ["Me siento criticado/a.", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["11.Estamos sincronizados en valores y objetivos básicos □ o surgen diferencias básicas entre nosotros □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Han surgido diferencias en los objetivos vitales", "", "", "", ""], ["Han surgido diferencias sobre creencias importantes. ", "", "", "", ""], ["Han surgido diferencias sobre los intereses del tiempo libre.", "", "", "", ""], ["Parece que queremos cosas diferentes de la vida. ", "", "", "", ""], ["Estamos creciendo en diferentes direcciones. ", "", "", "", ""], ["No me gusta mucho como soy con mi pareja. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["12.Han ocurrido acontecimientos muy duros (por ejemplo, violencia, drogas, una aventura) dentro de la pareja . Los estamos manejando bien □  , o parecen ser difíciles de manejar para nuestra pareja en este momento   □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Ha habido violencia física entre nosotros. ", "", "", "", ""], ["Hay un problema con el alcohol o las drogas. ", "", "", "", ""], ["La relación se está convirtiendo en algo que no esperaba.", "", "", "", ""], ["Nuestro \"contrato\" de pareja está cambiando. ", "", "", "", ""], ["Algunas de las cosas que quiere mi pareja me resultan desagradables o repulsivas. ", "", "", "", ""], ["Me siento decepcionado con esta relación.", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["13.Trabajamos bien como equipo □ o no estamos trabajando muy bien como equipo en estos momentos   □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Solíamos compartir más las tareas de la casa.", "", "", "", ""], ["Parece que tiramos en direcciones opuestas. ", "", "", "", ""], ["Mi pareja no comparte las tareas domésticas ni el cuidado de los hijos. ", "", "", "", ""], ["Me siento solo/a al frente de esta familia. ", "", "", "", ""], ["MI pareja no aporta económicamente. ", "", "", "", ""], ["Mi pareja no está siendo muy considerada. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["14.Nos enfrentamos bien a los problemas de poder o influencia □  o tenemos problemas en este ámbito □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["No me siento influyente en las decisiones que tomamos", "", "", "", ""], ["Mi pareja se ha vuelto más dominante. ", "", "", "", ""], ["Me he vuelto más exigente. ", "", "", "", ""], ["Mi pareja se ha vuelto pasivo/a.", "", "", "", ""], ["Mi pareja está \"distante\", no es una fuerza fuerte en la relación.", "", "", "", ""], ["Empieza a importarme mucho más quién dirige las cosas. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["15.Manejamos bien los temas de finanzas □  o tenemos problemas en este ámbito □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Uno de los dos no aporta suficiente dinero. ", "", "", "", ""], ["Tenemos diferencias sobre cómo gastar nuestro dinero. ", "", "", "", ""], ["Estamos estresados por las finanzas. ", "", "", "", ""], ["Mi pareja está financieramente más interesado en sí mismo que en nosotros. ", "", "", "", ""], ["No estamos unidos en la gestión de nuestras finanzas. ", "", "", "", ""], ["No hay suficiente planificación financiera. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["16.Nos divertimos  juntos  □  o no nos estamos divirtiendo mucho juntos estos días  □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Parece que no tenemos mucho tiempo para divertirnos. ", "", "", "", ""], ["Lo intentamos, pero no parece que disfrutemos mucho del tiempo que pasamos juntos.", "", "", "", ""], ["Estamos demasiado estresados para divertirnos.", "", "", "", ""], ["El trabajo ocupa todo nuestro tiempo hoy en día. ", "", "", "", ""], ["Nuestros intereses son tan diferentes ahora que no hay cosas divertidas que nos guste hacer juntos. ", "", "", "", ""], ["Planeamos cosas divertidas pero nunca las hacemos. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["17.Nos sentimos cerca en el área de la espiritualidad  □   o no estamos muy bien en esa área en estos días  □.", "", "", "", ""], ["", "No es problema ", "Es problema", "", "Comentarios que quiera agregar sobre esta área:"], ["Compartir las mismas creencias. ", "", "", "", ""], ["Estar de acuerdo sobre ideas y valores religiosos. ", "", "", "", ""], ["Cuestiones sobre la iglesia, mezquita, sinagoga, etc. ", "", "", "", ""], ["  Comunicarse bien sobre cosas espirituales.", "", "", "", ""], ["Cuestiones sobre crecimiento y cambio espiritual. ", "", "", "", ""], ["Cuestiones espirituales relacionadas con la familia o los hijos. ", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["Marque la opción que mas se ajuste a su realidad y agregue si es necesario el año.", "", "", "", ""], ["", "", "", "", ""], ["1. He hecho planes específicos para hablar sobre la", "", "", "", ""], ["separación o el divorcio con mi pareja. He pensado que le", "", "", "", ""], ["voy a decir etc.", "", "", "", ""], ["", "", "", "", ""], ["VERDADERO FALSO Año:", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["2. He abierto una cuenta de banco a mi nombre para", "", "", "", ""], ["proteger mis propios intereses.", "", "", "", ""], ["", "", "", "", ""], ["VERDADERO FALSO Año:", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["3. Pienso muy frecuentemente en el divorcio. Por lo menos", "", "", "", ""], ["una vez a la semana o más.", "", "", "", ""], ["", "", "", "", ""], ["VERDADERO FALSO Año:", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["4. Le he sugerido a mi pareja que deseo separarme,", "", "", "", ""], ["divorciarme, o terminar con el/ ella.", "", "", "", ""], ["VERDADERO FALSO Año:", "", "", "", ""], ["", "", "", "", ""], ["5. Mi pareja y yo hemos estado separados. ", "", "", "", ""], ["VERDADERO FALSO Año:", "", "", "", ""], ["", "", "", "", ""], ["6. Uno de los motivos por los que no me separo es por lo economico. (Vivienda, posibilidad de solventar mis gastos)", "", "", "", ""], ["VERDADERO FALSO", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["comentarios:", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["Marque la opcion que mas le reprersente en relación al futuro de la relación:", "", "", "", ""], ["", "", "", "", ""], ["0- Nuestra relación nunca podrá tener éxito y no hay nada mas que yo pueda hacer para preservarla.", "", "", "", ""], ["1-Seria bueno que nuestra relación tuviera éxito, pero me niego a hacer mas de lo que ya hago.", "", "", "", ""], ["2-Seria bueno que nuestra relacion tuviera éxito, pero no puedo hacer mucho mas de lo que ya hago para que asi sea.", "", "", "", ""], ["3-Deseo mucho que nuestra relación tenga éxito y pondré de mi parte lo necesario para que asi sea.", "", "", "", ""], ["4-Deseo muchisimo que nuestra relación tenga éxito y haré todo lo que pueda para que asi sea.", "", "", "", ""], ["5-Deseo a toda costa que nuestra relacion tenga éxito y haria lo imposible porque fuera asi.", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["Marque según corresponda:", "SI ", "NO", "", ""], ["", "", "", "", ""], ["1. ¿Siente que su vida hogareña es caótica? ", "", "", "", ""], ["2. ¿Hay alguna sensación de desorden en su vida juntos? ", "", "", "", ""], ["3. ¿Estar en esta relación hace que Ud. no pueda funcionar bien en su", "", "", "", ""], ["propia vida?", "", "", "", ""], ["4. ¿Les ocurren con frecuencia sucesos importantes e inesperados? ", "", "", "", ""], ["5. ¿Tienen que estar constantemente adaptándose a circunstancias", "", "", "", ""], ["cambiantes?", "", "", "", ""], ["6. ¿Siente usted que en ocasiones no tiene control de su vida? ", "", "", "", ""], ["7. ¿Se siente usted en ocasiones “sin rumbo” en esta relación? ", "", "", "", ""], ["8. ¿Es difícil para ambos trabajar con regularidad? ", "", "", "", ""], ["9. ¿Es difícil para ambos mantener un horario regular y confiable? ", "", "", "", ""], ["10. ¿Sienten inestabilidad en su vida financiera? ", "", "", "", ""], ["11. ¿Sienten que sus finanzas están fuera de control? ", "", "", "", ""], ["12. ¿Tienen problemas para alimentarse bien y nutritivamente? ", "", "", "", ""], ["13. ¿Les ha costado tener una rutina para las compras de los víveres? ", "", "", "", ""], ["14. ¿Les ha costado mantener una rutina para las comidas? ", "", "", "", ""], ["15. ¿Les ha costado mantenerse saludables?", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["MI HISTORIA VITAL:", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["A continuación marque según corresponda con su historia vital:", "", "", "", ""], ["", "DE ACUERDO", "NI DE ACUERDO NI EN DESACUERDO", "EN DESACUERDO", ""], ["", "", "", "", ""], ["1. La familia en la que crecí tenía dificultades financieras.", "", "", "", ""], ["2. Fui abusado/a físicamente por mis padres.", "", "", "", ""], ["3. La relación con mis hermanos no fue cercana.", "", "", "", ""], ["4. Fui abusado/a sexualmente en mi familia.", "", "", "", ""], ["5. El hogar de mi familia era un lugar inestable e", "", "", "", ""], ["inseguro.", "", "", "", ""], ["6. Mi familia se mudaba con demasiada frecuencia.", "", "", "", ""], ["7. Mis padres no eran afectuosos conmigo.", "", "", "", ""], ["8. Uno de mis padres o los dos eran alcohólicos.", "", "", "", ""], ["9. Mis padres eran infelices uno con el otro.", "", "", "", ""], ["10. Nunca confié realmente en mis padres.", "", "", "", ""], ["11. Mis padres no tenían confianza en mis habilidades.", "", "", "", ""], ["12. Mis padres no me elogiaban mucho.", "", "", "", ""], ["13. Mis padres no me mostraban con frecuencia que me", "", "", "", ""], ["amaban.", "", "", "", ""], ["14. Cuando era chico/a me sentía solo/a.", "", "", "", ""], ["15. Mis padres no me protegían muy bien del peligro.", "", "", "", ""], ["16. No viajábamos mucho juntos como familia.", "", "", "", ""], ["17. Durante mi infancia y adolescencia nunca podia", "", "", "", ""], ["hablar mucho con mis padres acerca de mis", "", "", "", ""], ["sentimientos.", "", "", "", ""], ["18. Mi hogar era muy caótico.", "", "", "", ""], ["19. Mis padres utilizaban una disciplina innecesariamente", "", "", "", ""], ["estricta y dura.", "", "", "", ""], ["20. Nunca estaba bien que yo les dijera a mis padres", "", "", "", ""], ["cuáles eran mis necesidades.", "", "", "", ""], ["21. No era aceptado/a por mis pares.", "", "", "", ""], ["22. Mis padres me avergonzaban o rebajaban.", "", "", "", ""], ["23. En mi familia no se expresaba amor o afecto.", "", "", "", ""], ["24. Nuestro hogar no se centraba en los niños.", "", "", "", ""], ["25. Los niños eran ignorados por mis padres.", "", "", "", ""], ["26. Había mucha rivalidad entre mis hermanos.", "", "", "", ""], ["27. Mi hogar no era un lugar abierto a visitantes o", "", "", "", ""], ["invitados.", "", "", "", ""], ["28. Mis padres usaban alcohol o drogas ilícitas.", "", "", "", ""], ["29. Mis padres me forzaban a hacer muchas tareas", "", "", "", ""], ["del hogar.", "", "", "", ""], ["30. Había mucho conflicto en mi familia.", "", "", "", ""], ["31. Mis padres me dieron muy poca libertad para", "", "", "", ""], ["explorer mis intereses.", "", "", "", ""], ["32. Experimenté crueldad por parte de mi familia.", "", "", "", ""], ["33. Yo fui abusado físicamente por mis padres.", "", "", "", ""], ["34. He sido testigo de violencia entre mis padres u", "", "", "", ""], ["otros adultos en mi familia.", "", "", "", ""], ["35. No tuve maestros que me apoyaran en la escuela.", "", "", "", ""], ["36. Experimenté abuso o acoso de mis pares en la", "", "", "", ""], ["escuela.", "", "", "", ""], ["37. Mis padres no eran comprensivos o empáticos", "", "", "", ""], ["con mis sentimientos.", "", "", "", ""], ["38. Mi padre no estuvo presente o estuvo muy", "", "", "", ""], ["ausente.", "", "", "", ""], ["39. Mis padres eran emocionalmente volátiles.", "", "", "", ""], ["40. Normalmente me echaban la culpa cuando algo", "", "", "", ""], ["no salía bien en la escuela.", "", "", "", ""], ["41. No tuve buenos amigos mientras crecía.", "", "", "", ""], ["42. Mis padres rara vez acudían a los eventos que", "", "", "", ""], ["eran especiales para mí.", "", "", "", ""], ["43. Mis padres han tenido explosiones", "", "", "", ""], ["temperamentales.", "", "", "", ""], ["44. No tuve la atención que necesitaba mientras crecía.", "", "", "", ""], ["45. Mi padre era una persona fría.", "", "", "", ""], ["46. Mis padres eran irresponsables.", "", "", "", ""], ["47. Yo no me sentí aceptado por mis compañeros.", "", "", "", ""], ["48. Mis padres nunca me conocieron bien.", "", "", "", ""], ["49. Había mucha tensión en mi hogar mientras crecía.", "", "", "", ""], ["50. Mi madre era una persona fría.", "", "", "", ""], ["51. Me dieron muy pocas opciones cuando era", "", "", "", ""], ["niño/a.", "", "", "", ""], ["52. Yo sentía hambre cuando niño/a.", "", "", "", ""], ["53. Nunca pude conocer realmente a mi padre.", "", "", "", ""], ["54. Rara vez espero con ganas la llegada de", "", "", "", ""], ["reuniones familiares o visitas de parientes.", "", "", "", ""], ["55. No somos una familia fuerte o unida.", "", "", "", ""], ["56. Nunca tuve vacaciones divertidas con mi familia.", "", "", "", ""], ["57. Mi familia no era expresiva emocionalmente.", "", "", "", ""], ["58. Mis padres eran estrictos y autoritarios.", "", "", "", ""], ["59. Algunos de mis hermanos me caían bien.", "", "", "", ""], ["60. Soy competitivo/a con uno o más de mis", "", "", "", ""], ["hermanos.", "", "", "", ""], ["61. Mi familia no era activa en la comunidad.", "", "", "", ""], ["62. Nunca estaba bien que yo cometiera errores.", "", "", "", ""], ["63. Mis padres me comparaban de manera", "", "", "", ""], ["desfavorable con otras personas.", "", "", "", ""], ["64. Mis padres eran muy perfeccionistas.", "", "", "", ""], ["65. Mis padres eran muy críticos conmigo.", "", "", "", ""], ["66. Normalmente no comíamos juntos en familia.", "", "", "", ""], ["67. Rara vez teníamos fiestas familiares divertidas.", "", "", "", ""], ["68. Lo que yo prefería como niño/a normalmente se", "", "", "", ""], ["ignoraba.", "", "", "", ""], ["69. Mis cumpleaños nunca se celebraban bien.", "", "", "", ""], ["70. No había preferencia entre hermanos.", "", "", "", ""], ["71. La disciplina de mis padres era inconsistente.", "", "", "", ""], ["72. Mis padres eran económicamente tacaños", "", "", "", ""], ["conmigo.", "", "", "", ""], ["73. En nuestro hogar no había música.", "", "", "", ""], ["74. En nuestro hogar no había risas.", "", "", "", ""], ["75. Normalmente no podía acudir a mis padres para", "", "", "", ""], ["pedirles ayuda.", "", "", "", ""], ["76. Rara vez venían amigos a mi casa", "", "", "", ""], ["77. Rara vez nos divertíamos juntos en familia.", "", "", "", ""], ["78. Rara vez jugábamos juntos en familia.", "", "", "", ""], ["79. Cuando era niño/a, si tenía un problema,", "", "", "", ""], ["normalmente me lo guardaba.", "", "", "", ""]], "areas": [{"num": 1, "headerRow": 4, "optA": "Nosotros permanecemos emocionalmente conectados", "optB": "nos estamos distanciando", "stmtRows": [6, 7, 8, 9, 10, 11], "stmts": ["Hablar entre nosotros.", "Mantener el contacto emocional.", "Sentirme valorado.", "No siento que mi pareja me conozca muy bien en este momento.", "Mi pareja está (o yo estoy) emocionalmente desvinculado/a.", "Pasar tiempo juntos."], "commentRow": 6}, {"num": 2, "headerRow": 14, "optA": "Sabemos manejar bien el estrés laboral y de otro tipo", "optB": "sentimos que estos problemas afectan nuestra relación", "stmtRows": [16, 17, 18, 19, 20, 21], "stmts": ["Ayudarse mutuamente a reducir el estrés cotidiano.", "Hablar juntos de estas tensiones.", "Hablar juntos sobre el estrés de forma útil.", "Mi pareja escucha con comprensión mis tensiones y preocupaciones.", "Mi pareja se desquita conmigo por el trabajo u otras tensiones.", "Mi pareja descarga sus tensiones laborales o de otro tipo en nuestros hijos u otras personas de nuestra vida."], "commentRow": 16}, {"num": 3, "headerRow": 24, "optA": "Manejamos bien nuestros desacuerdos", "optB": "nos estamos estancandoen uno o más temas", "stmtRows": [26, 27, 28, 29, 30, 31], "stmts": ["Han surgido diferencias básicas entre nosotros.", "Estas diferencias parecen irresolubles.", "Vivimos el día a día con dolor.", "Nuestras posiciones se están enquistando.", "Parece que nunca conseguiré lo que espero.", "Me preocupa mucho que estos problemas puedan dañar nuestra relación."], "commentRow": 26}, {"num": 4, "headerRow": 34, "optA": "Nuestra relación es romántica y apasionada", "optB": "se está volviendo rutinaria y sin pasión", "stmtRows": [36, 37, 38, 39, 40, 41], "stmts": ["Mi pareja ha dejado de ser verbalmente afectuoso.", "Mi pareja expresa amor o admiración con menos frecuencia.", "Rara vez nos tocamos.", "Mi pareja (o yo) hemos dejado de sentirnos muy románticos.", "Rara vez nos abrazamos.", "Tenemos pocos momentos tiernos o apasionados."], "commentRow": 36}, {"num": 5, "headerRow": 44, "optA": "Nuestra vida sexual está bien", "optB": "hay problemas en este ámbito", "stmtRows": [46, 47, 48, 49, 50, 51], "stmts": ["La frecuencia de las relaciones sexuales.", "La satisfacción que yo (o mi pareja) obtenemos del sexo.", "Poder hablar de los problemas sexuales.", "Los dos deseamos cosas diferentes sexualmente.", "La cuestión del deseo.", "La cantidad de amor en nuestro acto sexual."], "commentRow": 46}, {"num": 6, "headerRow": 54, "optA": "Un acontecimiento importante (como el nacimiento de un hijo, la pérdida del empleo, cambios de trabajo o residencia, una enfermedad, la muerte de un ser querido) ha ocurrido en nuestras vidas  . La pareja lo está afrontando bien", "optB": "no lo está afrontando bien", "stmtRows": [56, 57, 58, 59, 60, 61], "stmts": ["Tenemos puntos de vista muy diferentes sobre cómo manejar las cosas.", "Este acontecimiento ha llevado a mi pareja a estar muy distante.", "Este acontecimiento nos ha irritado a los dos.", "Este acontecimiento ha provocado muchas peleas.", "Me preocupa cómo acabará todo esto.", "Ahora estamos tomando posiciones muy diferentes."], "commentRow": 56}, {"num": 7, "headerRow": 64, "optA": "Han surgido problemas importantes en relación con los hijos (puede tratarse de tener o no un hijo)  . La pareja lo está llevando bien", "optB": "no lo está llevando bien.", "stmtRows": [66, 67, 68, 69, 70, 71], "stmts": ["Tenemos puntos de vista muy diferentes sobre los objetivos para los niños.", "Tenemos posturas diferentes sobre por qué disciplinar a los niños.", "Tenemos posturas diferentes sobre cómo disciplinar a los niños.", "Tenemos problemas sobre cómo estar cerca de nuestros hijos.", "No hablamos muy bien de estos temas.", "Hay mucha tensión o enfado por estas diferencias."], "commentRow": 66}, {"num": 8, "headerRow": 74, "optA": "Han surgido problemas o acontecimientos importantes relacionados con la familia política, los suegros o algún pariente.  El matrimonio los está gesionando bien", "optB": "no lo está gestionando bien", "stmtRows": [76, 77, 78, 79, 80, 81], "stmts": ["No me siento aceptado por la familia de mi pareja.", "A veces me pregunto a qué familia pertenece mi pareja.", "No me siento aceptado por mi propia familia.", "Hay tensión entre nosotros por lo que pueda pasar", "Este asunto ha generado mucha irritabilidad.", "Me preocupa cómo va a acabar esto."], "commentRow": 76}, {"num": 9, "headerRow": 84, "optA": "Sentirse atraído por otras personas o los celos no son un problema", "optB": "mi pareja coquetea o ha tenido una reciente infidelidad", "stmtRows": [86, 87, 88, 89, 90, 91], "stmts": ["Este tema es fuente de mucho dolor.", "Esta es un área que crea inseguridad.", "No puedo lidiar con las mentiras.", "Es difícil restablecer la confianza.", "Hay un sentimiento de traición.", "Es difícil saber cómo curar esto"], "commentRow": 86}, {"num": 10, "headerRow": 94, "optA": "Cuando surgen desacuerdos, resolvemos bien los problemas", "optB": "se han producido peleas desagradables", "stmtRows": [96, 97, 98, 99, 100, 101], "stmts": ["Ahora hay más peleas.", "Las peleas parecen surgir de la nada.", "La ira y la irritabilidad se han colado en nuestra relación.", "Nos herimos mutuamente en nuestras discusiones.", "Últimamente no me siento muy respetado.", "Me siento criticado/a."], "commentRow": 96}, {"num": 11, "headerRow": 104, "optA": "Estamos sincronizados en valores y objetivos básicos", "optB": "surgen diferencias básicas entre nosotros", "stmtRows": [106, 107, 108, 109, 110, 111], "stmts": ["Han surgido diferencias en los objetivos vitales", "Han surgido diferencias sobre creencias importantes.", "Han surgido diferencias sobre los intereses del tiempo libre.", "Parece que queremos cosas diferentes de la vida.", "Estamos creciendo en diferentes direcciones.", "No me gusta mucho como soy con mi pareja."], "commentRow": 106}, {"num": 12, "headerRow": 114, "optA": "Han ocurrido acontecimientos muy duros (por ejemplo, violencia, drogas, una aventura) dentro de la pareja . Los estamos manejando bien", "optB": "parecen ser difíciles de manejar para nuestra pareja en este momento", "stmtRows": [116, 117, 118, 119, 120, 121], "stmts": ["Ha habido violencia física entre nosotros.", "Hay un problema con el alcohol o las drogas.", "La relación se está convirtiendo en algo que no esperaba.", "Nuestro \"contrato\" de pareja está cambiando.", "Algunas de las cosas que quiere mi pareja me resultan desagradables o repulsivas.", "Me siento decepcionado con esta relación."], "commentRow": 116}, {"num": 13, "headerRow": 124, "optA": "Trabajamos bien como equipo", "optB": "no estamos trabajando muy bien como equipo en estos momentos", "stmtRows": [126, 127, 128, 129, 130, 131], "stmts": ["Solíamos compartir más las tareas de la casa.", "Parece que tiramos en direcciones opuestas.", "Mi pareja no comparte las tareas domésticas ni el cuidado de los hijos.", "Me siento solo/a al frente de esta familia.", "MI pareja no aporta económicamente.", "Mi pareja no está siendo muy considerada."], "commentRow": 126}, {"num": 14, "headerRow": 134, "optA": "Nos enfrentamos bien a los problemas de poder o influencia", "optB": "tenemos problemas en este ámbito", "stmtRows": [136, 137, 138, 139, 140, 141], "stmts": ["No me siento influyente en las decisiones que tomamos", "Mi pareja se ha vuelto más dominante.", "Me he vuelto más exigente.", "Mi pareja se ha vuelto pasivo/a.", "Mi pareja está \"distante\", no es una fuerza fuerte en la relación.", "Empieza a importarme mucho más quién dirige las cosas."], "commentRow": 136}, {"num": 15, "headerRow": 144, "optA": "Manejamos bien los temas de finanzas", "optB": "tenemos problemas en este ámbito", "stmtRows": [146, 147, 148, 149, 150, 151], "stmts": ["Uno de los dos no aporta suficiente dinero.", "Tenemos diferencias sobre cómo gastar nuestro dinero.", "Estamos estresados por las finanzas.", "Mi pareja está financieramente más interesado en sí mismo que en nosotros.", "No estamos unidos en la gestión de nuestras finanzas.", "No hay suficiente planificación financiera."], "commentRow": 146}, {"num": 16, "headerRow": 154, "optA": "Nos divertimos  juntos", "optB": "no nos estamos divirtiendo mucho juntos estos días", "stmtRows": [156, 157, 158, 159, 160, 161], "stmts": ["Parece que no tenemos mucho tiempo para divertirnos.", "Lo intentamos, pero no parece que disfrutemos mucho del tiempo que pasamos juntos.", "Estamos demasiado estresados para divertirnos.", "El trabajo ocupa todo nuestro tiempo hoy en día.", "Nuestros intereses son tan diferentes ahora que no hay cosas divertidas que nos guste hacer juntos.", "Planeamos cosas divertidas pero nunca las hacemos."], "commentRow": 156}, {"num": 17, "headerRow": 164, "optA": "Nos sentimos cerca en el área de la espiritualidad", "optB": "no estamos muy bien en esa área en estos días", "stmtRows": [166, 167, 168, 169, 170, 171], "stmts": ["Compartir las mismas creencias.", "Estar de acuerdo sobre ideas y valores religiosos.", "Cuestiones sobre la iglesia, mezquita, sinagoga, etc.", "Comunicarse bien sobre cosas espirituales.", "Cuestiones sobre crecimiento y cambio espiritual.", "Cuestiones espirituales relacionadas con la familia o los hijos."], "commentRow": 166}], "vf": [{"text": "He hecho planes específicos para hablar sobre la separación o el divorcio con mi pareja. He pensado que le voy a decir etc.", "markRow": 181, "hasYear": true}, {"text": "He abierto una cuenta de banco a mi nombre para proteger mis propios intereses.", "markRow": 187, "hasYear": true}, {"text": "Pienso muy frecuentemente en el divorcio. Por lo menos una vez a la semana o más.", "markRow": 193, "hasYear": true}, {"text": "Le he sugerido a mi pareja que deseo separarme, divorciarme, o terminar con el/ ella.", "markRow": 198, "hasYear": true}, {"text": "Mi pareja y yo hemos estado separados.", "markRow": 201, "hasYear": true}, {"text": "Uno de los motivos por los que no me separo es por lo economico. (Vivienda, posibilidad de solventar mis gastos)", "markRow": 204, "hasYear": false}], "vfCommentRow": 208, "commit": [{"row": 222, "text": "0- Nuestra relación nunca podrá tener éxito y no hay nada mas que yo pueda hacer para preservarla."}, {"row": 223, "text": "1-Seria bueno que nuestra relación tuviera éxito, pero me niego a hacer mas de lo que ya hago."}, {"row": 224, "text": "2-Seria bueno que nuestra relacion tuviera éxito, pero no puedo hacer mucho mas de lo que ya hago para que asi sea."}, {"row": 225, "text": "3-Deseo mucho que nuestra relación tenga éxito y pondré de mi parte lo necesario para que asi sea."}, {"row": 226, "text": "4-Deseo muchisimo que nuestra relación tenga éxito y haré todo lo que pueda para que asi sea."}, {"row": 227, "text": "5-Deseo a toda costa que nuestra relacion tenga éxito y haria lo imposible porque fuera asi."}], "chaos": [{"text": "¿Siente que su vida hogareña es caótica?", "markRow": 234}, {"text": "¿Hay alguna sensación de desorden en su vida juntos?", "markRow": 235}, {"text": "¿Estar en esta relación hace que Ud. no pueda funcionar bien en su propia vida?", "markRow": 236}, {"text": "¿Les ocurren con frecuencia sucesos importantes e inesperados?", "markRow": 238}, {"text": "¿Tienen que estar constantemente adaptándose a circunstancias cambiantes?", "markRow": 239}, {"text": "¿Siente usted que en ocasiones no tiene control de su vida?", "markRow": 241}, {"text": "¿Se siente usted en ocasiones “sin rumbo” en esta relación?", "markRow": 242}, {"text": "¿Es difícil para ambos trabajar con regularidad?", "markRow": 243}, {"text": "¿Es difícil para ambos mantener un horario regular y confiable?", "markRow": 244}, {"text": "¿Sienten inestabilidad en su vida financiera?", "markRow": 245}, {"text": "¿Sienten que sus finanzas están fuera de control?", "markRow": 246}, {"text": "¿Tienen problemas para alimentarse bien y nutritivamente?", "markRow": 247}, {"text": "¿Les ha costado tener una rutina para las compras de los víveres?", "markRow": 248}, {"text": "¿Les ha costado mantener una rutina para las comidas?", "markRow": 249}, {"text": "¿Les ha costado mantenerse saludables?", "markRow": 250}], "life": [{"text": "La familia en la que crecí tenía dificultades financieras.", "markRow": 260}, {"text": "Fui abusado/a físicamente por mis padres.", "markRow": 261}, {"text": "La relación con mis hermanos no fue cercana.", "markRow": 262}, {"text": "Fui abusado/a sexualmente en mi familia.", "markRow": 263}, {"text": "El hogar de mi familia era un lugar inestable e inseguro.", "markRow": 264}, {"text": "Mi familia se mudaba con demasiada frecuencia.", "markRow": 266}, {"text": "Mis padres no eran afectuosos conmigo.", "markRow": 267}, {"text": "Uno de mis padres o los dos eran alcohólicos.", "markRow": 268}, {"text": "Mis padres eran infelices uno con el otro.", "markRow": 269}, {"text": "Nunca confié realmente en mis padres.", "markRow": 270}, {"text": "Mis padres no tenían confianza en mis habilidades.", "markRow": 271}, {"text": "Mis padres no me elogiaban mucho.", "markRow": 272}, {"text": "Mis padres no me mostraban con frecuencia que me amaban.", "markRow": 273}, {"text": "Cuando era chico/a me sentía solo/a.", "markRow": 275}, {"text": "Mis padres no me protegían muy bien del peligro.", "markRow": 276}, {"text": "No viajábamos mucho juntos como familia.", "markRow": 277}, {"text": "Durante mi infancia y adolescencia nunca podia hablar mucho con mis padres acerca de mis sentimientos.", "markRow": 278}, {"text": "Mi hogar era muy caótico.", "markRow": 281}, {"text": "Mis padres utilizaban una disciplina innecesariamente estricta y dura.", "markRow": 282}, {"text": "Nunca estaba bien que yo les dijera a mis padres cuáles eran mis necesidades.", "markRow": 284}, {"text": "No era aceptado/a por mis pares.", "markRow": 286}, {"text": "Mis padres me avergonzaban o rebajaban.", "markRow": 287}, {"text": "En mi familia no se expresaba amor o afecto.", "markRow": 288}, {"text": "Nuestro hogar no se centraba en los niños.", "markRow": 289}, {"text": "Los niños eran ignorados por mis padres.", "markRow": 290}, {"text": "Había mucha rivalidad entre mis hermanos.", "markRow": 291}, {"text": "Mi hogar no era un lugar abierto a visitantes o invitados.", "markRow": 292}, {"text": "Mis padres usaban alcohol o drogas ilícitas.", "markRow": 294}, {"text": "Mis padres me forzaban a hacer muchas tareas del hogar.", "markRow": 295}, {"text": "Había mucho conflicto en mi familia.", "markRow": 297}, {"text": "Mis padres me dieron muy poca libertad para explorer mis intereses.", "markRow": 298}, {"text": "Experimenté crueldad por parte de mi familia.", "markRow": 300}, {"text": "Yo fui abusado físicamente por mis padres.", "markRow": 301}, {"text": "He sido testigo de violencia entre mis padres u otros adultos en mi familia.", "markRow": 302}, {"text": "No tuve maestros que me apoyaran en la escuela.", "markRow": 304}, {"text": "Experimenté abuso o acoso de mis pares en la escuela.", "markRow": 305}, {"text": "Mis padres no eran comprensivos o empáticos con mis sentimientos.", "markRow": 307}, {"text": "Mi padre no estuvo presente o estuvo muy ausente.", "markRow": 309}, {"text": "Mis padres eran emocionalmente volátiles.", "markRow": 311}, {"text": "Normalmente me echaban la culpa cuando algo no salía bien en la escuela.", "markRow": 312}, {"text": "No tuve buenos amigos mientras crecía.", "markRow": 314}, {"text": "Mis padres rara vez acudían a los eventos que eran especiales para mí.", "markRow": 315}, {"text": "Mis padres han tenido explosiones temperamentales.", "markRow": 317}, {"text": "No tuve la atención que necesitaba mientras crecía.", "markRow": 319}, {"text": "Mi padre era una persona fría.", "markRow": 320}, {"text": "Mis padres eran irresponsables.", "markRow": 321}, {"text": "Yo no me sentí aceptado por mis compañeros.", "markRow": 322}, {"text": "Mis padres nunca me conocieron bien.", "markRow": 323}, {"text": "Había mucha tensión en mi hogar mientras crecía.", "markRow": 324}, {"text": "Mi madre era una persona fría.", "markRow": 325}, {"text": "Me dieron muy pocas opciones cuando era niño/a.", "markRow": 326}, {"text": "Yo sentía hambre cuando niño/a.", "markRow": 328}, {"text": "Nunca pude conocer realmente a mi padre.", "markRow": 329}, {"text": "Rara vez espero con ganas la llegada de reuniones familiares o visitas de parientes.", "markRow": 330}, {"text": "No somos una familia fuerte o unida.", "markRow": 332}, {"text": "Nunca tuve vacaciones divertidas con mi familia.", "markRow": 333}, {"text": "Mi familia no era expresiva emocionalmente.", "markRow": 334}, {"text": "Mis padres eran estrictos y autoritarios.", "markRow": 335}, {"text": "Algunos de mis hermanos me caían bien.", "markRow": 336}, {"text": "Soy competitivo/a con uno o más de mis hermanos.", "markRow": 337}, {"text": "Mi familia no era activa en la comunidad.", "markRow": 339}, {"text": "Nunca estaba bien que yo cometiera errores.", "markRow": 340}, {"text": "Mis padres me comparaban de manera desfavorable con otras personas.", "markRow": 341}, {"text": "Mis padres eran muy perfeccionistas.", "markRow": 343}, {"text": "Mis padres eran muy críticos conmigo.", "markRow": 344}, {"text": "Normalmente no comíamos juntos en familia.", "markRow": 345}, {"text": "Rara vez teníamos fiestas familiares divertidas.", "markRow": 346}, {"text": "Lo que yo prefería como niño/a normalmente se ignoraba.", "markRow": 347}, {"text": "Mis cumpleaños nunca se celebraban bien.", "markRow": 349}, {"text": "No había preferencia entre hermanos.", "markRow": 350}, {"text": "La disciplina de mis padres era inconsistente.", "markRow": 351}, {"text": "Mis padres eran económicamente tacaños conmigo.", "markRow": 352}, {"text": "En nuestro hogar no había música.", "markRow": 354}, {"text": "En nuestro hogar no había risas.", "markRow": 355}, {"text": "Normalmente no podía acudir a mis padres para pedirles ayuda.", "markRow": 356}, {"text": "Rara vez venían amigos a mi casa", "markRow": 358}, {"text": "Rara vez nos divertíamos juntos en familia.", "markRow": 359}, {"text": "Rara vez jugábamos juntos en familia.", "markRow": 360}, {"text": "Cuando era niño/a, si tenía un problema, normalmente me lo guardaba.", "markRow": 361}], "nameRow": 2};
+
+/* ---------- estado ---------- */
+const emptyState = () => ({
+  name:'', date:new Date().toLocaleDateString('es-AR'),
+  areas: DATA.areas.map(()=>({opt:null, stmts:[null,null,null,null,null,null], comment:''})),
+  vf: DATA.vf.map(()=>({val:null, year:''})),
+  vfComment:'',
+  commit:null,
+  chaos: DATA.chaos.map(()=>null),
+  life: DATA.life.map(()=>null),
+});
+let S = emptyState();
+const LS_KEY = 'gottman_cuestionario_v1';
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({S, page})); }catch(e){} }
+function load(){ try{ const raw = localStorage.getItem(LS_KEY); if(raw){ const o = JSON.parse(raw); if(o && o.S){ S = Object.assign(emptyState(), o.S); return o.page||0; } } }catch(e){} return 0; }
+
+/* ---------- páginas ---------- */
+const LIFE_CHUNK = 20;
+const lifePages = Math.ceil(DATA.life.length / LIFE_CHUNK);
+// 0 inicio | 1..17 áreas | 18 V/F | 19 compromiso | 20 caos | 21..24 vital | última revisión
+const P_VF = 18, P_COMMIT = 19, P_CHAOS = 20, P_LIFE0 = 21, P_REVIEW = P_LIFE0 + lifePages;
+const TOTAL_PAGES = P_REVIEW + 1;
+let page = load();
+
+function totalRequired(){ return DATA.areas.length*7 + DATA.vf.length + 1 + DATA.chaos.length + DATA.life.length; }
+function answeredCount(){
+  let n=0;
+  S.areas.forEach(a=>{ if(a.opt!==null)n++; a.stmts.forEach(v=>{ if(v!==null)n++; }); });
+  S.vf.forEach(v=>{ if(v.val!==null)n++; });
+  if(S.commit!==null)n++;
+  S.chaos.forEach(v=>{ if(v!==null)n++; });
+  S.life.forEach(v=>{ if(v!==null)n++; });
+  return n;
+}
+function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ---------- render ---------- */
+const main = document.getElementById('main');
+const navInner = document.getElementById('navInner');
+
+function render(){
+  window.scrollTo(0,0);
+  const pct = Math.round(100*answeredCount()/totalRequired());
+  document.getElementById('barFill').style.width = pct+'%';
+  document.getElementById('stepLabel').textContent = page===0 ? '' : (page===P_REVIEW ? 'Final · '+pct+'%' : 'Paso '+page+' de '+(TOTAL_PAGES-1)+' · '+pct+'%');
+
+  if(page===0) renderIntro();
+  else if(page>=1 && page<=17) renderArea(page-1);
+  else if(page===P_VF) renderVF();
+  else if(page===P_COMMIT) renderCommit();
+  else if(page===P_CHAOS) renderChaos();
+  else if(page>=P_LIFE0 && page<P_REVIEW) renderLife(page-P_LIFE0);
+  else renderReview();
+  renderNav();
+  save();
+}
+
+function renderNav(){
+  let html='';
+  if(page>0) html += `<button class="btn ghost" onclick="go(${page-1})">Atrás</button>`;
+  if(page===0) html += `<button class="btn primary" onclick="startForm()">${answeredCount()>0?'Continuar donde quedé':'Comenzar'}</button>`;
+  else if(page<P_REVIEW) html += `<button class="btn primary" onclick="go(${page+1})">Siguiente</button>`;
+  else html += `<button class="btn primary" onclick="exportXLSX()">Descargar Excel</button>`;
+  navInner.innerHTML = html;
+}
+function go(p){ page = Math.max(0, Math.min(TOTAL_PAGES-1, p)); render(); }
+function startForm(){ S.name = document.getElementById('nameInput') ? document.getElementById('nameInput').value.trim() : S.name; go(1); }
+
+function renderIntro(){
+  main.innerHTML = `
+    <p class="eyebrow">Método Gottman · Evaluación de parejas</p>
+    <h2 class="sect serif">Cuestionario para completar antes de la sesión</h2>
+    <div class="intro-quote">${esc(DATA.template[3][0])}</div>
+    <div class="card">
+      <label class="fld" for="nameInput">Tu nombre (aparecerá en el Excel)</label>
+      <input type="text" id="nameInput" value="${esc(S.name)}" placeholder="Ej.: Nico" oninput="S.name=this.value; save();">
+    </div>
+    <p class="hint">Son 5 secciones y unas 220 respuestas en total. Tus respuestas se guardan automáticamente en este teléfono: podés cerrar y retomar cuando quieras. Al final vas a poder descargar el Excel exactamente igual al original, ya completo, para enviárselo a la psicóloga.</p>
+    <p class="hint">Cada persona completa el suyo por separado y en privado.</p>`;
+}
+
+function renderArea(i){
+  const A = DATA.areas[i], st = S.areas[i];
+  let html = `
+    <p class="eyebrow">Escala Gottman · Área ${A.num} de 17</p>
+    <h1 class="bignum serif">${A.num}</h1>
+    <p class="hint" style="margin-top:0">¿Cuál de las dos frases describe mejor su relación en este momento?</p>
+    <button class="path ${st.opt===0?'sel':''}" onclick="setAreaOpt(${i},0)"><span class="tick"></span><span class="lbl">Vamos bien</span>${esc(A.optA)}</button>
+    <button class="path ${st.opt===1?'sel':''}" onclick="setAreaOpt(${i},1)"><span class="tick"></span><span class="lbl">Necesita mejorar</span>${esc(A.optB)}</button>
+    <div class="divider-label">Responda a todas las afirmaciones</div>
+    <div class="card">`;
+  A.stmts.forEach((s,k)=>{
+    html += `<div class="stmt"><p>${esc(s)}</p>
+      <div class="seg">
+        <button class="${st.stmts[k]===0?'sel':''}" onclick="setStmt(${i},${k},0)">No es problema</button>
+        <button class="${st.stmts[k]===1?'sel':''}" onclick="setStmt(${i},${k},1)">Es problema</button>
+      </div></div>`;
+  });
+  html += `</div>
+    <div class="card">
+      <label class="fld" for="cmt${i}">Comentarios que quiera agregar sobre esta área (opcional)</label>
+      <textarea id="cmt${i}" placeholder="Si va bien: ¿cómo la están gestionando? Si no: ¿qué obstáculos ve?" oninput="S.areas[${i}].comment=this.value; save();">${esc(st.comment)}</textarea>
+    </div>`;
+  main.innerHTML = html;
+}
+function setAreaOpt(i,v){ S.areas[i].opt = (S.areas[i].opt===v? null : v); render(); }
+function setStmt(i,k,v){ S.areas[i].stmts[k] = (S.areas[i].stmts[k]===v? null : v); render(); }
+
+function renderVF(){
+  let html = `
+    <p class="eyebrow">Sección 2 · Pensamientos sobre la relación</p>
+    <h2 class="sect serif">Marque la opción que más se ajuste a su realidad</h2>
+    <p class="hint">Y agregue el año si corresponde.</p>`;
+  DATA.vf.forEach((q,i)=>{
+    const v = S.vf[i];
+    html += `<div class="card"><div class="stmt" style="border:none;padding-top:2px"><p>${esc(q.text)}</p>
+      <div class="seg">
+        <button class="${v.val===true?'sel':''}" onclick="setVF(${i},true)">Verdadero</button>
+        <button class="${v.val===false?'sel':''}" onclick="setVF(${i},false)">Falso</button>
+      </div>
+      ${q.hasYear? `<div style="margin-top:10px"><label class="fld">Año (si corresponde)</label><input class="year" type="text" inputmode="numeric" maxlength="4" placeholder="AAAA" value="${esc(v.year)}" oninput="S.vf[${i}].year=this.value; save();"></div>` : ''}
+    </div></div>`;
+  });
+  html += `<div class="card">
+    <label class="fld" for="vfc">Comentarios (opcional)</label>
+    <textarea id="vfc" oninput="S.vfComment=this.value; save();">${esc(S.vfComment)}</textarea>
+  </div>`;
+  main.innerHTML = html;
+}
+function setVF(i,v){ S.vf[i].val = (S.vf[i].val===v? null : v); render(); }
+
+function renderCommit(){
+  let html = `
+    <p class="eyebrow">Sección 3 · Futuro de la relación</p>
+    <h2 class="sect serif">Marque la opción que más le represente en relación al futuro de la relación</h2>
+    <p class="hint">Elija una sola opción.</p>`;
+  DATA.commit.forEach((o,i)=>{
+    html += `<button class="opt ${S.commit===i?'sel':''}" onclick="setCommit(${i})"><span class="num">${i}</span>${esc(o.text.replace(/^\d+\s*-\s*/,''))}</button>`;
+  });
+  main.innerHTML = html;
+}
+function setCommit(i){ S.commit = (S.commit===i? null : i); render(); }
+
+function renderChaos(){
+  let html = `
+    <p class="eyebrow">Sección 4 · Vida cotidiana</p>
+    <h2 class="sect serif">Marque según corresponda</h2>
+    <div class="card">`;
+  DATA.chaos.forEach((q,i)=>{
+    html += `<div class="stmt"><p>${i+1}. ${esc(q.text)}</p>
+      <div class="seg">
+        <button class="${S.chaos[i]===true?'sel':''}" onclick="setChaos(${i},true)">Sí</button>
+        <button class="${S.chaos[i]===false?'sel':''}" onclick="setChaos(${i},false)">No</button>
+      </div></div>`;
+  });
+  html += `</div>`;
+  main.innerHTML = html;
+}
+function setChaos(i,v){ S.chaos[i] = (S.chaos[i]===v? null : v); render(); }
+
+function renderLife(chunk){
+  const start = chunk*LIFE_CHUNK, end = Math.min(start+LIFE_CHUNK, DATA.life.length);
+  let html = `
+    <p class="eyebrow">Sección 5 · Mi historia vital · Parte ${chunk+1} de ${lifePages}</p>
+    <h2 class="sect serif">Marque según corresponda con su historia vital</h2>
+    <p class="hint">Afirmaciones ${start+1} a ${end} de ${DATA.life.length}.</p>
+    <div class="card">`;
+  for(let i=start;i<end;i++){
+    const q = DATA.life[i];
+    html += `<div class="stmt"><p>${i+1}. ${esc(q.text)}</p>
+      <div class="seg3">
+        <button class="${S.life[i]===0?'sel':''}" onclick="setLife(${i},0)">De acuerdo</button>
+        <button class="${S.life[i]===1?'sel':''}" onclick="setLife(${i},1)">Ni de acuerdo ni en desacuerdo</button>
+        <button class="${S.life[i]===2?'sel':''}" onclick="setLife(${i},2)">En desacuerdo</button>
+      </div></div>`;
+  }
+  html += `</div>`;
+  main.innerHTML = html;
+}
+function setLife(i,v){ S.life[i] = (S.life[i]===v? null : v); render(); }
+
+function renderReview(){
+  const missA=[], pages=[];
+  S.areas.forEach((a,i)=>{ const m=(a.opt===null?1:0)+a.stmts.filter(v=>v===null).length; if(m>0){missA.push(`Área ${i+1}: ${m}`); pages.push(i+1);} });
+  const mVF = S.vf.filter(v=>v.val===null).length;
+  const mCommit = S.commit===null?1:0;
+  const mChaos = S.chaos.filter(v=>v===null).length;
+  const mLife = S.life.filter(v=>v===null).length;
+  const totalMiss = (totalRequired()-answeredCount());
+  let html = `
+    <p class="eyebrow">Revisión final</p>
+    <h2 class="sect serif">${totalMiss===0 ? '¡Todo completo!' : 'Casi listo'}</h2>
+    <div class="card">
+      <div class="review-line"><span>Completado por</span><strong>${esc(S.name)||'<span class="missing">sin nombre</span>'}</strong></div>
+      <div class="review-line"><span>Respondidas</span><span class="pill-state">${answeredCount()} de ${totalRequired()}</span></div>
+      ${missA.length? `<div class="review-line"><span>Áreas Gottman pendientes</span><a href="#" onclick="go(${pages[0]});return false;">${missA.join(' · ')}</a></div>`:''}
+      ${mVF? `<div class="review-line"><span>Verdadero/Falso pendientes</span><a href="#" onclick="go(${P_VF});return false;">${mVF}</a></div>`:''}
+      ${mCommit? `<div class="review-line"><span>Futuro de la relación</span><a href="#" onclick="go(${P_COMMIT});return false;">pendiente</a></div>`:''}
+      ${mChaos? `<div class="review-line"><span>Vida cotidiana pendientes</span><a href="#" onclick="go(${P_CHAOS});return false;">${mChaos}</a></div>`:''}
+      ${mLife? `<div class="review-line"><span>Historia vital pendientes</span><a href="#" onclick="go(${P_LIFE0});return false;">${mLife}</a></div>`:''}
+    </div>
+    ${!S.name? `<div class="card"><label class="fld" for="nameInput2">Tu nombre (aparecerá en el Excel)</label><input type="text" id="nameInput2" placeholder="Ej.: Nico" oninput="S.name=this.value; save();"></div>`:''}
+    <button class="btn export" onclick="exportXLSX()">Descargar Excel completado</button>
+    <p class="saved-note">El archivo se guarda en tu teléfono (Descargas o app Archivos) listo para enviar por mail o WhatsApp.</p>
+    <p class="saved-note"><a href="#" onclick="resetAll();return false;" style="color:var(--ink-soft)">Borrar todas las respuestas y empezar de nuevo</a></p>`;
+  main.innerHTML = html;
+}
+function resetAll(){ if(confirm('¿Seguro que querés borrar todas las respuestas?')){ S = emptyState(); try{localStorage.removeItem(LS_KEY);}catch(e){} page=0; render(); } }
+
+/* ---------- exportación ---------- */
+function markBox(text, which){
+  // reemplaza la casilla □ número `which` (0 o 1) por ☒
+  let count = -1;
+  return text.replace(/□/g, m => { count++; return count===which ? '☒' : '☐'; });
+}
+function buildRows(){
+  const rows = DATA.template.map(r => r.slice());
+  // nombre y fecha
+  if(S.name) rows[DATA.nameRow][0] = 'Completado por: ' + S.name + '  —  Fecha: ' + S.date;
+  // áreas
+  DATA.areas.forEach((A,i)=>{
+    const st = S.areas[i];
+    if(st.opt!==null) rows[A.headerRow][0] = markBox(rows[A.headerRow][0], st.opt);
+    A.stmtRows.forEach((r,k)=>{
+      if(st.stmts[k]===0) rows[r][1] = 'X';
+      if(st.stmts[k]===1) rows[r][2] = 'X';
+    });
+    if(st.comment.trim()) rows[A.commentRow][4] = st.comment.trim();
+  });
+  // verdadero/falso
+  DATA.vf.forEach((q,i)=>{
+    const v = S.vf[i];
+    if(v.val!==null){
+      let line = 'VERDADERO ( ' + (v.val? 'X':' ') + ' )    FALSO ( ' + (v.val? ' ':'X') + ' )';
+      if(q.hasYear) line += '    Año: ' + (v.year.trim()||'');
+      rows[q.markRow][0] = line;
+    } else if(q.hasYear && v.year.trim()){
+      rows[q.markRow][0] = 'VERDADERO FALSO Año: ' + v.year.trim();
+    }
+  });
+  if(S.vfComment.trim()) rows[DATA.vfCommentRow][0] = S.vfComment.trim();
+  // compromiso
+  if(S.commit!==null) rows[DATA.commit[S.commit].row][1] = 'X';
+  // caos
+  DATA.chaos.forEach((q,i)=>{
+    if(S.chaos[i]===true) rows[q.markRow][1] = 'X';
+    if(S.chaos[i]===false) rows[q.markRow][2] = 'X';
+  });
+  // historia vital
+  DATA.life.forEach((q,i)=>{
+    const v = S.life[i];
+    if(v!==null) rows[q.markRow][1+v] = 'X';
+  });
+  return rows;
+}
+function exportXLSX(){
+  if(!S.name){ const el=document.getElementById('nameInput2')||document.getElementById('nameInput'); if(el){ el.focus(); alert('Escribí tu nombre antes de descargar, así la psicóloga sabe de quién es cada cuestionario.'); return; } }
+  const miss = totalRequired()-answeredCount();
+  if(miss>0 && !confirm('Hay '+miss+' respuestas sin completar. ¿Querés descargar el Excel igual? Las preguntas sin responder quedarán en blanco.')) return;
+  const rows = buildRows();
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  ws['!cols'] = [{wch:70},{wch:14},{wch:26},{wch:14},{wch:50}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Cuestionario');
+  const safeName = (S.name||'respuestas').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9_-]+/g,'_');
+  XLSX.writeFile(wb, 'Cuestionario_Gottman_' + safeName + '.xlsx');
+}
+
+render();
+</script>
+</body>
+</html>
