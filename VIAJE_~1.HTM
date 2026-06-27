@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundial 2026 · Semi + Final · Nico & Mile</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --celeste:#75AADB; --celeste-d:#4f8fc7; --sol:#F6B40E; --sol-d:#d99a00;
+    --tinta:#0e1b2b; --gris:#5b6b7c; --linea:#e3e9f0; --ok:#1faa59; --bg:#f4f8fc;
+    --card:#ffffff; --shadow:0 8px 30px rgba(20,50,90,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--tinta);background:var(--bg);line-height:1.5}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#5a98cf 0%,#75AADB 45%,#9cc3e6 100%);color:#fff;padding:54px 0 60px;position:relative;overflow:hidden;text-align:center}
+  .hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.10) 0 26px,transparent 26px 52px);opacity:.5}
+  .hero .wrap{position:relative;z-index:1}
+  .sun{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle,var(--sol) 60%,var(--sol-d));margin:0 auto 14px;box-shadow:0 0 0 6px rgba(246,180,14,.25)}
+  .hero h1{font-size:2.5rem;line-height:1.1;letter-spacing:-.5px;text-shadow:0 2px 12px rgba(0,40,80,.25)}
+  .hero h1 span{color:#fff}
+  .hero p.sub{margin-top:12px;font-size:1.15rem;opacity:.97;font-weight:500}
+  .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  .badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);padding:8px 16px;border-radius:30px;font-weight:600;font-size:.92rem;backdrop-filter:blur(4px)}
+  /* SECTION */
+  section{padding:40px 0}
+  h2{font-size:1.55rem;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  h2 .ic{font-size:1.3rem}
+  .lead{color:var(--gris);margin-bottom:22px;max-width:760px}
+  /* HIGHLIGHT */
+  .hl{background:linear-gradient(135deg,#102a43,#1b3a5b);color:#fff;border-radius:18px;padding:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:22px;box-shadow:var(--shadow)}
+  .hl .item{text-align:center}
+  .hl .num{font-size:2.1rem;font-weight:800;color:var(--sol)}
+  .hl .lbl{font-size:.9rem;opacity:.85;margin-top:4px}
+  .hl .sub2{font-size:.78rem;opacity:.6;margin-top:2px}
+  /* CALENDAR */
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+  .cal .dow{font-size:.72rem;font-weight:700;color:var(--gris);text-align:center;text-transform:uppercase;letter-spacing:.5px}
+  .day{background:var(--card);border:1px solid var(--linea);border-radius:12px;padding:10px 8px;min-height:96px;position:relative;box-shadow:0 2px 6px rgba(20,50,90,.04)}
+  .day .dn{font-weight:700;color:var(--gris);font-size:.95rem}
+  .day.empty{background:transparent;border:none;box-shadow:none}
+  .day.atl{border-color:var(--celeste);background:linear-gradient(180deg,#eaf3fb,#fff)}
+  .day.ny{border-color:var(--sol);background:linear-gradient(180deg,#fff7e3,#fff)}
+  .day.key{box-shadow:0 0 0 2px var(--sol)}
+  .tag{display:inline-block;font-size:.66rem;font-weight:700;padding:2px 6px;border-radius:6px;margin-top:6px;line-height:1.3}
+  .tag.t-atl{background:var(--celeste);color:#fff}
+  .tag.t-ny{background:var(--sol-d);color:#fff}
+  .tag.t-game{background:#e23b3b;color:#fff}
+  .tag.t-fly{background:#102a43;color:#fff}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;font-size:.85rem;color:var(--gris)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+  /* CARDS */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .card{background:var(--card);border:1px solid var(--linea);border-radius:16px;padding:24px;box-shadow:var(--shadow)}
+  .card h3{font-size:1.15rem;margin-bottom:4px}
+  .route{font-size:.85rem;color:var(--gris);margin-bottom:14px}
+  .kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--linea);font-size:.95rem}
+  .kv:last-child{border-bottom:none}
+  .kv b{font-weight:700}
+  .miles{color:var(--celeste-d);font-weight:800}
+  /* TABLE */
+  .opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  table{width:100%;border-collapse:collapse;font-size:.93rem}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--linea)}
+  th{background:#eef4fa;font-size:.78rem;text-transform:uppercase;letter-spacing:.4px;color:var(--gris)}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+  tr.total td{background:#102a43;color:#fff;font-weight:800;font-size:1rem;border:none}
+  tr.total td:first-child{border-radius:0 0 0 10px}
+  tr.total td:last-child{border-radius:0 0 10px 0}
+  .opt-head{font-weight:800;font-size:1.1rem;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .opt-head .pill{font-size:.72rem;background:var(--celeste);color:#fff;padding:3px 9px;border-radius:20px;font-weight:700}
+  /* CONTROLS */
+  .controls{background:#fff;border:1px solid var(--linea);border-radius:16px;padding:22px 24px;box-shadow:var(--shadow);display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;margin-bottom:26px}
+  .ctrl label{font-size:.82rem;font-weight:700;color:var(--gris);display:flex;justify-content:space-between}
+  .ctrl input[type=range]{width:100%;margin-top:10px;accent-color:var(--celeste)}
+  .ctrl .val{color:var(--celeste-d);font-weight:800}
+  /* charts */
+  .chartbox{background:#fff;border:1px solid var(--linea);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+  .chart-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}
+  /* optional ticket */
+  .opt-ticket{background:linear-gradient(135deg,#fff7e3,#fff);border:2px dashed var(--sol);border-radius:16px;padding:24px}
+  .opt-ticket .price{font-size:1.8rem;font-weight:800;color:var(--sol-d)}
+  /* NY experience */
+  .exp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+  .exp{background:var(--card);border:1px solid var(--linea);border-radius:14px;padding:20px;box-shadow:0 3px 12px rgba(20,50,90,.06);transition:transform .15s,box-shadow .15s}
+  .exp:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(20,50,90,.14)}
+  .exp .emoji{font-size:1.8rem}
+  .exp h4{margin:8px 0 6px;font-size:1.02rem}
+  .exp p{font-size:.88rem;color:var(--gris)}
+  .quote{margin-top:22px;text-align:center;font-size:1.2rem;font-weight:600;color:var(--celeste-d);background:linear-gradient(135deg,#eaf3fb,#fff7e3);border-radius:14px;padding:22px;border:1px solid var(--linea)}
+  /* note */
+  .note{font-size:.82rem;color:var(--gris);margin-top:14px;font-style:italic}
+  footer{text-align:center;padding:30px 18px 50px;color:var(--gris);font-size:.85rem}
+  @media(max-width:760px){
+    .grid2,.opt-grid,.chart-grid{grid-template-columns:1fr}
+    .hero h1{font-size:1.9rem}
+    .cal{gap:5px}.day{min-height:78px;padding:7px 5px}
+    .tag{font-size:.58rem}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="sun"></div>
+    <h1>Mundial + Nueva York 🇦🇷🗽<br><span>El viaje soñado con Mile</span></h1>
+    <p class="sub">La semi y la final de la Argentina… y de yapa, vacaciones en la ciudad que toda la vida quisimos conocer.</p>
+    <div class="badges">
+      <span class="badge">🗽 Nueva York: el sueño cumplido</span>
+      <span class="badge">🏟️ Semi 15/7 · Final 19/7</span>
+      <span class="badge">✈️ Vuelos pagados con millas</span>
+      <span class="badge">🏠 Casi todo gratis en lo de Cacho</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- RESUMEN / GANCHO -->
+  <section>
+    <h2><span class="ic">⭐</span> El resumen para convencerte</h2>
+    <p class="lead">Lo más fuerte: los vuelos transatlánticos los pagamos con millas, así que de bolsillo solo van las tasas. Mirá lo que nos ahorramos solo en aéreos.</p>
+    <div class="hl">
+      <div class="item">
+        <div class="num" id="hl-total">$2.603</div>
+        <div class="lbl">Costo total estimado (2 personas)</div>
+        <div class="sub2" id="hl-total-eur">≈ €2.286 · vuelta 20/7</div>
+      </div>
+      <div class="item">
+        <div class="num">$2.824</div>
+        <div class="lbl">Ahorro pagando vuelos con millas</div>
+        <div class="sub2">≈ €2.480 · vs comprar los aéreos en cash</div>
+      </div>
+      <div class="item">
+        <div class="num">75.000</div>
+        <div class="lbl">Millas Flying Blue (ida + vuelta, x2)</div>
+        <div class="sub2">≈ 93.750 puntos AMEX</div>
+      </div>
+      <div class="item">
+        <div class="num">5 días</div>
+        <div class="lbl">En Nueva York para disfrutar</div>
+        <div class="sub2">Casi todo gratis en lo de Cacho 🙌</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUEVA YORK: LA EXPERIENCIA -->
+  <section>
+    <h2><span class="ic">🗽</span> Nueva York: no es solo el Mundial, es <em>la</em> ciudad</h2>
+    <p class="lead">Pensalo así: vamos por la Argentina, sí, pero terminamos pasando casi una semana viviendo Nueva York. Esa ciudad que vimos mil veces en películas, series y fotos… caminándola juntos, en pleno verano, con la final del mundo de fondo. Es de esos viajes que se cuentan toda la vida.</p>
+    <div class="exp-grid">
+      <div class="exp"><div class="emoji">🌉</div><h4>Times Square &amp; Brooklyn Bridge</h4><p>Las postales de siempre, ahora en vivo. Caminar el puente al atardecer es de las mejores cosas gratis de la ciudad.</p></div>
+      <div class="exp"><div class="emoji">🌳</div><h4>Central Park &amp; el High Line</h4><p>Picnic, bici o simplemente perderse. Verano en el parque más famoso del mundo, sin gastar un peso.</p></div>
+      <div class="exp"><div class="emoji">🎨</div><h4>Museos &amp; SoHo</h4><p>MET, MoMA, y después vitrinear por SoHo y el Village. Cultura + paseo + cafecito.</p></div>
+      <div class="exp"><div class="emoji">🌃</div><h4>Skyline desde las alturas</h4><p>Top of the Rock, Edge o el ferry gratis a Staten Island con vista a la Estatua de la Libertad.</p></div>
+      <div class="exp"><div class="emoji">🍕</div><h4>Comer por el mundo</h4><p>Pizza de Brooklyn, bagels, Little Italy, food markets. Nueva York se come, y entra en los $100/día.</p></div>
+      <div class="exp"><div class="emoji">🎉</div><h4>Fan Festival + festejo</h4><p>El FIFA Fan Fest es gratis, y si la Argentina llega a la final… imaginate festejarlo en NY. No tiene precio.</p></div>
+    </div>
+    <div class="quote">"Vamos por el Mundial y volvemos habiendo cumplido el sueño de conocer Nueva York juntos." 💙🗽</div>
+  </section>
+
+  <!-- CALENDARIO -->
+  <section>
+    <h2><span class="ic">📅</span> El itinerario, día por día</h2>
+    <p class="lead">Julio 2026. Celeste = Atlanta, dorado = Nueva York. Los partidos arrancan 15:00 (hora ET).</p>
+    <div class="cal" id="cal"></div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--celeste)"></i> Atlanta (hotel Marriott)</span>
+      <span><i class="dot" style="background:var(--sol)"></i> Nueva York (Cacho + 2 noches hotel)</span>
+      <span><i class="dot" style="background:#e23b3b"></i> Partido</span>
+      <span><i class="dot" style="background:#102a43"></i> Vuelo</span>
+    </div>
+  </section>
+
+  <!-- VUELOS -->
+  <section>
+    <h2><span class="ic">✈️</span> Los vuelos (pagados con millas)</h2>
+    <p class="lead">Datos sacados de tu calculadora Flying Blue. Los dos tramos largos salieron nivel "Excelente". El tramo interno Atlanta→NY lo pagamos en cash (es baratito).</p>
+    <div class="grid2">
+      <div class="card">
+        <h3>🛫 Ámsterdam → Atlanta</h3>
+        <div class="route">Lunes 13/7 · ida al Mundial</div>
+        <div class="kv"><span>Millas (x2 personas)</span><b class="miles">37.500 millas</b></div>
+        <div class="kv"><span>Tasas e impuestos (x2)</span><b>€490 · $558</b></div>
+        <div class="kv"><span>Valor cash que evitamos</span><b style="color:var(--ok)">€1.938</b></div>
+        <div class="kv"><span>Nivel del canje</span><b>Excelente ⭐</b></div>
+      </div>
+      <div class="card">
+        <h3>🛬 Nueva York (JFK) → Ámsterdam</h3>
+        <div class="route">Lunes 20/7 (o 21/7) · vuelta</div>
+        <div class="kv"><span>Millas (x2 personas)</span><b class="miles">37.500 millas</b></div>
+        <div class="kv"><span>Tasas e impuestos (x2)</span><b>€338 · $385</b></div>
+        <div class="kv"><span>Valor cash que evitamos</span><b style="color:var(--ok)">€1.370</b></div>
+        <div class="kv"><span>Nivel del canje</span><b>Excelente ⭐</b></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px">
+      <h3>🚐 Atlanta → Nueva York</h3>
+      <div class="route">Jueves 16/7 · tramo interno (estimado en cash)</div>
+      <div class="kv"><span>Vuelo doméstico ~$130 p/persona (x2)</span><b>$260 · €228</b></div>
+      <div class="note" style="margin-top:8px">Julio es temporada alta; hay tarifas desde ~$55 pero presupuesto $130 c/u con valija para no quedar corto. Si conseguimos, también se puede canjear con millas.</div>
+    </div>
+  </section>
+
+  <!-- CONTROLES INTERACTIVOS -->
+  <section>
+    <h2><span class="ic">🎛️</span> Ajustá los números vos misma</h2>
+    <p class="lead">Movés los deslizadores y todo se recalcula: el resumen de arriba, la tabla y los gráficos.</p>
+    <div class="controls">
+      <div class="ctrl">
+        <label>Gasto por día (comida, transporte, varios) <span class="val" id="v-day">$100</span></label>
+        <input type="range" id="s-day" min="50" max="250" step="10" value="100">
+      </div>
+      <div class="ctrl">
+        <label>Hotel Atlanta por noche <span class="val" id="v-atl">$100</span></label>
+        <input type="range" id="s-atl" min="60" max="250" step="10" value="100">
+      </div>
+      <div class="ctrl">
+        <label>Hotel NY por noche <span class="val" id="v-ny">$200</span></label>
+        <input type="range" id="s-ny" min="100" max="400" step="20" value="200">
+      </div>
+      <div class="ctrl" style="background:#fff7e3;border:1px solid var(--sol);border-radius:12px;padding:14px 16px">
+        <label>🏨 Noches de hotel pagas en NY <span class="val" id="v-nyn">2</span></label>
+        <input type="range" id="s-nyn" min="0" max="5" step="1" value="2">
+        <div style="font-size:.76rem;color:var(--gris);margin-top:8px" id="cacho-note">Por si Cacho no puede: el resto las cubrimos nosotros.</div>
+      </div>
+      <div class="ctrl">
+        <label>Tipo de cambio €→$ <span class="val" id="v-fx">1,1388</span></label>
+        <input type="range" id="s-fx" min="1.00" max="1.25" step="0.0025" value="1.1388">
+      </div>
+    </div>
+  </section>
+
+  <!-- OPCIONES -->
+  <section>
+    <h2><span class="ic">🧮</span> Las dos opciones de vuelta</h2>
+    <p class="lead">Misma estructura; cambia cuántas noches nos quedamos en NY (gratis en lo de Cacho) y un día más de gastos.</p>
+    <div class="opt-grid">
+      <div>
+        <div class="opt-head">Opción A <span class="pill">Vuelta 20/7</span></div>
+        <p style="font-size:.85rem;color:var(--gris);margin-bottom:10px">3 noches Atlanta + 4 noches NY (2 hotel + 2 Cacho). 7 días de gastos.</p>
+        <table id="tbl-a"></table>
+      </div>
+      <div>
+        <div class="opt-head">Opción B <span class="pill" style="background:var(--sol-d)">Vuelta 21/7</span></div>
+        <p style="font-size:.85rem;color:var(--gris);margin-bottom:10px">3 noches Atlanta + 5 noches NY (2 hotel + 3 Cacho). 8 días de gastos.</p>
+        <table id="tbl-b"></table>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRAFICOS -->
+  <section>
+    <h2><span class="ic">📊</span> En gráficos</h2>
+    <div class="chart-grid">
+      <div class="chartbox"><canvas id="chartBar" height="260"></canvas></div>
+      <div class="chartbox"><canvas id="chartPie" height="260"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ENTRADA OPCIONAL -->
+  <section>
+    <h2><span class="ic">🎟️</span> Posible entrada para la semifinal</h2>
+    <p class="lead">Hay una chance chica de conseguir una entrada para la semi en Atlanta. Lo dejamos como extra opcional, con tope claro. Si no se da, con el Fan Fest de las dos ciudades (gratis) la pasamos increíble igual.</p>
+    <div class="opt-ticket">
+      <div class="kv"><span>Tope para 1 entrada (si aparece)</span><span class="price">€2.000 · $2.278</span></div>
+      <div class="kv"><span>Probabilidad</span><b>Baja · "si se da"</b></div>
+      <div class="kv"><span>Plan B (más que suficiente)</span><b style="color:var(--ok)">FIFA Fan Festival — gratis en Atlanta y NY</b></div>
+      <div class="kv"><span>Total Opción A + entrada</span><b id="tk-a">$4.881</b></div>
+      <div class="kv"><span>Total Opción B + entrada</span><b id="tk-b">$4.981</b></div>
+    </div>
+  </section>
+
+  <footer>
+    Armado para Mile 💙 · Vuelos según calculadora Flying Blue (KLM/Air France) desde puntos AMEX.<br>
+    Tasas/millas reales de la planilla; hoteles, gastos y vuelo interno son estimaciones ajustables. Tipo de cambio €→$ del 27/6/2026.
+  </footer>
+</div>
+
+<script>
+// ---- datos fijos de la planilla (x2 personas) ----
+const MILES_TAX_EUR = 490 + 338;   // ida + vuelta, tasas en EUR
+const INTERNAL_USD_PP = 130;       // ATL->NY por persona
+
+// estado ajustable
+let st = { day:100, atl:100, ny:200, fx:1.1388, nyPaid:2 };
+
+const fmtUSD = n => '$' + Math.round(n).toLocaleString('es-AR');
+const fmtEUR = n => '€' + Math.round(n).toLocaleString('es-AR');
+
+function calc(opt){ // opt 'A' o 'B'
+  const nyNights = opt==='A' ? 4 : 5;   // noches totales en NY
+  const expDays = 3 + nyNights;
+  const paidNights = Math.min(st.nyPaid, nyNights);
+  const cachoNights = nyNights - paidNights;
+  const taxesUSD = MILES_TAX_EUR * st.fx;
+  const internalUSD = INTERNAL_USD_PP * 2;
+  const atlHotel = st.atl * 3;
+  const nyHotel = st.ny * paidNights;   // noches pagas (resto Cacho)
+  const expenses = st.day * expDays;
+  const total = taxesUSD + internalUSD + atlHotel + nyHotel + expenses;
+  return {taxesUSD, internalUSD, atlHotel, nyHotel, expenses, expDays, total, paidNights, cachoNights};
+}
+
+function row(label, usd, extra=''){
+  return `<tr><td>${label}${extra?` <span style="color:var(--gris);font-size:.8rem">${extra}</span>`:''}</td><td class="r">${fmtUSD(usd)}</td></tr>`;
+}
+function buildTable(opt){
+  const c = calc(opt);
+  return `<thead><tr><th>Concepto</th><th class="r">USD</th></tr></thead><tbody>
+    ${row('Tasas vuelos (millas)', c.taxesUSD, '€'+MILES_TAX_EUR)}
+    ${row('Vuelo interno ATL→NY', c.internalUSD, 'x2')}
+    ${row('Hotel Atlanta', c.atlHotel, '3 noches')}
+    ${row('Hotel NY', c.nyHotel, c.paidNights+' noche'+(c.paidNights!==1?'s':'')+' · '+c.cachoNights+' en lo de Cacho')}
+    ${row('Gastos diarios', c.expenses, c.expDays+' días')}
+    <tr class="total"><td>TOTAL (≈ ${fmtEUR(c.total/st.fx)})</td><td class="r">${fmtUSD(c.total)}</td></tr>
+  </tbody>`;
+}
+
+// calendario
+function buildCal(){
+  // julio 2026: 1/7 = miércoles. dow index lun=0
+  const items = {
+    13:{c:'atl',tags:['<span class="tag t-fly">✈️ AMS→ATL</span>','<span class="tag t-atl">Atlanta</span>']},
+    14:{c:'atl',tags:['<span class="tag t-atl">Atlanta</span>']},
+    15:{c:'atl key',tags:['<span class="tag t-game">🏟️ SEMI 15:00</span>']},
+    16:{c:'ny',tags:['<span class="tag t-fly">✈️ ATL→NY</span>','<span class="tag t-ny">NY · Cacho</span>']},
+    17:{c:'ny',tags:['<span class="tag t-ny">NY</span>']},
+    18:{c:'ny',tags:['<span class="tag t-ny">NY</span>']},
+    19:{c:'ny key',tags:['<span class="tag t-game">🏆 FINAL 15:00</span>']},
+    20:{c:'ny',tags:['<span class="tag t-fly">✈️ JFK→AMS (A)</span>']},
+    21:{c:'ny',tags:['<span class="tag t-fly">✈️ vuelta (B)</span>']},
+  };
+  const dows=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  let html = dows.map(d=>`<div class="dow">${d}</div>`).join('');
+  // 1 julio 2026 es miércoles -> offset. Mostramos del 13 al 21 (semana del 13=lunes)
+  // 13/7/2026 es lunes. Empezamos esa semana.
+  const start=13, end=21;
+  // primera fila empieza lunes 13, sin huecos
+  for(let d=start; d<=end; d++){
+    const it = items[d];
+    const cls = it ? 'day '+it.c : 'day';
+    const tags = it ? it.tags.join('') : '';
+    html += `<div class="${cls}"><div class="dn">${d}</div>${tags}</div>`;
+  }
+  document.getElementById('cal').innerHTML = html;
+}
+
+let barChart, pieChart;
+function render(){
+  // labels
+  document.getElementById('v-day').textContent = fmtUSD(st.day);
+  document.getElementById('v-atl').textContent = fmtUSD(st.atl);
+  document.getElementById('v-ny').textContent = fmtUSD(st.ny);
+  document.getElementById('v-nyn').textContent = st.nyPaid;
+  document.getElementById('v-fx').textContent = st.fx.toFixed(4).replace('.',',');
+  document.getElementById('cacho-note').textContent = st.nyPaid===0
+    ? '¡Las 4-5 noches gratis en lo de Cacho! 🙌'
+    : 'Pagamos '+st.nyPaid+' noche'+(st.nyPaid!==1?'s':'')+'; el resto, en lo de Cacho.';
+
+  const a = calc('A'), b = calc('B');
+  document.getElementById('tbl-a').innerHTML = buildTable('A');
+  document.getElementById('tbl-b').innerHTML = buildTable('B');
+
+  // resumen
+  document.getElementById('hl-total').textContent = fmtUSD(a.total);
+  document.getElementById('hl-total-eur').textContent = '≈ '+fmtEUR(a.total/st.fx)+' · vuelta 20/7';
+
+  // entrada opcional
+  const tkEUR = 2000*st.fx;
+  document.getElementById('tk-a').textContent = fmtUSD(a.total + tkEUR);
+  document.getElementById('tk-b').textContent = fmtUSD(b.total + tkEUR);
+
+  // charts
+  const catLabels=['Tasas vuelos','Vuelo interno','Hotel ATL','Hotel NY','Gastos diarios'];
+  const aData=[a.taxesUSD,a.internalUSD,a.atlHotel,a.nyHotel,a.expenses];
+  const bData=[b.taxesUSD,b.internalUSD,b.atlHotel,b.nyHotel,b.expenses];
+  const colors=['#102a43','#5b6b7c','#75AADB','#F6B40E','#1faa59'];
+
+  if(!barChart){
+    barChart=new Chart(document.getElementById('chartBar'),{
+      type:'bar',
+      data:{labels:catLabels,datasets:[
+        {label:'Opción A (20/7)',data:aData,backgroundColor:'#75AADB'},
+        {label:'Opción B (21/7)',data:bData,backgroundColor:'#F6B40E'}]},
+      options:{responsive:true,plugins:{title:{display:true,text:'Costo por rubro (USD, 2 personas)'},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtUSD(c.raw)}}},
+        scales:{y:{ticks:{callback:v=>'$'+v}}}}
+    });
+  } else { barChart.data.datasets[0].data=aData; barChart.data.datasets[1].data=bData; barChart.update(); }
+
+  if(!pieChart){
+    pieChart=new Chart(document.getElementById('chartPie'),{
+      type:'doughnut',
+      data:{labels:catLabels,datasets:[{data:aData,backgroundColor:colors}]},
+      options:{responsive:true,plugins:{title:{display:true,text:'Distribución del gasto · Opción A'},
+        legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.label+': '+fmtUSD(c.raw)}}}}
+    });
+  } else { pieChart.data.datasets[0].data=aData; pieChart.update(); }
+}
+
+// listeners
+const bind=(id,key,fn)=>{document.getElementById(id).addEventListener('input',e=>{st[key]=parseFloat(e.target.value);render();});};
+bind('s-day','day'); bind('s-atl','atl'); bind('s-ny','ny'); bind('s-fx','fx'); bind('s-nyn','nyPaid');
+
+buildCal();
+render();
+</script>
+</body>
+</html>
