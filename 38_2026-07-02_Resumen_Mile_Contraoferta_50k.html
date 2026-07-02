@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Croesestraat 58 | Contraoferta €50.000 — 2 jul 2026</title>
+<style>
+  :root{
+    --ink:#17202a; --muted:#5c6673; --soft:#f5f7fa; --line:#d9e0e8; --panel:#fff;
+    --blue:#2563eb; --blue-soft:#dbeafe; --green:#11845b; --green-soft:#dff7eb;
+    --amber:#b7791f; --amber-soft:#fff2cf; --red:#b42318; --red-soft:#ffe4e0;
+    --violet:#6d28d9; --violet-soft:#ede9fe; --teal:#0f766e; --teal-soft:#ccfbf1;
+    --shadow:0 18px 50px rgba(23,32,42,.10); --radius:10px; --max:1100px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;color:var(--ink);
+    background:linear-gradient(180deg,#eef4fb 0,#f8fafc 420px,#f8fafc 100%);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    line-height:1.5;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 22px;}
+  a{color:inherit;}
+  .topbar{position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(217,224,232,.85);
+    background:rgba(248,250,252,.92);backdrop-filter:blur(14px);}
+  .topbar-inner{display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:62px;}
+  .brand{display:flex;flex-direction:column;gap:2px;}
+  .brand strong{font-size:15px;}
+  .brand span{color:var(--muted);font-size:12px;}
+  .nav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;}
+  .nav a{border:1px solid var(--line);border-radius:8px;background:var(--panel);
+    padding:7px 10px;font-size:12px;font-weight:700;text-decoration:none;}
+  .nav a:hover{border-color:#9fb1c5;}
+  header.hero{padding:34px 0 12px;}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;
+    color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+  .hero-main{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(239,246,255,.96));
+    border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:28px;position:relative;overflow:hidden;}
+  .hero-main:after{content:"";position:absolute;right:-140px;top:-120px;width:330px;height:330px;
+    border:40px solid rgba(37,99,235,.09);transform:rotate(18deg);}
+  h1{margin:0 0 8px;font-size:27px;letter-spacing:-.01em;}
+  .lede{color:var(--muted);font-size:15px;max-width:780px;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;
+    border-radius:999px;padding:5px 11px;border:1px solid var(--line);background:#fff;}
+  .pill.blue{background:var(--blue-soft);border-color:#bcd2f7;color:#1e40af;}
+  .pill.green{background:var(--green-soft);border-color:#aee5cc;color:#0c6b48;}
+  .pill.amber{background:var(--amber-soft);border-color:#ecd79a;color:#8a5b09;}
+  .pill.red{background:var(--red-soft);border-color:#f0c9c4;color:#9b1c12;}
+  section{padding:26px 0 4px;}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 14px;}
+  .sec-title .n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+    border-radius:7px;background:var(--ink);color:#fff;font-size:12px;}
+  .grid{display:grid;gap:14px;}
+  .g2{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .g3{grid-template-columns:repeat(3,minmax(0,1fr));}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr;}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;box-shadow:var(--shadow);}
+  .card h3{margin:0 0 8px;font-size:15px;}
+  .card p{margin:0 0 8px;font-size:14px;color:#2c3744;}
+  .card p:last-child{margin-bottom:0;}
+  .tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.05em;
+    text-transform:uppercase;padding:3px 7px;border-radius:6px;margin-bottom:9px;}
+  .tag.hecho{background:var(--blue-soft);color:#1e40af;}
+  .tag.infer{background:var(--violet-soft);color:#5b21b6;}
+  .tag.riesgo{background:var(--red-soft);color:#9b1c12;}
+  .callout{border:1px solid var(--line);border-left:4px solid var(--blue);
+    border-radius:8px;padding:16px 18px;box-shadow:var(--shadow);background:#fff;}
+  .callout.green{border-left-color:var(--green);}
+  .callout.amber{border-left-color:var(--amber);}
+  .callout.red{border-left-color:var(--red);}
+  .callout h3{margin:0 0 6px;font-size:15px;}
+  .callout p{margin:0;font-size:14px;color:#2c3744;}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);
+    border-radius:var(--radius);overflow:hidden;font-size:13px;box-shadow:var(--shadow);}
+  th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{background:var(--soft);font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
+  tr:last-child td{border-bottom:none;}
+  td strong{color:var(--ink);}
+  .hl{background:var(--green-soft);}
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:10px;}
+  ol.steps li{position:relative;background:#fff;border:1px solid var(--line);border-radius:9px;
+    padding:14px 16px 14px 50px;font-size:14px;box-shadow:var(--shadow);}
+  ol.steps li:before{counter-increment:s;content:counter(s);position:absolute;left:13px;top:13px;
+    width:24px;height:24px;border-radius:7px;background:var(--blue);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+  .donts{display:grid;gap:8px;}
+  .donts .item{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #f0c9c4;
+    border-radius:8px;padding:11px 14px;font-size:13.5px;}
+  .donts .item:before{content:"✕";flex:none;color:var(--red);font-weight:800;}
+  .checklist{display:grid;gap:8px;}
+  .checklist .item{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:12px 14px;font-size:13.5px;box-shadow:var(--shadow);}
+  .checklist .item:before{content:"✓";flex:none;width:22px;height:22px;border-radius:6px;
+    background:var(--teal-soft);color:#0c5d56;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:12px;}
+  /* Barras de evolución de ofertas */
+  .bars{display:grid;gap:10px;}
+  .brow{display:grid;grid-template-columns:150px 1fr 90px;gap:12px;align-items:center;
+    background:#fff;border:1px solid var(--line);border-radius:9px;padding:11px 15px;box-shadow:var(--shadow);}
+  @media(max-width:600px){.brow{grid-template-columns:110px 1fr 80px;}}
+  .brow .lab{font-size:12.5px;font-weight:700;}
+  .brow .lab span{display:block;font-weight:400;color:var(--muted);font-size:11px;}
+  .brow .track{height:14px;border-radius:7px;background:var(--soft);overflow:hidden;}
+  .brow .fill{height:100%;border-radius:7px;}
+  .brow .amt{text-align:right;font-weight:800;font-size:13.5px;}
+  /* Escenarios */
+  .esc{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+    overflow:hidden;display:flex;flex-direction:column;}
+  .esc .head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 16px;
+    border-bottom:1px solid var(--line);background:var(--soft);}
+  .esc .head h3{margin:0;font-size:14.5px;}
+  .esc .prob{flex:none;font-size:11px;font-weight:800;border-radius:999px;padding:4px 10px;}
+  .esc .prob.alta{background:var(--green-soft);color:#0c6b48;}
+  .esc .prob.media{background:var(--amber-soft);color:#8a5b09;}
+  .esc .prob.baja{background:var(--blue-soft);color:#1e40af;}
+  .esc .prob.min{background:var(--soft);color:var(--muted);border:1px solid var(--line);}
+  .esc .body{padding:14px 16px;font-size:13.5px;color:#2c3744;flex:1;}
+  .esc .body p{margin:0 0 8px;}
+  .esc .body p:last-child{margin:0;}
+  .esc .body b.q{color:var(--ink);}
+  .esc .foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;background:#fff;}
+  .esc .foot b{color:var(--ink);}
+  .probtrack{height:8px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:8px;}
+  .probfill{height:100%;border-radius:4px;background:var(--blue);}
+  footer{padding:30px 0 50px;color:var(--muted);font-size:12px;text-align:center;}
+  .disc{max-width:780px;margin:0 auto;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="wrap topbar-inner">
+  <div class="brand"><strong>Croesestraat 58</strong><span>Contraoferta €50.000 · 2 de julio de 2026</span></div>
+  <nav class="nav">
+    <a href="#donde">Dónde estamos</a><a href="#jugada">La jugada</a><a href="#carta">La carta</a>
+    <a href="#escenarios">Escenarios</a><a href="#escalera">Escalera</a><a href="#juicio">¿Juicio?</a><a href="#reglas">Reglas</a>
+  </nav>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <div class="kicker">Resumen para Mile · Ronda 4</div>
+  <div class="hero-main">
+    <h1>Pasamos al ataque: contraoferta de €50.000</h1>
+    <p class="lede">Ellos ofrecieron €10.000 y amenazaron con juicio. Nosotros respondemos con una carta firme:
+    <b>no aceptamos</b>, les explicamos por qué su amenaza legal es débil, y ponemos nuestro número sobre la mesa —
+    <b>€50.000</b> por irnos el 31 de diciembre de 2026, con el dinero asegurado en un notario <i>antes</i> de entregar las llaves.
+    El objetivo realista no es cobrar 50: es <b>cerrar entre €32.000 y €38.000</b>.</p>
+    <div class="meta-row">
+      <span class="pill red">Ellos ofrecen: €10.000</span>
+      <span class="pill blue">Nosotros pedimos: €50.000</span>
+      <span class="pill green">Objetivo de cierre: €32–38 mil</span>
+      <span class="pill amber">Nuestra oferta vence: 24 de julio</span>
+    </div>
+  </div>
+</div></header>
+
+<section id="donde"><div class="wrap">
+  <h2 class="sec-title"><span class="n">1</span> Dónde estamos: cada vez que no cedimos, ellos subieron</h2>
+  <div class="bars">
+    <div class="brow"><div class="lab">Abril <span>1ª carta (Justus)</span></div>
+      <div class="track"><div class="fill" style="width:4.2%;background:#b42318;"></div></div><div class="amt">€2.100</div></div>
+    <div class="brow"><div class="lab">Mayo <span>2ª carta (Justus)</span></div>
+      <div class="track"><div class="fill" style="width:15%;background:#b7791f;"></div></div><div class="amt">€7.500</div></div>
+    <div class="brow"><div class="lab">Junio <span>"Oferta final" (Tawfik)</span></div>
+      <div class="track"><div class="fill" style="width:20%;background:#b7791f;"></div></div><div class="amt">€10.000</div></div>
+    <div class="brow" style="border-color:#aee5cc;background:var(--green-soft);"><div class="lab">Julio <span>NUESTRA contraoferta</span></div>
+      <div class="track"><div class="fill" style="width:100%;background:#11845b;"></div></div><div class="amt">€50.000</div></div>
+  </div>
+  <div style="margin-top:14px" class="callout green">
+    <h3>El dato que manda</h3>
+    <p>Subieron de €2.100 a €10.000 (casi <b>5 veces</b>) sin que nosotros cediéramos <b>nada</b>. Eso demuestra dos cosas:
+    sus "ofertas finales" nunca fueron finales, y a Chad le vale <b>mucho</b> que nos vayamos. Vender la casa vacía puede valerle
+    entre €46.000 y €90.000 más que venderla con nosotros adentro. Le estamos pidiendo una parte de un valor que <b>nosotros le creamos</b> al irnos.</p>
+  </div>
+</div></section>
+
+<section id="jugada"><div class="wrap">
+  <h2 class="sec-title"><span class="n">2</span> La jugada: por qué ahora sí ponemos un número</h2>
+  <div class="grid g3">
+    <div class="card"><span class="tag hecho">Hecho</span>
+      <h3>Ya ganamos la estructura</h3>
+      <p>Sin darnos cuenta casi, ellos ya aceptaron todo lo que íbamos a exigir: fecha 31-dic-2026, pago asegurado con notario/escrow,
+      depósito devuelto aparte, y acuerdo revisable por nuestros asesores antes de firmar.</p>
+      <p><b>Solo queda pelear una cosa: el número.</b></p></div>
+    <div class="card"><span class="tag infer">Estrategia</span>
+      <h3>Ancla alta con argumentos</h3>
+      <p>€50.000 no es un capricho: refleja lo que perdemos (alquiler protegido de €1.400 en un mercado mucho más caro, años de diferencia,
+      mudanza completa) y lo que él gana (vender vacío vale mucho más).</p>
+      <p>Nadie arranca pidiendo lo que quiere cobrar. Se arranca arriba para cerrar bien.</p></div>
+    <div class="card"><span class="tag riesgo">Protección</span>
+      <h3>La oferta se protege sola</h3>
+      <p>La carta dice "without prejudice": nuestra propuesta no puede usarse en nuestra contra en un juicio.</p>
+      <p>Y tiene un seguro: <b>si nos demandan, la oferta caduca automáticamente</b>. Litigar les sale más caro que negociar, y lo saben.</p></div>
+  </div>
+</div></section>
+
+<section id="carta"><div class="wrap">
+  <h2 class="sec-title"><span class="n">3</span> La carta: qué dice y qué NO dice</h2>
+  <div class="grid g2">
+    <div>
+      <ol class="steps">
+        <li><b>Seguimos siendo inquilinos protegidos.</b> El contrato pasó a indefinido; no tenemos obligación de irnos y pagamos puntual, siempre.</li>
+        <li><b>Su amenaza de juicio es floja y se lo decimos.</b> "Necesito la casa para venderla" no es una causal válida según los tribunales holandeses. Si demandan, nos defendemos a fondo.</li>
+        <li><b>Su plazo de 21 días no nos obliga.</b> Es un plazo que inventaron ellos; se lo decimos con elegancia.</li>
+        <li><b>Aceptamos su estructura, rechazamos su número.</b> €10.000 no compensa ni de cerca lo que nos piden entregar.</li>
+        <li><b>Nuestra propuesta: €50.000</b>, salida 31-dic-2026, plata en el notario ANTES de las llaves, depósito aparte, acuerdo sin trampas revisado por asesores. Válida hasta el <b>24 de julio</b>.</li>
+      </ol>
+    </div>
+    <div>
+      <div class="donts">
+        <div class="item">No admite que el contrato haya terminado (nunca).</div>
+        <div class="item">No menciona los €380.000 de la compra: ese es otro carril y no se mezcla.</div>
+        <div class="item">No regala una fecha de salida "gratis": la fecha solo existe dentro del paquete con los €50.000.</div>
+        <div class="item">No insulta ni sobra a nadie: firme y profesional, como siempre.</div>
+        <div class="item">No muestra nuestro número real de cierre (ese queda entre nosotros).</div>
+      </div>
+      <div class="callout amber" style="margin-top:12px">
+        <h3>Pendiente prudente</h3>
+        <p>La amenaza de juicio hace recomendable tener un <b>abogado de huurrecht</b> listo antes del 24 de julio.
+        No porque vayamos a perder: para estar cubiertos y para que la próxima carta, si hace falta, salga con membrete de abogado.</p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="escenarios"><div class="wrap">
+  <h2 class="sec-title"><span class="n">4</span> ¿Qué pueden hacer ellos ahora? Los 8 escenarios</h2>
+  <div class="grid g2">
+
+    <div class="esc"><div class="head"><h3>A · Contraofertan €18–30 mil</h3><span class="prob alta">~40% · el más probable</span></div>
+      <div class="body"><p>Es su patrón de siempre: aprietan, no cedemos, suben. Una contraoferta intermedia les deja salvar la cara de su "oferta final".</p>
+      <p><b class="q">Nosotros:</b> bajamos en escalones chicos (ver escalera abajo), nunca dos veces seguidas, y cobramos algo por cada baja.</p>
+      <div class="probtrack"><div class="probfill" style="width:40%"></div></div></div>
+      <div class="foot">Cierre esperado: <b>€30.000–38.000</b> 💰</div></div>
+
+    <div class="esc"><div class="head"><h3>B · Repiten "€10.000 es final" + amenaza</h3><span class="prob media">~15–20%</span></div>
+      <div class="body"><p>Doblar la apuesta retórica antes de moverse, a ver si el miedo nos ablanda.</p>
+      <p><b class="q">Nosotros:</b> respuesta de 5 líneas: "tomamos nota, nuestra oferta sigue en pie hasta el 24-jul". Nada más. La historia dice que después de nuestra firmeza, suben.</p>
+      <div class="probtrack"><div class="probfill" style="width:18%;background:var(--amber)"></div></div></div>
+      <div class="foot">Deriva probable: al escenario A en 2–4 semanas.</div></div>
+
+    <div class="esc"><div class="head"><h3>C · Suben poquito (€12–15 mil)</h3><span class="prob media">~10–15%</span></div>
+      <div class="body"><p>Moverse lo mínimo para parecer razonables ante un eventual juez.</p>
+      <p><b class="q">Nosotros:</b> espejo: si su movimiento es cosmético, el nuestro también (50.000 → 47.500), o ni nos movemos. Los gestos vacíos se pagan con gestos vacíos.</p>
+      <div class="probtrack"><div class="probfill" style="width:13%;background:var(--amber)"></div></div></div>
+      <div class="foot">Si madura: €28.000–35.000, con más rondas.</div></div>
+
+    <div class="esc"><div class="head"><h3>D · Nos demandan (juicio de fondo)</h3><span class="prob baja">~10%</span></div>
+      <div class="body"><p>Necesitarían ganar con una causal ("necesito la casa para venderla") que la justicia holandesa <b>rechaza</b>, contra inquilinos que pagan puntual y con un contrato convertido a indefinido.</p>
+      <p><b class="q">Nosotros:</b> abogado ese mismo día, defensa total, y el canal sigue abierto: muchos juicios se arreglan en el medio… y más caro para el que demandó.</p>
+      <div class="probtrack"><div class="probfill" style="width:10%;background:var(--red)"></div></div></div>
+      <div class="foot">Su peor camino: meses de proceso, causal débil, costas.</div></div>
+
+    <div class="esc"><div class="head"><h3>E · Desalojo exprés (kort geding)</h3><span class="prob min">&lt;5%</span></div>
+      <div class="body"><p>Para un desalojo urgente hace falta urgencia real: deudas de alquiler o problemas graves. No hay nada de eso: pagamos puntual, siempre.</p>
+      <p><b class="q">Nosotros:</b> abogado, nos presentamos, y casi seguro lo pierden — lo que los debilita para todo lo demás.</p>
+      <div class="probtrack"><div class="probfill" style="width:4%;background:var(--red)"></div></div></div>
+      <div class="foot">Sería casi un regalo para nosotros.</div></div>
+
+    <div class="esc"><div class="head"><h3>F · Silencio</h3><span class="prob baja">~10%</span></div>
+      <div class="body"><p>Dejar vencer nuestro plazo para "resetear", o simple parálisis de Chad.</p>
+      <p><b class="q">Nosotros:</b> nada. El tiempo juega para nosotros: vivimos acá pagando €1.400 y el apurado por plata es él. El 24-jul la oferta caduca sola; si vuelven, se arranca de nuevo desde nuestro lado.</p>
+      <div class="probtrack"><div class="probfill" style="width:10%"></div></div></div>
+      <div class="foot">Único costo: tiempo (ver riesgo en Reglas).</div></div>
+
+    <div class="esc"><div class="head"><h3>G · Cambian de plan: venden ocupada o nos venden a nosotros</h3><span class="prob baja">~5–10%</span></div>
+      <div class="body"><p>Si irnos le sale caro, Chad puede vender la casa con nosotros adentro (el comprador hereda nuestro contrato) o retomar la venta directa a nosotros.</p>
+      <p><b class="q">Nosotros:</b> carril separado. Si reabre la venta, nuestra referencia sigue siendo <b>€380–400 mil</b>. Ojo: si vende ocupada a un tercero, el buyout desaparece — es la señal a vigilar más de cerca.</p>
+      <div class="probtrack"><div class="probfill" style="width:8%"></div></div></div>
+      <div class="foot">La amenaza real a nuestra palanca no es el juicio: es esto.</div></div>
+
+    <div class="esc"><div class="head"><h3>H · Aceptan los €50.000</h3><span class="prob min">≤5%</span></div>
+      <div class="body"><p>Poco probable, pero si pasa: no festejar por escrito y no apurarse a firmar.</p>
+      <p><b class="q">Nosotros:</b> el peligro se muda al contrato de salida (VSO): revisión palabra por palabra con abogado. Sin renuncias raras, sin admisiones, sin multas escondidas, plata en el notario antes de las llaves.</p>
+      <div class="probtrack"><div class="probfill" style="width:5%"></div></div></div>
+      <div class="foot">La firma del VSO es el momento de máximo riesgo del caso.</div></div>
+
+  </div>
+</div></section>
+
+<section id="escalera"><div class="wrap">
+  <h2 class="sec-title"><span class="n">5</span> La escalera: cómo bajamos de 50 sin regalar nada</h2>
+  <table>
+    <thead><tr><th>Ronda</th><th>Si ellos ofrecen…</th><th>Nosotros respondemos…</th><th>La regla</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Hoy</strong></td><td>€10.000</td><td><strong>€50.000</strong></td><td>Ancla alta con argumentos</td></tr>
+      <tr><td>Ronda 1</td><td>€18–22 mil</td><td>€42.500</td><td>Cada baja nuestra pide algo a cambio</td></tr>
+      <tr><td>Ronda 2</td><td>€25–28 mil</td><td>€38.000</td><td>Escalones cada vez más chicos</td></tr>
+      <tr><td>Ronda 3</td><td>€30–33 mil</td><td>€35–36 mil</td><td>Señal de que el techo real se acerca</td></tr>
+      <tr class="hl"><td><strong>Cierre</strong></td><td colspan="2"><strong>€32.000–38.000</strong> con estructura limpia</td><td>Objetivo realista 🎯</td></tr>
+    </tbody>
+  </table>
+  <div style="margin-top:12px" class="callout">
+    <h3>El número secreto</h3>
+    <p>Nuestro piso interno es <b>€27.500–30.000</b>: por debajo de eso no tiene sentido vender la protección de inquilinos.
+    Ese número <b>no se dice nunca</b> — ni por teléfono, ni "en confianza", ni en un mail. Entre €25 y 30 mil con condiciones
+    perfectas, la decisión es nuestra, de los dos, con calma.</p>
+  </div>
+</div></section>
+
+<section id="juicio"><div class="wrap">
+  <h2 class="sec-title"><span class="n">6</span> ¿Y si al final hay juicio? Tranquilidad, con matices</h2>
+  <div class="grid g2">
+    <div class="callout green">
+      <h3>El juicio es nuestro escudo, no nuestra espada</h3>
+      <p>Si "ganamos" un juicio, el premio es <b>quedarnos en casa cobrando €0</b> — no nos darían plata. Por eso no lo buscamos:
+      la única forma de cobrar el valor de nuestra posición es negociando. Pero si ellos lo inician, nuestra defensa es fuerte:
+      su causal está rechazada por los tribunales, no hay notificación válida de fin de contrato en todo el expediente, y pagamos puntual desde el día uno.</p>
+    </div>
+    <div class="callout amber">
+      <h3>Lo que sí cuesta</h3>
+      <p>Un juicio significa contratar abogado (honorarios reales), meses de espera y desgaste emocional. Probabilidad baja de perder,
+      pero no cero — nada es cero en tribunales. Por eso: abogado listo <b>antes</b> de que haga falta, renta puntual sin excepción,
+      y ninguna carta nuestra les regala excusas. Si demandan, también se puede negociar durante el proceso — y suele salir más caro para ellos.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="reglas"><div class="wrap">
+  <h2 class="sec-title"><span class="n">7</span> Reglas de oro hasta el cierre</h2>
+  <div class="grid g2">
+    <div class="checklist">
+      <div class="item">Todo por escrito, siempre. Ni llamadas ni reuniones sin agenda escrita previa.</div>
+      <div class="item">Renta de €1.400 pagada puntual, pase lo que pase. Es nuestro chaleco antibalas.</div>
+      <div class="item">Abogado de huurrecht contactado antes del 24 de julio.</div>
+      <div class="item">Cada concesión nuestra exige una de ellos. Nunca dos bajas seguidas.</div>
+      <div class="item">Decidir la jugada post-24-julio ANTES del 24 de julio.</div>
+    </div>
+    <div class="donts">
+      <div class="item">No aceptar "casi €10.000" por miedo al plazo: el plazo era de ellos y ya lo neutralizamos.</div>
+      <div class="item">No revelar el piso interno (€27,5–30 mil). A nadie.</div>
+      <div class="item">No mezclar el buyout con la compra de la casa (€380 mil): carriles separados.</div>
+      <div class="item">No firmar NADA sin revisión de abogado, aunque el número sea bueno.</div>
+      <div class="item">No dormirse: la ventana buena para cerrar es <b>julio–septiembre</b>. Si Chad se funde o vende ocupada, el buyout se evapora.</div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap disc">
+  <p>Resumen preparado el 2 de julio de 2026 sobre la base del expediente del caso (docs 33–37). Las probabilidades son estimaciones
+  del análisis, no certezas. Este material es de un analista de negociación y asistente legal <b>no abogado</b>; los puntos jurídicos
+  (causal de terminación, kort geding, conversión a contrato indefinido) deben ratificarse con un advocaat huurrecht.</p>
+</div></footer>
+
+</body>
+</html>
