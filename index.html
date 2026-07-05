@@ -28,15 +28,16 @@
     display: block;
     padding: 14px 18px;
     text-decoration: none;
-    color: #1a56db;
-    font-weight: 500;
+    color: inherit;
     word-break: break-word;
   }
+  .nombre { color: #1a56db; font-weight: 500; }
+  .fecha { display: block; font-size: .85rem; color: #888; margin-top: 4px; }
   .estado { color: #888; }
   @media (prefers-color-scheme: dark) {
     body { background: #15161a; color: #e6e6e6; }
     #lista li { background: #1f2126; border-color: #33363d; }
-    #lista a { color: #7aa7ff; }
+    .nombre { color: #7aa7ff; }
   }
 </style>
 </head>
@@ -49,34 +50,62 @@
 const USUARIO = "nflizarraga";
 const REPO = "dashboards";
 const BRANCH = "main";
+const API = `https://api.github.com/repos/${USUARIO}/${REPO}`;
 
-fetch(`https://api.github.com/repos/${USUARIO}/${REPO}/contents/?ref=${BRANCH}`)
-  .then(r => r.json())
-  .then(archivos => {
-    const htmls = archivos
-      .filter(f => f.type === "file"
-        && /\.html?$/i.test(f.name)
-        && f.name.toLowerCase() !== "index.html")
-      .sort((a, b) => b.name.localeCompare(a.name)); // más nuevos arriba si empiezan con número/fecha
+async function cargar() {
+  const archivos = await fetch(`${API}/contents/?ref=${BRANCH}`).then(r => r.json());
 
-    const lista = document.getElementById("lista");
-    htmls.forEach(f => {
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.href = f.name; // link relativo: funciona en GitHub Pages
-      a.textContent = f.name
-        .replace(/\.html?$/i, "")
-        .replace(/[_-]/g, " ");
-      li.appendChild(a);
-      lista.appendChild(li);
-    });
+  const htmls = archivos.filter(f =>
+    f.type === "file" &&
+    /\.html?$/i.test(f.name) &&
+    f.name.toLowerCase() !== "index.html"
+  );
 
-    document.getElementById("estado").textContent =
-      htmls.length ? `${htmls.length} página${htmls.length > 1 ? "s" : ""}` : "No hay páginas todavía.";
-  })
-  .catch(() => {
-    document.getElementById("estado").textContent = "Error cargando la lista.";
+  // buscar la fecha del último commit de cada archivo
+  const conFecha = await Promise.all(htmls.map(async f => {
+    try {
+      const commits = await fetch(
+        `${API}/commits?path=${encodeURIComponent(f.path)}&sha=${BRANCH}&per_page=1`
+      ).then(r => r.json());
+      f.fecha = new Date(commits[0].commit.committer.date);
+    } catch (e) {
+      f.fecha = null;
+    }
+    return f;
+  }));
+
+  // más recientes arriba
+  conFecha.sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
+
+  const lista = document.getElementById("lista");
+  conFecha.forEach(f => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = f.name; // link relativo: funciona en GitHub Pages
+
+    const nombre = document.createElement("span");
+    nombre.className = "nombre";
+    nombre.textContent = f.name.replace(/\.html?$/i, "").replace(/[_-]/g, " ");
+
+    const fecha = document.createElement("span");
+    fecha.className = "fecha";
+    fecha.textContent = f.fecha
+      ? "Subido el " + f.fecha.toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })
+      : "";
+
+    a.appendChild(nombre);
+    a.appendChild(fecha);
+    li.appendChild(a);
+    lista.appendChild(li);
   });
+
+  document.getElementById("estado").textContent =
+    conFecha.length ? `${conFecha.length} página${conFecha.length > 1 ? "s" : ""}` : "No hay páginas todavía.";
+}
+
+cargar().catch(() => {
+  document.getElementById("estado").textContent = "Error cargando la lista.";
+});
 </script>
 </body>
 </html>
