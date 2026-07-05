@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía 1:1 con el CFO — Lunes</title>
+<style>
+  :root{--bg:#0f1420;--card:#1a2233;--accent:#4f8ef7;--green:#3ecf8e;--red:#f76c6c;--amber:#f7c948;--text:#e8ecf4;--muted:#9aa5b8;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:24px;max-width:900px;margin:0 auto;}
+  h1{font-size:1.6rem;margin-bottom:4px;}
+  .sub{color:var(--muted);margin-bottom:24px;}
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:10;}
+  .tab{background:var(--card);border:1px solid #2a3550;color:var(--muted);padding:8px 16px;border-radius:20px;cursor:pointer;font-size:.9rem;}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  section{display:none;}
+  section.active{display:block;animation:fade .25s;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .card{background:var(--card);border-radius:12px;padding:18px 20px;margin-bottom:14px;border-left:4px solid var(--accent);}
+  .card.green{border-left-color:var(--green);}
+  .card.red{border-left-color:var(--red);}
+  .card.amber{border-left-color:var(--amber);}
+  .card h3{font-size:1.05rem;margin-bottom:8px;}
+  .card p, .card li{color:#c7cfdd;font-size:.95rem;}
+  ul{padding-left:20px;}
+  li{margin-bottom:8px;}
+  .tag{display:inline-block;background:#2a3550;color:var(--accent);font-size:.75rem;padding:2px 10px;border-radius:10px;margin-bottom:8px;}
+  .check{list-style:none;padding-left:0;}
+  .check li{padding-left:30px;position:relative;cursor:pointer;}
+  .check li::before{content:'';position:absolute;left:0;top:4px;width:18px;height:18px;border:2px solid var(--accent);border-radius:4px;}
+  .check li.done{color:var(--muted);text-decoration:line-through;}
+  .check li.done::before{background:var(--green);border-color:var(--green);content:'✓';color:#fff;text-align:center;line-height:18px;font-size:12px;}
+  .quote{font-style:italic;background:#141b2b;padding:12px 16px;border-radius:8px;margin-top:8px;color:#b8c2d4;}
+  strong{color:var(--text);}
+</style>
+</head>
+<body>
+<h1>🎯 1:1 con Bart (CFO) — Lunes</h1>
+<p class="sub">Tu guía de preparación. Objetivo: escuchar primero, dejar plantada la semilla de tu valor.</p>
+
+<div class="tabs">
+  <div class="tab active" data-t="estrategia">Estrategia</div>
+  <div class="tab" data-t="pitch">Tu pitch</div>
+  <div class="tab" data-t="logros">Logros clave</div>
+  <div class="tab" data-t="preguntas">Preguntas al CFO</div>
+  <div class="tab" data-t="evitar">Qué evitar</div>
+  <div class="tab" data-t="checklist">Checklist</div>
+</div>
+
+<section id="estrategia" class="active">
+  <div class="card green">
+    <h3>La regla de oro: 70% escuchar, 30% hablar</h3>
+    <p>Él convocó la reunión para explicarte objetivos. Dejalo liderar. Tu mejor impresión no viene de una presentación, sino de <strong>preguntas inteligentes y respuestas concretas</strong>. Un CFO meticuloso valora a quien va preparado pero no le roba tiempo.</p>
+  </div>
+  <div class="card">
+    <h3>No lleves presentaciones ni HTMLs a la reunión</h3>
+    <p>Esta guía es para vos, para repasar antes. Llegar con un deck a un primer 1:1 puede leerse como ansiedad por impresionar. Llevá solo una libreta: <strong>anotar lo que él dice</strong> es la señal de respeto más fuerte que existe para alguien meticuloso.</p>
+  </div>
+  <div class="card amber">
+    <h3>Tu ventaja silenciosa</h3>
+    <p>Bart ya dio el okay para tu pase a Business Control. No es un desconocido: ya conoce tu nombre y aprobó tu movimiento. No necesitás venderte de cero — necesitás <strong>confirmar que la decisión fue correcta</strong>.</p>
+  </div>
+  <div class="card">
+    <h3>El equilibrio que buscás</h3>
+    <p>Primera mitad: escuchar objetivos, tomar nota, hacer preguntas. Última parte: un cierre breve donde mostrás ambición sin pedir nada. La semilla se planta con una frase, no con un discurso.</p>
+    <div class="quote">"Quiero que sepas que estoy muy motivado con este paso a Business Control. Vengo de operar los procesos desde adentro — pagos, conciliaciones, sistemas — y creo que esa visión me va a servir para controlar mejor los números. Lo que necesite el equipo en esta transición, contá conmigo."</div>
+  </div>
+</section>
+
+<section id="pitch">
+  <div class="card">
+    <span class="tag">Si te pregunta "contame de vos" — 90 segundos máximo</span>
+    <h3>Estructura: pasado → presente → futuro</h3>
+    <ul>
+      <li><strong>Pasado:</strong> "Entré hace dos años como Junior Financial Accountant. Empecé con AP tradicional, pero rápido me fui metiendo en sistemas y procesos."</li>
+      <li><strong>Presente:</strong> "Terminé liderando la implementación de ISP Next, gestionando las entidades de UK y Bélgica, coordinando al equipo de Hungría, y el año pasado armé el budget completo del equipo de Finanzas — que fue lo que me acercó a Business Control."</li>
+      <li><strong>Futuro:</strong> "Me entusiasma este rol porque conozco los procesos desde la operación. Sé de dónde salen los números que ahora voy a controlar."</li>
+    </ul>
+  </div>
+  <div class="card green">
+    <h3>Tu frase diferencial (memorizala)</h3>
+    <div class="quote">"No solo sé leer los números — sé exactamente cómo se generan, en qué sistema, y dónde suelen estar los errores."</div>
+    <p style="margin-top:8px">Esto es lo que un business controller que viene de FP&A puro no puede decir. Es tu moat.</p>
+  </div>
+</section>
+
+<section id="logros">
+  <div class="card">
+    <span class="tag">Budget de Finanzas</span>
+    <h3>El más relevante para él</h3>
+    <p>Armaste el budget anual del equipo de Finanzas entrevistando a cada manager, y estimaste con lógica propia (+5% sobre promedio de actuals, estacionalidad de gastos como auditoría) los vendors sin información. Te dio el 3er puesto en los awards de Q4. <strong>Es literalmente trabajo de business controller ya hecho.</strong></p>
+  </div>
+  <div class="card">
+    <span class="tag">ISP Next</span>
+    <h3>Implementación de sistema</h3>
+    <p>Application owner, redujiste tiempos de codificación de 2-3 semanas a estar al día. Menciona el resultado, no el apodo de "rey de ISP".</p>
+  </div>
+  <div class="card">
+    <span class="tag">Liderazgo</span>
+    <h3>Equipo de Hungría</h3>
+    <p>Entrenaste y liderás a 2 personas que hoy hacen la codificación y conciliaciones. Delegaste una operación completa — eso es mentalidad de controller: liberar tiempo para análisis.</p>
+  </div>
+  <div class="card">
+    <span class="tag">Entidades</span>
+    <h3>STX UK y Belgium</h3>
+    <p>Responsabilidad completa de pagos y conciliación bancaria de UK; pagos manuales de Belgium (y co-creaste la herramienta Excel→XML con IT).</p>
+  </div>
+  <div class="card amber">
+    <h3>Cómo mencionarlos</h3>
+    <p>NO los recites. Tenelos listos como <strong>ejemplos concretos</strong> cuando él pregunte algo. "¿Tenés experiencia con presupuestos?" → historia del budget. "¿Cómo te llevás con sistemas?" → ISP. Un logro contado a demanda vale 10 contados de corrido.</p>
+  </div>
+</section>
+
+<section id="preguntas">
+  <div class="card green">
+    <h3>Sobre prioridades (elegí 2-3, no todas)</h3>
+    <ul>
+      <li>"¿Cuáles son las 2 o 3 prioridades del equipo de Business Control para lo que queda del año?"</li>
+      <li>"Desde tu posición, ¿qué es lo que más valorás de un buen business controller?"</li>
+      <li>"¿Qué te gustaría ver de mí en los primeros 90 días para considerar que la transición fue un éxito?"</li>
+    </ul>
+  </div>
+  <div class="card green">
+    <h3>Sobre el contexto del equipo</h3>
+    <ul>
+      <li>"Con la salida de [la persona] y la licencia de mi manager, ¿cómo querés que organicemos la comunicación mientras tanto? ¿Preferís updates escritos, un 1:1 quincenal...?"</li>
+      <li>"¿Hay algún proceso o reporte del equipo que te preocupe que quede descubierto en esta transición?"</li>
+    </ul>
+    <p style="margin-top:8px">Esta última es oro: le ofrecés cubrir huecos sin que te lo pida.</p>
+  </div>
+  <div class="card">
+    <h3>Pregunta de cierre (siempre funciona)</h3>
+    <div class="quote">"¿Hay algo que debería empezar a hacer, o dejar de hacer, desde esta semana?"</div>
+  </div>
+  <div class="card amber">
+    <h3>Sobre la IA — el momento justo</h3>
+    <p>Si surge el tema de eficiencia o herramientas, ahí sí: "Estoy usando IA para acelerar análisis y documentación — por ejemplo [ejemplo real tuyo]. Si te interesa, me encantaría explorar dónde podría ahorrarle tiempo al equipo." Como oferta, no como show. Si no surge, guardalo para el segundo 1:1.</p>
+  </div>
+</section>
+
+<section id="evitar">
+  <div class="card red">
+    <h3>No pidas promoción ni salario</h3>
+    <p>No en la primera reunión. Ya hay gente (Fransa, Jan) peleando por tu posición. Si vos lo planteás ahora, la reunión se convierte en una negociación y perdés el terreno de "vine a aportar". El momento llegará — con esta relación construida.</p>
+  </div>
+  <div class="card red">
+    <h3>No hables mal de Peter ni del proceso</h3>
+    <p>Nada de "me pusieron trabas", "no me valoraron", "el aumento me decepcionó". El CFO conoce la interna mejor que vos. Cualquier queja te resta. Si pregunta por la transición: "Fue un proceso largo, pero estoy contento de estar acá."</p>
+  </div>
+  <div class="card red">
+    <h3>No monopolices con logros</h3>
+    <p>Tu documento tiene material para 2 horas. La reunión es de él. Logros solo a demanda.</p>
+  </div>
+  <div class="card red">
+    <h3>No lleves materiales sin que los pida</h3>
+    <p>Ni HTML, ni deck, ni CV. Libreta y lapicera. Si él quiere algo por escrito, te lo va a pedir — y ahí sí, se lo mandás impecable en 24hs (eso sí impresiona a un meticuloso).</p>
+  </div>
+  <div class="card amber">
+    <h3>Cuidado con "soy muy bueno en todo"</h3>
+    <p>Tu confianza es real y está justificada, pero ante un CFO se demuestra con especificidad: "reduje la codificación de 3 semanas a 1 día" pesa más que cualquier autoelogio.</p>
+  </div>
+</section>
+
+<section id="checklist">
+  <div class="card">
+    <h3>Domingo</h3>
+    <ul class="check">
+      <li>Repasar esta guía completa una vez</li>
+      <li>Elegir mis 2-3 preguntas favoritas de la pestaña "Preguntas"</li>
+      <li>Practicar el pitch de 90 segundos en voz alta (2 veces)</li>
+      <li>Repasar números clave: 3 semanas→al día (ISP), budget de Finanzas, 2 personas en Hungría, entidades UK/BE</li>
+      <li>Dormir bien</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Lunes antes de la reunión</h3>
+    <ul class="check">
+      <li>Libreta y lapicera listas</li>
+      <li>Llegar 5 minutos antes</li>
+      <li>Releer solo la pestaña "Estrategia"</li>
+      <li>Recordar: 70% escuchar, 30% hablar</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Después de la reunión (mismo día)</h3>
+    <ul class="check">
+      <li>Pasar en limpio las notas</li>
+      <li>Mandarle un mail corto: agradecer + resumir en 3 bullets lo acordado + próximos pasos</li>
+      <li>Este mail es tu verdadera jugada de "meticuloso reconoce meticuloso"</li>
+    </ul>
+  </div>
+</section>
+
+<script>
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('section').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById(t.dataset.t).classList.add('active');
+}));
+document.querySelectorAll('.check li').forEach(li=>li.addEventListener('click',()=>li.classList.toggle('done')));
+</script>
+</body>
+</html>
