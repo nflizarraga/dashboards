@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboards</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    max-width: 640px;
+    margin: 40px auto;
+    padding: 0 20px;
+    background: #f6f7f9;
+    color: #1a1a2e;
+  }
+  h1 { font-size: 1.5rem; }
+  #lista { list-style: none; padding: 0; }
+  #lista li {
+    background: #fff;
+    border: 1px solid #e2e4e8;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: box-shadow .15s;
+  }
+  #lista li:hover { box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  #lista a {
+    display: block;
+    padding: 14px 18px;
+    text-decoration: none;
+    color: #1a56db;
+    font-weight: 500;
+    word-break: break-word;
+  }
+  .estado { color: #888; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #15161a; color: #e6e6e6; }
+    #lista li { background: #1f2126; border-color: #33363d; }
+    #lista a { color: #7aa7ff; }
+  }
+</style>
+</head>
+<body>
+<h1>📊 Dashboards</h1>
+<p class="estado" id="estado">Cargando…</p>
+<ul id="lista"></ul>
+
+<script>
+const USUARIO = "nflizarraga";
+const REPO = "dashboards";
+const BRANCH = "main";
+
+fetch(`https://api.github.com/repos/${USUARIO}/${REPO}/contents/?ref=${BRANCH}`)
+  .then(r => r.json())
+  .then(archivos => {
+    const htmls = archivos
+      .filter(f => f.type === "file"
+        && /\.html?$/i.test(f.name)
+        && f.name.toLowerCase() !== "index.html")
+      .sort((a, b) => b.name.localeCompare(a.name)); // más nuevos arriba si empiezan con número/fecha
+
+    const lista = document.getElementById("lista");
+    htmls.forEach(f => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = f.name; // link relativo: funciona en GitHub Pages
+      a.textContent = f.name
+        .replace(/\.html?$/i, "")
+        .replace(/[_-]/g, " ");
+      li.appendChild(a);
+      lista.appendChild(li);
+    });
+
+    document.getElementById("estado").textContent =
+      htmls.length ? `${htmls.length} página${htmls.length > 1 ? "s" : ""}` : "No hay páginas todavía.";
+  })
+  .catch(() => {
+    document.getElementById("estado").textContent = "Error cargando la lista.";
+  });
+</script>
+</body>
+</html>
