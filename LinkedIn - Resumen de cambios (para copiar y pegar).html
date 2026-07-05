@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedIn — Plan de cambios · Nico Lizarraga</title>
+<style>
+  :root{
+    --bg:#f3f6fb; --card:#ffffff; --ink:#1a2433; --muted:#5b6b80;
+    --blue:#0a66c2; --blue-dark:#084d92; --green:#0e8a5f; --amber:#b45309; --red:#c0392b;
+    --border:#e3e9f2; --code-bg:#f0f4fa;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding:0 0 60px}
+  .hero{background:linear-gradient(135deg,#0a66c2 0%,#084d92 60%,#063a6e 100%);color:#fff;padding:38px 24px 30px;text-align:center}
+  .hero h1{font-size:1.7rem;font-weight:700;letter-spacing:.3px}
+  .hero p{opacity:.85;margin-top:6px;font-size:.95rem}
+  .hero .goal{display:inline-block;margin-top:14px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:6px 18px;font-size:.9rem}
+  .wrap{max-width:880px;margin:0 auto;padding:26px 18px}
+  .progress-bar{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(10,40,80,.06)}
+  .progress-track{flex:1;height:10px;background:#e6edf6;border-radius:6px;overflow:hidden}
+  .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#0a66c2,#0e8a5f);border-radius:6px;transition:width .3s}
+  .progress-label{font-size:.85rem;font-weight:600;color:var(--muted);white-space:nowrap}
+  section{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:22px;overflow:hidden;box-shadow:0 1px 4px rgba(10,40,80,.05)}
+  .sec-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border);background:#fbfcfe}
+  .sec-num{width:34px;height:34px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+  .sec-head h2{font-size:1.12rem}
+  .sec-head .tag{margin-left:auto;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:12px;letter-spacing:.5px;white-space:nowrap}
+  .tag.now{background:#fdecea;color:var(--red)}
+  .tag.week{background:#fef3e2;color:var(--amber)}
+  .tag.later{background:#e7f4ee;color:var(--green)}
+  .sec-body{padding:18px 20px}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
+  .step:last-child{border-bottom:none}
+  .step input[type=checkbox]{width:20px;height:20px;margin-top:3px;accent-color:var(--green);cursor:pointer;flex-shrink:0}
+  .step label{cursor:pointer}
+  .step b{color:var(--blue-dark)}
+  .step small{display:block;color:var(--muted);margin-top:2px}
+  .copyblock{position:relative;background:var(--code-bg);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:10px;padding:16px 16px 14px;margin:12px 0;white-space:pre-wrap;font-size:.92rem}
+  .copyblock .cb-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--blue);margin-bottom:8px}
+  .copybtn{position:absolute;top:10px;right:10px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .2s}
+  .copybtn:hover{background:var(--blue-dark)}
+  .copybtn.done{background:var(--green)}
+  .pill-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .pill{padding:5px 13px;border-radius:16px;font-size:.85rem;font-weight:600;border:1px solid transparent}
+  .pill.del{background:#fdecea;color:var(--red);text-decoration:line-through}
+  .pill.add{background:#e7f4ee;color:var(--green)}
+  .pill.pin{background:#eaf2fc;color:var(--blue);border-color:var(--blue)}
+  .subhead{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:16px 0 4px}
+  .subhead:first-child{margin-top:0}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9rem}
+  th{background:#fbfcfe;text-align:left;padding:9px 12px;border-bottom:2px solid var(--border);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+  td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+  .note{background:#fef9ec;border:1px solid #f3e3b5;border-radius:10px;padding:12px 15px;font-size:.88rem;margin:12px 0;color:#7a5a12}
+  .timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:6px}
+  .tl-card{border:1px solid var(--border);border-radius:10px;padding:14px}
+  .tl-card h4{color:var(--blue);font-size:.95rem;margin-bottom:6px}
+  .tl-card ul{padding-left:16px;font-size:.86rem;color:var(--ink)}
+  .tl-card li{margin-bottom:4px}
+  footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:26px}
+  @media print{.copybtn,.progress-bar{display:none}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Plan de mejora de LinkedIn</h1>
+  <p>Nico Lizarraga · linkedin.com/in/nflizarraga · 05/07/2026</p>
+  <div class="goal">🎯 Objetivo: perfil alineado a <b>Business Control / FP&amp;A</b> → mejor trabajo a mediados de 2027</div>
+</div>
+
+<div class="progress-bar">
+  <span class="progress-label" id="progLabel">0 / 0 tareas</span>
+  <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+</div>
+
+<div class="wrap">
+
+<!-- ============ 1. POSICIÓN NUEVA ============ -->
+<section>
+  <div class="sec-head"><div class="sec-num">1</div><h2>Agregar el puesto nuevo</h2><span class="tag now">HACER YA — Día 1 (martes 8:30–10:00)</span></div>
+  <div class="sec-body">
+    <div class="step"><input type="checkbox" data-task><label><b>Agregar puesto nuevo</b> (no editar el viejo): Experiencia → <b>+</b> → Agregar puesto. Título <b>Business Controller</b> · STX Group · Jornada completa · Inicio <b>July 2026</b> · Amsterdam · Híbrido.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Activar "Notificar a mi red"</b> al guardar → LinkedIn avisa "Nico started a new position" = alcance gratis.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Cerrar el puesto anterior:</b> Junior Financial Accountant → fecha fin <b>June 2026</b> + pegar descripción nueva (sección 4).</label></div>
+
+    <div class="copyblock"><div class="cb-title">Descripción del puesto nuevo — copiar y pegar</div><button class="copybtn">Copiar</button><span class="cb-text">Business partner to STX's Finance organisation, supporting budgeting, forecasting and performance analysis across the group's business lines.
+
+• Own the annual budget process for the Finance department, working directly with all Finance managers on vendor-level estimates and monthly phasing.
+• Build monthly reporting and variance analysis in Lucanet, connecting actuals to the story behind them.
+• Support cost allocation reviews (Chart of Accounts and cost-square structure) across the organisation.
+• Bridge Accounting and Business Control: deep operational knowledge of AP, payments and reconciliation processes feeding into better planning.</span></div>
+  </div>
+</section>
+
+<!-- ============ 2. TITULAR + ABOUT ============ -->
+<section>
+  <div class="sec-head"><div class="sec-num">2</div><h2>Titular y "Acerca de"</h2><span class="tag now">HACER YA — mismo Día 1</span></div>
+  <div class="sec-body">
+    <div class="step"><input type="checkbox" data-task><label><b>Cambiar el titular a mano</b> (LinkedIn no lo actualiza solo al agregar el puesto).</label></div>
+
+    <div class="copyblock"><div class="cb-title">Titular nuevo (opción recomendada)</div><button class="copybtn">Copiar</button><span class="cb-text">Business Controller @ STX Group | Budgeting &amp; Forecasting | FP&amp;A | Data-Driven Finance (Power BI · SQL · Lucanet)</span></div>
+
+    <div class="copyblock"><div class="cb-title">Titular — alternativa narrativa</div><button class="copybtn">Copiar</button><span class="cb-text">Business Controller @ STX Group | From Accounting to FP&amp;A | Automation, Data &amp; Business Partnering</span></div>
+
+    <div class="step"><input type="checkbox" data-task><label><b>Reemplazar el About completo</b> por el texto de abajo.</label></div>
+
+    <div class="copyblock"><div class="cb-title">About nuevo — copiar y pegar</div><button class="copybtn">Copiar</button><span class="cb-text">Business Controller at STX Group in Amsterdam, after two years in Financial Accounting where I earned my way into Business Control by doing the work before having the title.
+
+The project that got me here: full ownership of the Finance department budget — sitting down with every Finance manager, challenging vendor-level estimates, and building the numbers bottom-up. It earned me a top-3 spot in the Finance Q4 awards and, more importantly, the trust of the Business Control team.
+
+Before that, I built a track record of fixing and improving things:
+
+→ Led the implementation of ISP Next (invoice processing), cutting processing times from ~3 weeks to same-day and becoming application owner — approval flows, user rights, the works.
+→ Co-built an Excel-to-XML payment tool with IT that removed a manual, error-prone process.
+→ Trained and led a 2-person offshore team in Hungary, freeing up the local team for higher-value work.
+→ Owned payments and reconciliations for STX UK and Belgium, and produced AR reports for the banks' Borrowing Base audit.
+
+I am the person colleagues come to when something doesn't work and nobody knows why. I like problems, systems, and making numbers tell the truth.
+
+Toolkit: Lucanet · Microsoft Dynamics 365 · Power BI · SQL · Python · Advanced Excel · AI tools (daily user)
+Languages: Spanish (native) · English (full professional) · Italian · Dutch (learning)</span></div>
+  </div>
+</section>
+
+<!-- ============ 3. POST ============ -->
+<section>
+  <div class="sec-head"><div class="sec-num">3</div><h2>Post de agradecimiento</h2><span class="tag week">Día 2–3 (mié/jue, misma franja)</span></div>
+  <div class="sec-body">
+    <div class="step"><input type="checkbox" data-task><label><b>Publicar el post</b> 1–2 días después de actualizar la posición (dos toques = dos olas de visibilidad).</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Etiquetar con @</b> a Ge Gao y Mitchell (reemplazar [apellido]) para que sus redes vean el post.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Foto:</b> con equipo/oficina rinde el doble. Si tenés una con Ge o el equipo de Finanzas, usala.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Responder TODOS los comentarios</b> en las primeras 24 hs (el algoritmo lo premia).</label></div>
+    <div class="step"><input type="checkbox" data-task><label>Después, <b>fijar el post en Destacados</b> (Featured).</label></div>
+
+    <div class="copyblock"><div class="cb-title">Post — copiar y pegar (agregar las menciones @ al pegar)</div><button class="copybtn">Copiar</button><span class="cb-text">Some news I am really happy to share: as of July 1st, I am a Business Controller at STX Group. 🎯
+
+Two years ago I joined STX as a Junior Financial Accountant. Since then I got to lead the implementation of a new invoice processing system, build automation tools together with IT, coach our team in Hungary, and take ownership of the Finance department budget — the project that opened the door to Business Control.
+
+None of that happened alone.
+
+Thank you Ge Gao — my right hand in Accounting and the best teammate I could have asked for. We carried everything forward together, and you made the hard days easier.
+
+Thank you Mitchell [apellido] — for trusting me with the Finance budget project, for highlighting my work, and for backing me all the way into your team. Your support truly made the difference.
+
+And thank you to the whole STX Finance team for two years of learning and growth.
+
+Now: diving into Lucanet, budgeting, forecasting and business partnering — and enjoying every single day of it. This is just the beginning.
+
+#BusinessControl #FinanceCareers #NewChapter</span></div>
+  </div>
+</section>
+
+<!-- ============ 4. PUESTO ANTERIOR ============ -->
+<section>
+  <div class="sec-head"><div class="sec-num">4</div><h2>Reescribir el puesto anterior (Jr. Financial Accountant)</h2><span class="tag now">HACER YA</span></div>
+  <div class="sec-body">
+    <div class="step"><input type="checkbox" data-task><label><b>Pegar esta descripción</b> en Junior Financial Accountant (May 2024 – Jun 2026).</label></div>
+
+    <div class="copyblock"><div class="cb-title">Descripción reescrita — copiar y pegar</div><button class="copybtn">Copiar</button><span class="cb-text">• Led the implementation of ISP Next (invoice processing system), reducing processing time from ~3 weeks to same-day (-70%+). Application owner: approval routes, user management and rights.
+• Delivered the Finance department's annual budget as a cross-team project with all Finance managers — awarded top-3 Finance employee of Q4.
+• Trained and led a 2-person offshore team (Hungary) covering invoice coding and bank reconciliations; final review remained under my ownership.
+• Owned weekly payments and bank reconciliations for STX UK and Belgium, including trade payments with high daily volumes.
+• Co-developed an Excel-to-XML payment tool with IT, automating manual payment files sent to FIS.
+• Produced AR reports for Treasury's Borrowing Base audit with external banks.
+• Main creator of opex vendor accounts (bank details, VAT codes, payment methods) — vendor-side KYC checks, including detecting and escalating errors from the KYC team.
+• Supported external audits, cost reallocations for controllers, and expense controls via Rydoo (flagged and reported irregularities).</span></div>
+  </div>
+</section>
+
+<!-- ============ 5. EXPERIENCIAS VIEJAS + EDUCACIÓN ============ -->
+<section>
+  <div class="sec-head"><div class="sec-num">5</div><h2>Experiencias viejas y Educación</h2><span class="tag week">ESTA SEMANA</span></div>
+  <div class="sec-body">
+    <div class="subhead">Experiencias</div>
+    <table>
+      <tr><th>Puesto</th><th>Acción</th></tr>
+      <tr><td><b>Nicoin</b> — "Cryptocurrency Influencer &amp; Finance Analist"</td><td>Renombrar a <b>Founder — Financial Education Platform</b> (corrige el typo "Analist"). Sacar "Youtube" como ubicación → vacía o "Remote".</td></tr>
+      <tr><td><b>Graffiti Jeans</b> — Marketing Chief (¡Dec 2009!)</td><td>Corregir fecha de inicio al rango real del rol de marketing (~2015/2016). Un "Chief" desde 2009 genera dudas.</td></tr>
+      <tr><td><b>Black Sheep Technology</b> — Data Analyst</td><td>Dejar. Borrar el bullet de "experimental cryptocurrency".</td></tr>
+      <tr><td>NH Hotel · Lizarraga &amp; Assoc. · Up Consulting · WASD · Scravaglieri · Kosiuko</td><td>Dejar como están.</td></tr>
+    </table>
+    <div class="step"><input type="checkbox" data-task><label><b>Nicoin:</b> renombrar y limpiar ubicación.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Graffiti Jeans:</b> corregir fecha de inicio.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Black Sheep:</b> borrar bullet cripto.</label></div>
+
+    <div class="subhead">Educación</div>
+    <div class="step"><input type="checkbox" data-task><label><b>UNC:</b> cambiar a <b>Bachelor's Degree in Accounting &amp; Finance (Contador Público)</b> y <b>omitir las fechas</b> (2010–2022 genera preguntas).</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Diplomatura:</b> renombrar a <b>Postgraduate Diploma in Digital Marketing &amp; e-Commerce</b>.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Coderhouse:</b> título en inglés → <b>Front-End Developer</b>.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Agregar</b> cursos de Lepaya (Excel 3/4) y Power BI como certificaciones.</label></div>
+  </div>
+</section>
+
+<!-- ============ 6. APTITUDES ============ -->
+<section>
+  <div class="sec-head"><div class="sec-num">6</div><h2>Aptitudes: de 45 a ~30</h2><span class="tag week">ESTA SEMANA</span></div>
+  <div class="sec-body">
+    <div class="subhead">🗑️ Eliminar (duplicados ES/EN + etapa cripto)</div>
+    <div class="pill-grid">
+      <span class="pill del">Analitica de datos (x2)</span><span class="pill del">Análisis de datos</span><span class="pill del">Análisis financiero</span><span class="pill del">Análisis de negocio</span><span class="pill del">Ciencia de datos</span><span class="pill del">Narración de datos</span><span class="pill del">Cuentas a pagar</span><span class="pill del">Cuentas a cobrar</span><span class="pill del">Control financiero</span><span class="pill del">Cryptocurrency</span><span class="pill del">Credit Cards</span><span class="pill del">Startup Marketing</span><span class="pill del">English (como skill)</span><span class="pill del">Business</span><span class="pill del">Microsoft Office</span><span class="pill del">Administration</span>
+    </div>
+    <div class="note">Las validaciones viejas de Bitcoin / Traders / Bolsa de valores desaparecen solas al borrar esas aptitudes.</div>
+
+    <div class="subhead">➕ Agregar (te posicionan en BC/FP&amp;A)</div>
+    <div class="pill-grid">
+      <span class="pill add">Business Control</span><span class="pill add">Budgeting &amp; Forecasting</span><span class="pill add">Variance Analysis</span><span class="pill add">FP&amp;A</span><span class="pill add">Lucanet</span><span class="pill add">Microsoft Dynamics 365</span><span class="pill add">Business Partnering</span><span class="pill add">Process Improvement</span><span class="pill add">Stakeholder Management</span><span class="pill add">Accounts Payable</span><span class="pill add">Cost Allocation</span>
+    </div>
+
+    <div class="subhead">📌 Fijar como Top 5 (pinned)</div>
+    <div class="pill-grid">
+      <span class="pill pin">1. Budgeting &amp; Forecasting</span><span class="pill pin">2. Financial Analysis</span><span class="pill pin">3. Business Control</span><span class="pill pin">4. Microsoft Power BI</span><span class="pill pin">5. Microsoft Excel</span>
+    </div>
+    <div class="step"><input type="checkbox" data-task><label><b>Eliminar</b> las 16 aptitudes marcadas.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Agregar</b> las 11 nuevas.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Fijar</b> el Top 5.</label></div>
+  </div>
+</section>
+
+<!-- ============ 7. AJUSTES RÁPIDOS ============ -->
+<section>
+  <div class="sec-head"><div class="sec-num">7</div><h2>Ajustes rápidos (10 minutos)</h2><span class="tag now">HACER YA</span></div>
+  <div class="sec-body">
+    <div class="step"><input type="checkbox" data-task><label><b>Sector (Industry):</b> "IT Services and IT Consulting" → <b>Financial Services</b>. (Editar perfil → Información básica). Impacta directo en búsquedas de recruiters.</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Sitio web:</b> sacar <b>nicoin.ar</b> (resto de la etapa cripto, no ayuda a la imagen BC).</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Banner:</b> el actual es de enero 2023 (etapa cripto). Cambiar por algo sobrio: skyline de Ámsterdam o banner limpio "Business Controller | Finance &amp; Data".<small>Te lo puedo diseñar si querés.</small></label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Foto de perfil:</b> si tiene +2 años, renovarla (fondo neutro, sonrisa, luz natural).</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Cumpleaños visible:</b> limitar quién lo ve en privacidad (detalle menor).</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Modo creador:</b> NO activarlo (no publicás con esa frecuencia).</label></div>
+  </div>
+</section>
+
+<!-- ============ 8. RECOMENDACIONES ============ -->
+<section>
+  <div class="sec-head"><div class="sec-num">8</div><h2>Recomendaciones — tu mayor déficit (tenés CERO)</h2><span class="tag now">EMPEZAR YA</span></div>
+  <div class="sec-body">
+    <table>
+      <tr><th>A quién</th><th>Ángulo</th><th>Cuándo</th></tr>
+      <tr><td><b>Mitchell</b> (Senior BC)</td><td>Proyecto de budget, capacidad analítica, por qué te quiso en su equipo</td><td>Ya — momento perfecto</td></tr>
+      <tr><td><b>Ge Gao</b></td><td>Trabajo en equipo, confiabilidad, volumen manejado juntos</td><td>Ya (ofrecé escribirle una vos también)</td></tr>
+      <tr><td><b>Peter</b> (ex manager)</td><td>ISP Next, liderazgo equipo Hungría, crecimiento</td><td>En 1–2 meses</td></tr>
+      <tr><td><b>Fransa</b> (Manager BC)</td><td>Potencial, por qué peleó por tu posición</td><td>Con 2–3 meses en BC</td></tr>
+    </table>
+    <div class="step"><input type="checkbox" data-task><label><b>Pedir recomendación a Mitchell</b> (usar template).</label></div>
+    <div class="step"><input type="checkbox" data-task><label><b>Pedir recomendación a Ge Gao</b> (usar template).</label></div>
+
+    <div class="copyblock"><div class="cb-title">Template de pedido — copiar, adaptar el [name] y el proyecto</div><button class="copybtn">Copiar</button><span class="cb-text">Hi [name], I hope you are doing well! As I settle into the Business Controller role, I am updating my LinkedIn profile and it would mean a lot if you could write a short recommendation about our time working together — for example around [the Finance budget project / the ISP Next implementation / how we handled the AP workload]. I would gladly write one for you as well. Thank you!</span></div>
+  </div>
+</section>
+
+<!-- ============ 9. HOJA DE RUTA ============ -->
+<section>
+  <div class="sec-head"><div class="sec-num">9</div><h2>Hoja de ruta 12 meses</h2><span class="tag later">SEGUIMIENTO</span></div>
+  <div class="sec-body">
+    <div class="timeline">
+      <div class="tl-card"><h4>Q3 2026 (ya)</h4><ul><li>Todo lo de arriba</li><li>2 recomendaciones (Mitchell, Ge)</li><li>Seguir: Rabobank, ING, ABN AMRO, Adyen, Ahold, Heineken, Philips, Booking</li></ul></div>
+      <div class="tl-card"><h4>Q4 2026</h4><ul><li>1 post/mes (Lucanet, budget season, mejoras de procesos)</li><li>Certificación <b>PL-300</b> (Power BI Data Analyst)</li><li>Conectar con 5–10 BCs de empresas objetivo</li></ul></div>
+      <div class="tl-card"><h4>Q1 2027</h4><ul><li>Actualizar puesto BC con logros cuantificados</li><li>Recomendación de Fransa</li><li><b>Open to work</b> solo recruiters: Business Controller, Financial Analyst, FP&amp;A Analyst</li><li>Benchmark salarial (Michael Page / Robert Walters NL)</li></ul></div>
+      <div class="tl-card"><h4>Q2 2027</h4><ul><li>Aplicar activamente</li><li>Mercado NL: <b>€55–70k</b> para BC/FP&amp;A mid-level con tu perfil</li></ul></div>
+    </div>
+    <div class="note"><b>Regla de oro (15 min/semana):</b> aceptar/enviar invitaciones relevantes, comentar 2–3 posts de gente de finanzas NL (comentar &gt; likear), mantener el perfil vivo.</div>
+  </div>
+</section>
+
+<footer>Generado el 05/07/2026 · Fuentes: exportación oficial de LinkedIn + bitácora personal · Los checks se guardan en este navegador.</footer>
+</div>
+
+<script>
+// Botones copiar
+document.querySelectorAll('.copybtn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const txt=btn.parentElement.querySelector('.cb-text').innerText;
+    navigator.clipboard.writeText(txt).then(()=>{
+      btn.textContent='✓ Copiado';btn.classList.add('done');
+      setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('done');},2000);
+    });
+  });
+});
+// Checklist con persistencia
+const boxes=[...document.querySelectorAll('input[data-task]')];
+const KEY='linkedin-plan-nico';
+let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){}
+boxes.forEach((b,i)=>{
+  b.checked=!!saved[i];
+  b.addEventListener('change',()=>{saved[i]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}update();});
+});
+function update(){
+  const done=boxes.filter(b=>b.checked).length;
+  document.getElementById('progFill').style.width=(done/boxes.length*100)+'%';
+  document.getElementById('progLabel').textContent=done+' / '+boxes.length+' tareas';
+}
+update();
+</script>
+</body>
+</html>
