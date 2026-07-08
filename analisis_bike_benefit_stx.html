@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis Bike Benefit Programme — STX | Nico</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --card:#ffffff; --ink:#1a2332; --muted:#5b6b7f;
+    --blue:#1e5eff; --blue-soft:#e8efff; --green:#0e9f6e; --green-soft:#e3f5ee;
+    --amber:#b45309; --amber-soft:#fdf3e3; --red:#c0392b; --red-soft:#fdecea;
+    --border:#e3e8ef; --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding:32px 16px}
+  .wrap{max-width:1060px;margin:0 auto}
+  header.hero{background:linear-gradient(135deg,#12295e,#1e5eff);color:#fff;border-radius:var(--radius);padding:36px 32px;margin-bottom:28px}
+  header.hero h1{font-size:1.7rem;margin-bottom:6px}
+  header.hero p{opacity:.85;font-size:.95rem}
+  h2{font-size:1.25rem;margin:38px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+  h3{font-size:1.02rem;margin:16px 0 8px}
+  p{margin-bottom:10px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:14px}
+  .grid{display:grid;gap:14px}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+  .b-blue{background:var(--blue-soft);color:var(--blue)} .b-green{background:var(--green-soft);color:var(--green)}
+  .b-amber{background:var(--amber-soft);color:var(--amber)} .b-red{background:var(--red-soft);color:var(--red)}
+  .winner{border:2px solid var(--green);position:relative}
+  .winner::after{content:"⭐ RECOMENDADA";position:absolute;top:-12px;right:16px;background:var(--green);color:#fff;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:12px}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;margin:10px 0}
+  th{background:#12295e;color:#fff;padding:10px 8px;text-align:left;font-weight:600}
+  td{padding:9px 8px;border-bottom:1px solid var(--border)}
+  tr:nth-child(even) td{background:#f8fafd}
+  .best{background:var(--green-soft)!important;font-weight:700;color:var(--green)}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .big{font-size:1.9rem;font-weight:800;line-height:1.1}
+  .kpi{display:flex;flex-direction:column;gap:2px}
+  .kpi small{color:var(--muted);font-size:.78rem}
+  ul,ol{margin:8px 0 12px 22px}
+  li{margin-bottom:6px}
+  .assume{background:var(--amber-soft);border-left:4px solid var(--amber);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:.88rem}
+  .assume strong{color:var(--amber)}
+  .note{font-size:.8rem;color:var(--muted)}
+  .pill-ok{color:var(--green);font-weight:700} .pill-bad{color:var(--red);font-weight:700} .pill-mid{color:var(--amber);font-weight:700}
+  .matrix td:first-child{font-weight:600}
+  footer{text-align:center;color:var(--muted);font-size:.78rem;margin-top:40px}
+  @media(max-width:640px){header.hero{padding:24px 18px} .card{padding:16px} table{font-size:.78rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>🚲 Bike Benefit Programme STX — Análisis comparativo</h1>
+  <p>Buy Bike vs Lease Bike vs compra por cuenta propia · Preparado para Nico · Utrecht, NL · Julio 2026<br>
+  Basado en el email de HR Services del 2/7/2026 y el reglamento completo "Bicycle lease scheme STX Group" v1.0 (18-06-2026, FiscFree/Hellorider)</p>
+</header>
+
+<!-- ============ RESUMEN EJECUTIVO ============ -->
+<h2>1 · Resumen ejecutivo</h2>
+<div class="card winner">
+  <span class="badge b-green">Recomendación</span>
+  <h3 style="font-size:1.15rem">Lease Bike es la opción más conveniente en casi todos los escenarios — y por mucho.</h3>
+  <p>La razón es simple: <strong>STX aporta €50/mes durante 36 meses = €1.800 de contribución directa</strong>. Ese monto supera con creces el máximo ahorro fiscal del Buy Bike (~€563) y el costo total de leasear una bici de hasta ~€1.400 queda casi enteramente cubierto por la empresa.</p>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="kpi"><span class="big" style="color:var(--green)">€1.800</span><small>Contribución total de STX en el Lease (€50 × 36 meses)</small></div>
+    <div class="kpi"><span class="big" style="color:var(--blue)">~€563</span><small>Máximo ahorro fiscal del Buy Bike (37,56% × €1.500)</small></div>
+    <div class="kpi"><span class="big" style="color:var(--red)">€0</span><small>Aporte de la empresa si comprás por tu cuenta</small></div>
+  </div>
+  <p style="margin-top:14px"><strong>En una frase:</strong> con una bici de hasta ~€1.400, el lease te cuesta solo unos pocos euros al mes (el impuesto sobre la "bijtelling" del 7%); con una e-bike de €2.500, pagarías ~€31/mes neto vs €1.937 de golpe con Buy Bike. <strong>El reglamento confirma que la cuota se descuenta del salario BRUTO</strong> (art. 3.2/3.3), así que la ventaja fiscal del lease está garantizada. La única situación donde Buy Bike gana es si valorás ser dueño inmediato o planeás irte de STX pronto — e incluso al irte podés <strong>transferir el lease a tu nuevo empleador</strong> (art. 10.2).</p>
+</div>
+
+<!-- ============ SUPUESTOS ============ -->
+<div class="assume">
+  <strong>✅ Datos CONFIRMADOS por el reglamento oficial (v1.0, 18-06-2026) y ⚠️ supuestos restantes:</strong>
+  <ul style="margin-bottom:0">
+    <li>✅ <strong>Descuento desde salario BRUTO:</strong> confirmado (art. 3.2/3.3) — la cuota se descuenta del bruto y "pagás menos impuestos". Deja de ser supuesto.</li>
+    <li>✅ <strong>Bijtelling 7%:</strong> confirmada (art. 3.2) sobre el precio de catálogo de bici <em>y accesorios leased</em>, se paga siempre. Costo real: 7% × precio × 37,56% ÷ 12 (entre €1,75 y €6,60/mes según la bici).</li>
+    <li>✅ <strong>Todo incluido:</strong> mantenimiento, reparaciones, seguro de daño y robo (deducible de solo €25), asistencia en ruta en NL y bici de préstamo si la reparación tarda +2 días hábiles (arts. 6–7 y Anexo 1).</li>
+    <li>✅ <strong>Sin precio máximo de bici</strong> (art. 2.2) + accesorios fijos hasta el 15% del precio (art. 2.3). Límite real: la cuota no puede superar el <strong>5% de tu salario bruto mensual</strong> (art. 1.1) — con €62.000/año ≈ €258/mes → bicis hasta ~€7.000. No te limita.</li>
+    <li>✅ <strong>El lease NO afecta vakantiegeld, bonus ni pensión</strong> (art. 3.5) — solo la base de prestaciones sociales (WW/ZW), indemnización y el ingreso imponible anual. Ojo: no se paga travel allowance neto (art. 3.8).</li>
+    <li>⚠️ <strong>Cuota mensual del lease:</strong> sigue estimada como (precio ÷ 36) × 1,30. El reglamento remite al <em>calculador de FiscFree</em> para el monto exacto — usalo antes de firmar.</li>
+    <li>⚠️ <strong>Valor de compra al final:</strong> "valor de mercado en ese momento" vía oferta de Hellorider (art. 11.3), sin tabla. Estimado en 15% del precio nuevo. No estás obligado a comprarla.</li>
+    <li>⚠️ <strong>Tasa marginal:</strong> 37,56% (tramo 2 NL 2026, salario €38.883–€78.426 — tu caso con €62k).</li>
+  </ul>
+</div>
+
+<!-- ============ CÓMO FUNCIONA ============ -->
+<h2>2 · Cómo funciona cada alternativa</h2>
+<div class="grid g3">
+  <div class="card">
+    <span class="badge b-blue">Opción 1 · Buy Bike</span>
+    <p><strong>Comprás la bici y pagás hasta €1.500 con salario bruto</strong> en vez de neto. Como ese monto no paga impuestos, ahorrás tu tasa marginal (~37,56%) sobre lo intercambiado.</p>
+    <ul>
+      <li>La bici es <strong>tuya desde el día 1</strong>.</li>
+      <li>Elegís en cuántas cuotas se descuenta de tu salario.</li>
+      <li>Lo que exceda €1.500 lo pagás vos, sin ventaja fiscal.</li>
+      <li>Seguro y mantenimiento corren por tu cuenta.</li>
+      <li>Disponible una vez cada 3 años.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <span class="badge b-green">Opción 2 · Lease Bike</span>
+    <p><strong>Lease de 36 meses de una bici nueva vía Hellorider</strong> (red de dealers de FiscFree). STX pone €50 brutos/mes; tu parte se descuenta del salario bruto. Al final, Hellorider te ofrece comprarla a valor de mercado (sin obligación).</p>
+    <ul>
+      <li>STX aporta <strong>€1.800 en total</strong> (€50 × 36).</li>
+      <li>Incluye <strong>mantenimiento, reparaciones, seguro de daño/robo (deducible €25), asistencia en ruta y bici de préstamo</strong> ✅ confirmado.</li>
+      <li>Pagás impuesto sobre la "bijtelling" del 7% del precio (€2–7/mes neto).</li>
+      <li>Si te vas de STX: <strong>40% de las cuotas restantes</strong>… salvo que <strong>transfieras el lease a tu nuevo empleador</strong>.</li>
+      <li>Sin precio máximo; todo tipo de bicis (e-bikes, cargo, racing, speed pedelec) y accesorios fijos hasta 15%.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <span class="badge b-amber">Opción 3 · Por tu cuenta</span>
+    <p><strong>Comprás la bici con tu dinero neto</strong>, sin pasar por el programa.</p>
+    <ul>
+      <li>Cero ventaja fiscal, cero aporte de STX.</li>
+      <li>Libertad total: cualquier tienda, bici usada, Marktplaats, etc.</li>
+      <li>Sin vínculo con tu empleo ni riesgo si te vas.</li>
+      <li>Única opción sensata para <strong>bicis usadas</strong> (el programa aplica a bicis nuevas vía dealers participantes).</li>
+      <li>No consume tu turno del beneficio (1 vez cada 3 años).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ COMPARACIÓN DE COSTOS ============ -->
+<h2>3 · Comparación de costos — ¿cuánto pagás realmente vos?</h2>
+<p>Costo <strong>neto total para vos</strong> a lo largo de 36 meses, incluyendo (para el lease) el impuesto de la bijtelling y la compra final de la bici al 15% del valor nuevo, para que las tres opciones terminen igual: <em>siendo dueño de la bici</em>.</p>
+
+<div class="card">
+<h3>💶 Costo mensual neto durante el período (36 meses)</h3>
+<table>
+  <tr><th>Precio bici</th><th class="num">Buy Bike¹</th><th class="num">Lease Bike²</th><th class="num">Por tu cuenta¹</th></tr>
+  <tr><td>€800 (city bike)</td><td class="num">€13,90/mes</td><td class="num best">€1,75/mes</td><td class="num">€22,20/mes</td></tr>
+  <tr><td>€1.200 (city/trekking buena)</td><td class="num">€20,80/mes</td><td class="num best">€2,65/mes</td><td class="num">€33,30/mes</td></tr>
+  <tr><td>€1.800 (e-bike entrada)</td><td class="num">€34,40/mes</td><td class="num best">€13,30/mes</td><td class="num">€50,00/mes</td></tr>
+  <tr><td>€2.500 (e-bike media)</td><td class="num">€53,80/mes</td><td class="num best">€30,60/mes</td><td class="num">€69,40/mes</td></tr>
+  <tr><td>€3.000 (e-bike premium)</td><td class="num">€67,70/mes</td><td class="num best">€43,00/mes</td><td class="num">€83,30/mes</td></tr>
+</table>
+<p class="note">¹ Costo total dividido en 36 meses para comparar (en la práctica Buy Bike se descuenta en las cuotas que elijas). ² Cuota neta + impuesto bijtelling; no incluye la compra final opcional.</p>
+</div>
+
+<div class="card">
+<h3>📊 Costo total del período (36 meses) — terminando como dueño de la bici</h3>
+<table>
+  <tr><th>Precio bici</th><th class="num">Buy Bike</th><th class="num">Lease Bike (+ compra final 15%)</th><th class="num">Por tu cuenta</th><th class="num">Ahorro del Lease vs por tu cuenta</th></tr>
+  <tr><td>€800</td><td class="num">€500</td><td class="num best">€183</td><td class="num">€800</td><td class="num pill-ok">€617 (77%)</td></tr>
+  <tr><td>€1.200</td><td class="num">€749</td><td class="num best">€275</td><td class="num">€1.200</td><td class="num pill-ok">€925 (77%)</td></tr>
+  <tr><td>€1.800</td><td class="num">€1.237</td><td class="num best">€749</td><td class="num">€1.800</td><td class="num pill-ok">€1.051 (58%)</td></tr>
+  <tr><td>€2.500</td><td class="num">€1.937</td><td class="num best">€1.478</td><td class="num">€2.500</td><td class="num pill-ok">€1.022 (41%)</td></tr>
+  <tr><td>€3.000</td><td class="num">€2.437</td><td class="num best">€1.998</td><td class="num">€3.000</td><td class="num pill-ok">€1.002 (33%)</td></tr>
+</table>
+<p class="note">Equivalente anual: dividí por 3. Ejemplo €1.800: Lease ≈ €250/año vs Buy ≈ €412/año vs por tu cuenta €600/año. El lease además suele incluir seguro y mantenimiento (valor extra de ~€10–15/mes que estas cifras no computan a su favor).</p>
+</div>
+
+<div class="card">
+<h3>🏢 ¿Quién pone qué? (ejemplo bici de €1.800)</h3>
+<table>
+  <tr><th></th><th class="num">Pone STX</th><th class="num">Pone Hacienda (ahorro fiscal)</th><th class="num">Ponés vos</th></tr>
+  <tr><td>Buy Bike</td><td class="num">€0</td><td class="num">€563</td><td class="num">€1.237</td></tr>
+  <tr><td class="best">Lease Bike</td><td class="num best">€1.800</td><td class="num best">~€324³</td><td class="num best">€749 (incl. compra final)</td></tr>
+  <tr><td>Por tu cuenta</td><td class="num">€0</td><td class="num">€0</td><td class="num">€1.800</td></tr>
+</table>
+<p class="note">³ Ahorro fiscal neto del lease: descuento bruto de tu parte de la cuota, menos el impuesto de la bijtelling. ✅ Descuento desde salario bruto confirmado por el reglamento (art. 3.2/3.3).</p>
+</div>
+
+<div class="card">
+<span class="badge b-green">✅ Duda resuelta por el reglamento</span>
+<h3>El descuento del lease es desde salario BRUTO — el lease gana en todos los escenarios</h3>
+<p>En la versión anterior de este análisis existía la duda de si tu parte de la cuota se descontaba antes o después de impuestos (lo que hacía ganar al Buy Bike con bicis >€2.300). El reglamento oficial lo confirma: <strong>"the monthly lease amount is deducted from your gross salary"</strong> y "your gross salary decreases and you pay less tax" (arts. 3.2 y 3.3). Con esto, <strong>el Lease Bike es la opción más barata en los cinco escenarios</strong>, sin excepciones. Solo el deducible de €25 por siniestro y otros cargos puntuales se descuentan del neto.</p>
+<p class="note">Bonus confirmado (art. 3.5): a diferencia de lo que suele pasar con los salary sacrifice, este lease NO reduce tu vakantiegeld, bonus ni acumulación de pensión. Solo baja tu ingreso imponible (que además puede darte derecho a más toeslagen/subsidios) y la base de eventuales prestaciones sociales (WW/ZW) e indemnización.</p>
+</div>
+
+<div class="card">
+<span class="badge b-blue">Solo para chusmear 👀</span>
+<h3>¿Y una bici de €4.000 o €5.000? ¿Afecta mi salario de €62.000?</h3>
+<p><strong>Tu salario no cambia nada:</strong> con €62.000 brutos anuales estás de lleno en el tramo 2 de NL 2026 (€38.883–€78.426, tasa 37,56%) — exactamente la tasa usada en todo este análisis. Recién si superaras €78.426 pasarías al 49,5% y el ahorro fiscal de ambas opciones sería mayor (Buy Bike ahorraría €743 en vez de €563, y la bijtelling también te costaría más).</p>
+<table>
+  <tr><th>Concepto</th><th class="num">Bici €4.000</th><th class="num">Bici €5.000</th></tr>
+  <tr><td>Buy Bike — costo neto total (solo €1.500 con ventaja)</td><td class="num">€3.437</td><td class="num">€4.437</td></tr>
+  <tr><td>Lease — cuota estimada (bruta, incl. servicios)</td><td class="num">€144/mes</td><td class="num">€181/mes</td></tr>
+  <tr><td>Lease — costo neto para vos (desc. bruto + bijtelling)</td><td class="num best">€68/mes</td><td class="num best">€92/mes</td></tr>
+  <tr><td>Lease — total 36 meses + compra final (15%)</td><td class="num best">€3.038</td><td class="num best">€4.079</td></tr>
+  <tr><td>Penalidad si te vas al mes 12 (40% cuotas restantes)</td><td class="num pill-bad">~€1.387</td><td class="num pill-bad">~€1.733</td></tr>
+  <tr><td>¿Entra en el tope del 5% de tu salario? (cuota máx. €258/mes)</td><td class="num pill-ok">Sí (€144)</td><td class="num pill-ok">Sí (€181)</td></tr>
+</table>
+<p class="note">Conclusión del chusmeo: el reglamento confirma que <strong>no hay precio máximo de bici</strong> (art. 2.2) y que el descuento es bruto, así que el lease sigue ganando incluso a €4.000–5.000. El límite real es que la cuota no supere el 5% de tu salario bruto mensual (art. 1.1): con €62k son ~€258/mes → podrías leasear hasta ~€7.000 de bici. Pero el ahorro porcentual cae (24% y 18% vs comprar sola) y la penalidad de salida escala fuerte. Para tu uso urbano en Utrecht, gastar >€3.500 es pagar por prestaciones (doble batería, motor de cargo, speed pedelec) que no vas a usar — y encima es un imán de robos.</p>
+</div>
+
+<!-- ============ NORMAL VS ELECTRICA ============ -->
+<h2>4 · ¿Bici normal o eléctrica?</h2>
+<div class="grid g2">
+  <div class="card">
+    <span class="badge b-blue">Bici normal (€600–€1.400)</span>
+    <ul>
+      <li>Para tus trayectos (ciudad, estación, urbano) en Utrecht —plana y compacta— una bici normal <strong>alcanza perfectamente</strong>.</li>
+      <li>Con Lease: costo casi nulo para vos (€2–3/mes). Con Buy: entra entera bajo el límite de €1.500 → máximo aprovechamiento fiscal.</li>
+      <li>Menos atractiva para robos, mantenimiento más barato, sin batería que degradar.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <span class="badge b-green">E-bike (€1.800–€3.000)</span>
+    <ul>
+      <li>Vale la pena si hacés >8–10 km por trayecto, llegás sudado al trabajo, o querés reemplazar viajes en transporte público.</li>
+      <li><strong>El Lease brilla acá:</strong> sin tope de €1.500, seguro contra robo incluido (crítico en Utrecht) y mantenimiento cubierto. Una e-bike de €2.500 te sale ~€31/mes.</li>
+      <li>Con Buy Bike, €1.000–1.500 del precio quedan fuera del beneficio.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ LIMITE ============ -->
+<h2>5 · ¿Qué pasa con el límite de €1.500 (Buy Bike)?</h2>
+<div class="card">
+  <table>
+    <tr><th>Situación</th><th>Efecto</th></tr>
+    <tr><td>Bici cuesta <strong>menos</strong> de €1.500 (ej. €1.200)</td><td>Intercambiás solo €1.200. Ahorro = 37,56% × €1.200 = <strong>€451</strong>. No "perdés" el resto del cupo, simplemente no lo usás (y el beneficio queda usado por 3 años).</td></tr>
+    <tr><td>Bici cuesta <strong>más</strong> de €1.500 (ej. €2.500)</td><td>Intercambiás €1.500 (ahorro máx. <strong>€563</strong>) y pagás los €1.000 restantes de tu bolsillo neto, sin ventaja alguna. El ahorro porcentual se diluye: 22,5% sobre €2.500.</td></tr>
+    <tr><td>Lease Bike</td><td>✅ <strong>Confirmado: sin precio máximo de bici</strong> (art. 2.2) + accesorios fijos hasta el 15% del precio (art. 2.3). El único tope es que la cuota no supere el <strong>5% de tu salario bruto mensual</strong> (art. 1.1): con €62k ≈ €258/mes → bicis de hasta ~€7.000. La contribución de €50/mes es fija, así que cuanto más cara la bici, menor el porcentaje cubierto.</td></tr>
+  </table>
+</div>
+
+<!-- ============ RIESGOS ============ -->
+<h2>6 · Riesgos de cada opción</h2>
+<div class="grid g3">
+  <div class="card">
+    <span class="badge b-blue">Buy Bike</span>
+    <ul>
+      <li><span class="pill-ok">Riesgo bajo.</span> La bici es tuya; si te vas de STX solo queda pendiente liquidar las cuotas de descuento acordadas.</li>
+      <li>Robo o rotura: problema tuyo (contratá seguro aparte, ~€5–10/mes en Utrecht).</li>
+      <li>Intercambiar salario bruto reduce mínimamente base de pensión/vacaciones/prestaciones sociales.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <span class="badge b-red">Lease Bike</span>
+    <ul>
+      <li><span class="pill-bad">Riesgo principal: irte de STX antes del mes 36.</span> Early Termination Fee = <strong>40% de las cuotas restantes</strong> (art. 11.1), descontado de tu último salario. Ejemplos (bici €2.500, cuota ~€90): al año → ~€867; al mes 24 → ~€433. <strong>Mitigación clave: podés transferir el lease a tu nuevo empleador</strong> (art. 10.2) y evitar la penalidad — hablá con HR llegado el caso.</li>
+      <li><span class="pill-mid">El seguro tiene condiciones estrictas (Anexo 1):</span> candado de cadena ART-2 obligatorio + siempre atada a un objeto fijo + doble candado + sacar la batería al guardarla. Robo sin cumplir esto = lo pagás vos (hasta el valor de la bici). Denuncia policial + aviso a Hellorider en 5 días hábiles, entregando las dos llaves originales.</li>
+      <li>Deducible de €25 por daño y por robo de accesorios. La responsabilidad civil (daños a terceros) NO está incluida, salvo speed pedelecs.</li>
+      <li>Firmaste = te quedás: no se puede cambiar de bici (art. 4.6). Y si al final no la comprás ni la devolvés a tiempo, la facturación sigue corriendo (art. 10.1).</li>
+      <li>La cuota puede subir con el IPC si los costos del programa suben >12% (art. 3.4). El valor de compra final es "valor de mercado" sin tabla definida.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <span class="badge b-amber">Por tu cuenta</span>
+    <ul>
+      <li><span class="pill-mid">Riesgo financiero: pagás 100%.</span> Dejás €563–€1.800 de beneficios sobre la mesa.</li>
+      <li>Único riesgo real es el costo de oportunidad — cero ataduras con el empleador.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ PROS Y CONTRAS ============ -->
+<h2>7 · Buy Bike vs Lease Bike — ventajas y desventajas</h2>
+<div class="card">
+<table>
+  <tr><th></th><th>✅ Ventajas</th><th>❌ Desventajas</th></tr>
+  <tr>
+    <td><strong>Buy Bike</strong></td>
+    <td>Propiedad inmediata · Simple · Sin ataduras largas · Elegís cuotas · Riesgo casi nulo al cambiar de trabajo</td>
+    <td>Ahorro limitado a €563 máx. · Tope €1.500 (malo para e-bikes) · Sin seguro ni mantenimiento · Requiere 6 meses de antigüedad</td>
+  </tr>
+  <tr>
+    <td><strong>Lease Bike</strong></td>
+    <td>€1.800 de STX (el beneficio más grande) · Sin precio máximo ✅ · Descuento bruto ✅ · Mantenimiento + reparaciones + seguro robo/daño + asistencia en ruta + bici de préstamo incluidos ✅ · No afecta vakantiegeld/bonus/pensión ✅ · Accesorios hasta 15% · Sin registro BKR · Ideal para e-bikes</td>
+    <td>Penalidad del 40% si te vas antes (mitigable transfiriendo el lease al nuevo empleador) · No sos dueño hasta el mes 36 (compra final a valor de mercado, opcional) · Requiere permanente + 6 meses · Compromiso de 3 años · Condiciones estrictas de candado/robo · Sin cambio de bici tras firmar · RC no incluida</td>
+  </tr>
+</table>
+</div>
+
+<!-- ============ TIPO DE BICI ============ -->
+<h2>8 · ¿Qué tipo de bici te conviene para Utrecht?</h2>
+<div class="card">
+  <p>Tu uso: ciudad, ir al trabajo/estación, trayectos urbanos. Utrecht es plana, compacta (~5–7 km de punta a punta) y tiene el estacionamiento de bicis más grande del mundo en la estación… y una de las tasas de robo más altas de NL.</p>
+  <table>
+    <tr><th>Tipo</th><th>¿Para vos?</th><th>Comentario</th></tr>
+    <tr><td><strong>City bike (omafiets/stadsfiets)</strong></td><td class="pill-ok">★★★ Ideal</td><td>Posición erguida, portaequipaje, luces y candado integrados, robusta y poco atractiva para ladrones. €600–€1.100. La opción racional para tu uso.</td></tr>
+    <tr><td><strong>Trekking bike</strong></td><td class="pill-ok">★★☆ Muy buena</td><td>Más versátil si además hacés paseos de fin de semana fuera de la ciudad. €900–€1.400.</td></tr>
+    <tr><td><strong>E-bike urbana</strong></td><td class="pill-mid">★★☆ Solo si hay distancia</td><td>Injustificable para <5 km; excelente si tu commute real supera 8–10 km o querés reemplazar el bus/tren corto. Con el lease es donde más rinde el beneficio.</td></tr>
+    <tr><td><strong>Folding bike (plegable)</strong></td><td class="pill-mid">★☆☆ Nicho</td><td>Solo si la llevás en el tren a diario (viaja gratis plegada). Menos cómoda para uso urbano general.</td></tr>
+    <tr><td><strong>Racefiets / MTB</strong></td><td class="pill-bad">☆☆☆ No</td><td>No sirven para commute urbano con lluvia, carga y candados.</td></tr>
+  </table>
+  <p><strong>Sugerencia concreta:</strong> una city bike sólida de €900–€1.200 (Gazelle, Batavus, Cortina) en Lease te costaría ~€2–3/mes con seguro incluido. Si tu trayecto diario es largo, una e-bike de ~€2.500 por ~€31/mes sigue siendo excelente.</p>
+</div>
+
+<!-- ============ REQUISITOS ============ -->
+<h2>9 · Requisitos que tenés que cumplir</h2>
+<div class="grid g2">
+  <div class="card">
+    <span class="badge b-blue">Buy Bike</span>
+    <ul>
+      <li>Ser empleado de STX con <strong>mínimo 6 meses de antigüedad</strong>.</li>
+      <li>Registrarte en el portal <strong>FiscFree</strong> con tu email de trabajo (necesitás employee ID y fecha de inicio, están en HiBob).</li>
+      <li>Comprar en dealer participante o webshop del programa.</li>
+      <li>Aprobación de HR. Usable 1 vez cada 3 años (excluyente con Lease).</li>
+    </ul>
+  </div>
+  <div class="card">
+    <span class="badge b-green">Lease Bike</span>
+    <ul>
+      <li><strong>Contrato permanente + mínimo 6 meses en STX</strong> (art. 1.1) ✓ (vos cumplís).</li>
+      <li>La cuota no puede superar el <strong>5% de tu salario bruto mensual</strong> (~€258/mes con €62k) ni llevar tu salario bajo el mínimo CAO.</li>
+      <li>Registro en FiscFree (recibís un PIN por email) + solicitud en <strong>HiBob</strong>: Actions → Update Profile → Bicycle Benefits, con aprobación de manager y HR.</li>
+      <li>Elegir bici en un dealer <strong>Hellorider</strong> (dándole tu PIN) o en el catálogo online (filtro "order online"). Máx. 1 bici por 36 meses.</li>
+      <li>Retirar la bici dentro de los 14 días del aviso; exigir el <strong>proof of delivery digital</strong> (sin él, no hay seguro) y verificar que incluya el candado ART-2.</li>
+      <li>Obligaciones de uso: doble candado a objeto fijo, sacar batería al guardar, mantenimiento solo en dealers Hellorider, no uso comercial ni competitivo.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ PREGUNTAS HR ============ -->
+<h2>10 · Preguntas para HR / FiscFree — actualizado con el reglamento</h2>
+<div class="card">
+  <h3>✅ Ya respondidas por el reglamento oficial:</h3>
+  <ul>
+    <li>¿Bruto o neto? → <strong>Bruto</strong> (arts. 3.2/3.3). ¿Incluye seguro/mantenimiento/asistencia? → <strong>Sí, todo</strong> (arts. 6–7), con deducible de €25 y condiciones de candado ART-2.</li>
+    <li>¿Precio máximo? → <strong>No hay</strong> (art. 2.2); el tope es cuota ≤ 5% de tu salario bruto mensual (~€258 en tu caso). ¿Marcas? → casi todas, vía red <strong>Hellorider</strong> (incluye Gazelle, Veloretti, Cowboy, etc.).</li>
+    <li>¿Bijtelling? → Sí, 7% del precio bici + accesorios, procesada por nómina (art. 3.2).</li>
+    <li>¿Afecta pensión/vakantiegeld/bonus? → <strong>No</strong> (art. 3.5); solo prestaciones sociales, indemnización e ingreso imponible.</li>
+    <li>¿Penalidad de salida? → 40% de las cuotas restantes, descontada del último salario (arts. 11.1/11.2), <strong>evitable transfiriendo el lease al nuevo empleador</strong> (art. 10.2). Compra final: oferta de Hellorider a valor de mercado, opcional (art. 11.3).</li>
+    <li>¿Accesorios? → Leaseables si van fijos a la bici, hasta 15% del precio (art. 2.3).</li>
+  </ul>
+  <h3>❓ Las que quedan abiertas (pocas y puntuales):</h3>
+  <ol>
+    <li><strong>Cuota exacta:</strong> correr el <strong>calculador de FiscFree</strong> con el modelo elegido — mi estimación de (precio÷36)×1,30 es orientativa.</li>
+    <li>El 40% de penalidad, ¿se calcula sobre la cuota completa o sobre tu parte neta de los €50 de STX?</li>
+    <li>¿Valor de mercado típico de compra al final? Pedir ejemplos reales de otros empleados (¿ronda el 10–20%?).</li>
+    <li>Si la cuota es menor a €50 (bici barata), ¿la diferencia de contribución de STX se pierde? (Sugerencia: usá el 15% de accesorios para aprovecharla.)</li>
+    <li>Art. 3.8: no se paga travel allowance neto — ¿esto aplica solo a quienes toman el lease o es política general? ¿Cuánto dejarías de cobrar por km si hoy lo recibís?</li>
+    <li>Buy Bike: ¿el intercambio de €1.500 sí afecta vakantiegeld/pensión (a diferencia del lease)?</li>
+  </ol>
+</div>
+
+<!-- ============ MATRIZ ============ -->
+<h2>11 · Matriz final de decisión</h2>
+<div class="card">
+<table class="matrix">
+  <tr><th>Criterio (peso)</th><th class="num">Buy Bike</th><th class="num">Lease Bike</th><th class="num">Por tu cuenta</th></tr>
+  <tr><td>Costo total / ahorro (40%)</td><td class="num">6</td><td class="num best">10</td><td class="num">2</td></tr>
+  <tr><td>Riesgo si dejo STX (20%)</td><td class="num best">9</td><td class="num">6</td><td class="num best">10</td></tr>
+  <tr><td>Conveniencia (seguro, mantenimiento, trámites) (15%)</td><td class="num">5</td><td class="num best">9</td><td class="num">6</td></tr>
+  <tr><td>Flexibilidad y propiedad (15%)</td><td class="num best">8</td><td class="num">5</td><td class="num best">10</td></tr>
+  <tr><td>Acceso a mejor bici (e-bike) (10%)</td><td class="num">5</td><td class="num best">10</td><td class="num">4</td></tr>
+  <tr style="font-weight:800"><td>Puntaje ponderado</td><td class="num">6,6</td><td class="num best">8,3</td><td class="num">5,7</td></tr>
+</table>
+<p class="note">Escala 1–10. Ponderación acorde a tu prioridad declarada: decisión racional basada en ahorro, riesgo y conveniencia. El puntaje de riesgo del Lease subió de 5 a 6 tras confirmarse que el contrato puede transferirse a un nuevo empleador (art. 10.2).</p>
+</div>
+
+<!-- ============ CONCLUSION ============ -->
+<h2>12 · Conclusión — qué elegiría yo</h2>
+<div class="card winner">
+  <p><strong>Elegiría el Lease Bike sin dudarlo</strong> — y con el reglamento en mano, la decisión es aún más clara que antes: los €50/mes de STX son €1.800 que solo existen si leaseás (más de tres veces el mejor ahorro fiscal del Buy Bike), el descuento bruto está confirmado, no toca tu vakantiegeld/bonus/pensión, e incluye seguro de robo, mantenimiento, asistencia en ruta y bici de préstamo. Tenés contrato permanente y el riesgo de salida anticipada quedó además mitigado: el lease se puede <strong>transferir a tu nuevo empleador</strong>; y aun pagando la penalidad del 40%, en el peor caso ronda €400–€1.000, menos que el beneficio que capturás.</p>
+  <p><strong>Mi jugada concreta:</strong></p>
+  <ol>
+    <li>Registrarte en FiscFree (PIN por email) y correr el <strong>calculador oficial</strong> con 2–3 modelos para tener la cuota exacta.</li>
+    <li>Si tu trayecto diario es corto (&lt;5 km): <strong>city bike de ~€1.000–€1.200 en lease</strong> → ~€2–3/mes. Prácticamente gratis. Considerá usar el 15% de accesorios (canasto, portaequipaje fijo) para exprimir los €50 de STX.</li>
+    <li>Si tu trayecto supera 8–10 km o querés jubilar el transporte público: <strong>e-bike de ~€2.200–€2.500 en lease</strong> → ~€25–31/mes netos.</li>
+    <li>Al recibirla: exigí el <strong>proof of delivery digital</strong> (sin él no hay seguro), verificá el candado ART-2, y hacete el hábito: doble candado a objeto fijo + batería adentro. En Utrecht esto no es opcional.</li>
+    <li>Comprar por tu cuenta solo tiene sentido para una <strong>bici usada</strong> barata; Buy Bike quedó relegado a un plan B si por algo no quisieras el compromiso de 36 meses.</li>
+  </ol>
+</div>
+
+<footer>
+  Análisis basado en el email "Renewed bike benefits NL" (HR Services STX, 2/7/2026), el reglamento "Bicycle lease scheme STX Group" v1.0 (18-06-2026, FiscFree/Hellorider), tramos fiscales NL 2026 (35,75% / 37,56% / 49,5%) y la regla de bijtelling del 7%.<br>
+  Los supuestos restantes (cuota estimada, valor residual 15%) están marcados. Esto es un análisis informativo, no asesoramiento fiscal — la cuota exacta sale del calculador de FiscFree.
+</footer>
+
+</div>
+</body>
+</html>
