@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundial 2026 · Nico & Mile · Plan de Viaje v4</title>
+<style>
+  :root{
+    --celeste:#75AADB; --celeste-osc:#4a8bc4; --azul:#0d2b45; --azul2:#123a5c;
+    --oro:#F6B40E; --blanco:#f8fafc; --gris:#94a3b8; --verde:#22c55e;
+    --rojo:#ef4444; --naranja:#f97316; --card:#12314f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
+  body{background:linear-gradient(160deg,#081c30 0%,#0d2b45 60%,#123a5c 100%);color:var(--blanco);padding-bottom:60px}
+  .wrap{max-width:1050px;margin:0 auto;padding:0 18px}
+
+  /* HERO */
+  .hero{text-align:center;padding:48px 16px 30px;background:
+    radial-gradient(circle at 50% -20%,rgba(117,170,219,.35),transparent 60%)}
+  .hero .flag{font-size:52px}
+  .hero h1{font-size:clamp(28px,5vw,46px);letter-spacing:1px;margin:8px 0 4px;
+    background:linear-gradient(90deg,var(--celeste),#fff,var(--celeste));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.sub{color:var(--celeste);font-size:18px;font-weight:600}
+  .hero .update{display:inline-block;margin-top:14px;background:rgba(246,180,14,.15);border:1px solid var(--oro);
+    color:var(--oro);padding:7px 18px;border-radius:999px;font-size:14px;font-weight:700}
+
+  /* SECTION TITLES */
+  h2.sec{font-size:24px;margin:46px 0 18px;display:flex;align-items:center;gap:10px}
+  h2.sec::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,var(--celeste),transparent)}
+  .note{font-size:13px;color:var(--gris);margin-top:8px;line-height:1.5}
+
+  /* BRACKET / CAMINO */
+  .camino{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:760px){.camino{grid-template-columns:repeat(2,1fr)}}
+  .paso{background:var(--card);border-radius:14px;padding:16px 14px;text-align:center;border:1px solid rgba(117,170,219,.25);position:relative}
+  .paso.done{border-color:var(--verde)}
+  .paso.now{border:2px solid var(--oro);box-shadow:0 0 22px rgba(246,180,14,.25)}
+  .paso .etapa{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gris)}
+  .paso .rival{font-size:19px;font-weight:800;margin:6px 0 2px}
+  .paso .det{font-size:13px;color:var(--celeste)}
+  .paso .badge{position:absolute;top:-11px;right:10px;background:var(--oro);color:#082032;font-size:11px;font-weight:800;
+    padding:3px 10px;border-radius:999px}
+  .paso .badge.ok{background:var(--verde);color:#052e13}
+
+  /* CALENDARIO */
+  .cal{display:grid;grid-template-columns:repeat(11,1fr);gap:6px}
+  @media(max-width:860px){.cal{grid-template-columns:repeat(4,1fr)}}
+  .dia{border-radius:12px;padding:10px 6px;text-align:center;min-height:118px;font-size:12px;border:1px solid rgba(255,255,255,.08)}
+  .dia .num{font-size:19px;font-weight:800}
+  .dia .dow{color:var(--gris);font-size:10px;text-transform:uppercase;letter-spacing:1px}
+  .dia .tag{margin-top:6px;border-radius:7px;padding:3px 4px;font-size:10.5px;font-weight:700;line-height:1.25}
+  .d-atl{background:linear-gradient(180deg,rgba(249,115,22,.22),rgba(249,115,22,.08))}
+  .d-atl .tag{background:rgba(249,115,22,.85);color:#fff}
+  .d-ny{background:linear-gradient(180deg,rgba(117,170,219,.25),rgba(117,170,219,.08))}
+  .d-ny .tag{background:var(--celeste-osc);color:#fff}
+  .d-cacho{background:linear-gradient(180deg,rgba(34,197,94,.22),rgba(34,197,94,.06))}
+  .d-cacho .tag{background:var(--verde);color:#052e13}
+  .tag.gold{background:var(--oro)!important;color:#082032!important}
+  .tag.avion{background:#fff!important;color:#0d2b45!important}
+
+  /* CARDS RESERVAS */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .rcard{background:var(--card);border-radius:16px;padding:20px;border:1px solid rgba(117,170,219,.25);position:relative}
+  .rcard.free{border-color:var(--verde)}
+  .rcard.pend{border-style:dashed;border-color:var(--oro)}
+  .rcard h3{font-size:17px;margin-bottom:2px}
+  .rcard .fecha{color:var(--celeste);font-size:13.5px;font-weight:600}
+  .rcard .precio{font-size:26px;font-weight:800;margin:10px 0 4px}
+  .rcard .precio small{font-size:13px;color:var(--gris);font-weight:400}
+  .rcard ul{list-style:none;margin-top:8px}
+  .rcard li{font-size:13px;color:#cbd5e1;padding:3px 0;border-top:1px dashed rgba(255,255,255,.08)}
+  .pill{position:absolute;top:16px;right:16px;font-size:11px;font-weight:800;padding:4px 11px;border-radius:999px}
+  .pill.ok{background:rgba(34,197,94,.2);color:var(--verde);border:1px solid var(--verde)}
+  .pill.warn{background:rgba(246,180,14,.15);color:var(--oro);border:1px solid var(--oro)}
+  .cancel{margin-top:10px;font-size:12px;color:var(--naranja)}
+
+  /* TABLAS PRESUPUESTO */
+  table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden}
+  th{background:rgba(117,170,219,.15);text-align:left;padding:11px 14px;font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--celeste)}
+  td{padding:11px 14px;font-size:14.5px;border-top:1px solid rgba(255,255,255,.06)}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+  tr.subtotal td{background:rgba(117,170,219,.08);font-weight:700}
+  tr.total td{background:rgba(246,180,14,.14);font-weight:800;font-size:16.5px;color:var(--oro)}
+  .muted{color:var(--gris);font-size:12.5px}
+
+  /* BARRAS COMPARATIVAS */
+  .bars{background:var(--card);border-radius:16px;padding:22px;border:1px solid rgba(117,170,219,.25)}
+  .bar-row{margin:14px 0}
+  .bar-row .lbl{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:6px}
+  .bar{height:26px;border-radius:8px;background:rgba(255,255,255,.07);overflow:hidden}
+  .bar>div{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;
+    font-size:12.5px;font-weight:800;color:#082032}
+  .f1{background:linear-gradient(90deg,var(--celeste),#a8d0f0)}
+  .f2{background:linear-gradient(90deg,var(--oro),#fcd34d)}
+  .f3{background:linear-gradient(90deg,var(--naranja),#fdba74)}
+
+  /* ALERTA ENTRADA */
+  .alerta{background:linear-gradient(90deg,rgba(246,180,14,.12),rgba(239,68,68,.08));border:1px solid var(--oro);
+    border-radius:16px;padding:20px 22px;margin-top:16px}
+  .alerta h3{color:var(--oro);font-size:16px;margin-bottom:8px}
+  .alerta p{font-size:14px;line-height:1.6;color:#e2e8f0}
+
+  /* TIMELINE */
+  .tline{position:relative;margin-top:6px;padding-left:32px}
+  .tline::before{content:"";position:absolute;left:10px;top:6px;bottom:6px;width:3px;
+    background:linear-gradient(180deg,var(--rojo),var(--oro),var(--celeste));border-radius:2px}
+  .tev{position:relative;margin-bottom:16px;background:var(--card);border:1px solid rgba(117,170,219,.25);
+    border-radius:14px;padding:14px 18px}
+  .tev::before{content:"";position:absolute;left:-28px;top:18px;width:14px;height:14px;border-radius:50%;
+    background:var(--celeste);border:3px solid #0d2b45}
+  .tev.hot{border-color:var(--oro)}
+  .tev.hot::before{background:var(--oro);box-shadow:0 0 12px rgba(246,180,14,.7)}
+  .tev.rojo{border-color:var(--rojo)}
+  .tev.rojo::before{background:var(--rojo);box-shadow:0 0 12px rgba(239,68,68,.6)}
+  .tev .cuando{font-size:12px;font-weight:800;color:var(--oro);text-transform:uppercase;letter-spacing:1.2px}
+  .tev.rojo .cuando{color:var(--rojo)}
+  .tev h4{font-size:15.5px;margin:4px 0 5px}
+  .tev p{font-size:13.5px;color:#cbd5e1;line-height:1.55}
+
+  /* CHECKLIST */
+  .check{background:var(--card);border-radius:16px;padding:20px;border:1px solid rgba(117,170,219,.25)}
+  .check h3{color:var(--celeste);font-size:15px;margin:14px 0 6px;text-transform:uppercase;letter-spacing:1px}
+  .check h3:first-child{margin-top:0}
+  .check label{display:flex;gap:10px;align-items:flex-start;padding:7px 4px;font-size:14.5px;cursor:pointer;border-radius:8px}
+  .check label:hover{background:rgba(255,255,255,.04)}
+  .check input{margin-top:3px;accent-color:var(--verde);width:16px;height:16px}
+  .fecha-lim{color:var(--oro);font-weight:700;font-size:12.5px}
+
+  footer{text-align:center;margin-top:56px;color:var(--gris);font-size:13px;line-height:1.7}
+  .heart{color:var(--celeste)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="flag">🇦🇷⚽🗽</div>
+  <h1>MUNDIAL 2026 — NICO & MILE</h1>
+  <p class="sub">Atlanta → Nueva York · 13 al 23 de julio</p>
+  <div class="update">⚽ HOY 22:00 ARG — CUARTOS: Argentina vs Suiza · esta noche se define el plan</div>
+  <p class="note" style="max-width:680px;margin:14px auto 0">
+    Actualizado el 11/7/2026 (día del partido). <b>Cambio grande:</b> chau Disney/Orlando — cancelamos esa opción.
+    El nuevo Plan B es mucho más simple: si Argentina queda afuera, cambiamos el vuelo internacional con KLM
+    (€70 por persona) y aterrizamos directo en Nueva York. Sin vuelos internos, sin corridas.
+  </p>
+</div>
+
+<div class="wrap">
+
+  <!-- CAMINO DE LA SCALONETA -->
+  <h2 class="sec">🏆 El camino de la Scaloneta</h2>
+  <div class="camino">
+    <div class="paso done">
+      <span class="badge ok">GANADO</span>
+      <div class="etapa">16avos</div>
+      <div class="rival">vs Cabo Verde ✔</div>
+      <div class="det">Argentina avanzó a 8vos</div>
+    </div>
+    <div class="paso done">
+      <span class="badge ok">GANADO</span>
+      <div class="etapa">Octavos</div>
+      <div class="rival">Egipto 2–3 ARG ✔</div>
+      <div class="det">Remontada épica el 7/7 en Atlanta</div>
+    </div>
+    <div class="paso now">
+      <span class="badge">HOY 🔥</span>
+      <div class="etapa">Cuartos</div>
+      <div class="rival">vs Suiza 🇨🇭</div>
+      <div class="det">Sáb 11/7 · 22:00 ARG (21:00 NY / 20:00 local)<br>Arrowhead Stadium, Kansas City</div>
+    </div>
+    <div class="paso">
+      <span class="badge">NOSOTROS AHÍ 🎫</span>
+      <div class="etapa">Semifinal</div>
+      <div class="rival">¿ARGENTINA?</div>
+      <div class="det">Mié 15/7 · Mercedes-Benz Stadium, Atlanta</div>
+    </div>
+  </div>
+  <p class="note">Si Argentina gana esta noche, juega la semifinal del 15/7 en Atlanta — justo cuando estamos ahí.
+  Si pierde, mañana llamamos a KLM y el viaje se convierte en 10 días de Nueva York. En cualquiera de los dos
+  escenarios, mañana domingo 12/7 es día de compras: vuelos o cambio de pasaje.</p>
+
+  <!-- CALENDARIO -->
+  <h2 class="sec">📅 Calendario del viaje (Plan A)</h2>
+  <div class="cal">
+    <div class="dia d-atl"><div class="dow">Lun</div><div class="num">13</div><div class="tag avion">✈️ Llegada ATL</div><div class="tag">Marriott Midtown</div></div>
+    <div class="dia d-atl"><div class="dow">Mar</div><div class="num">14</div><div class="tag">Atlanta · fan fest</div></div>
+    <div class="dia d-atl"><div class="dow">Mié</div><div class="num">15</div><div class="tag gold">🎫 SEMIFINAL</div><div class="tag">Mercedes-Benz</div></div>
+    <div class="dia d-ny"><div class="dow">Jue</div><div class="num">16</div><div class="tag avion">✈️ ATL→PHL + 🚄 tren</div><div class="tag">Sheraton Times Sq</div></div>
+    <div class="dia d-ny"><div class="dow">Vie</div><div class="num">17</div><div class="tag">NY · Midtown</div><div class="tag" style="background:var(--verde);color:#052e13">→ lo de Cacho</div></div>
+    <div class="dia d-cacho"><div class="dow">Sáb</div><div class="num">18</div><div class="tag">Cacho 🏡 gratis</div></div>
+    <div class="dia d-cacho"><div class="dow">Dom</div><div class="num">19</div><div class="tag">Cacho 🏡</div><div class="tag gold">🏆 FINAL MetLife</div></div>
+    <div class="dia d-cacho"><div class="dow">Lun</div><div class="num">20</div><div class="tag">Cacho → TownePlace</div></div>
+    <div class="dia d-ny"><div class="dow">Mar</div><div class="num">21</div><div class="tag">TownePlace LIC</div></div>
+    <div class="dia d-ny"><div class="dow">Mié</div><div class="num">22</div><div class="tag">TownePlace LIC</div></div>
+    <div class="dia d-ny"><div class="dow">Jue</div><div class="num">23</div><div class="tag avion">✈️ Vuelta 🇦🇷</div></div>
+  </div>
+  <p class="note">🟠 Atlanta · 🔵 Nueva York (hotel) · 🟢 Nueva York (lo de Cacho, gratis). La final del 19/7 es en MetLife —
+  aunque no entremos al estadio, ese día NY va a ser una fiesta (Fan Fest, pantallas gigantes).<br>
+  🗽 <b>Si corre el Plan B</b>: el vuelo internacional del 13/7 aterriza directo en NY (cambio KLM €70 p/p),
+  los días 13–16 son de Nueva York (hotel a reservar, único pendiente) y del 16 en adelante todo sigue idéntico:
+  Sheraton, Cacho, TownePlace.</p>
+
+  <!-- RESERVAS CONFIRMADAS -->
+  <h2 class="sec">✅ Reservas y pendientes</h2>
+  <div class="cards">
+    <div class="rcard">
+      <span class="pill ok">PAGADO EN MILLAS</span>
+      <h3>✈️ Vuelos internacionales (KLM)</h3>
+      <div class="fecha">Ida 13/7 a Atlanta · Vuelta 23/7 desde NY</div>
+      <div class="precio">€729 <small>tasas (los dos)</small></div>
+      <ul>
+        <li>Ida: €245,50 + 32.000 millas c/u</li>
+        <li>Vuelta: €119 + 18.750 millas c/u</li>
+        <li>Total millas: 101.500 (≈126.875 puntos AMEX)</li>
+        <li>🗽 Plan B: cambio de destino ATL→NY por €70 p/p (€140 los dos)</li>
+      </ul>
+    </div>
+    <div class="rcard">
+      <span class="pill ok">CONFIRMADA</span>
+      <h3>🏨 Atlanta Marriott Suites Midtown</h3>
+      <div class="fecha">Lun 13 → Jue 16 jul · 3 noches · suite king</div>
+      <div class="precio">$301,05 <small>$79/noche + imp.</small></div>
+      <ul>
+        <li>Conf. #75810609 · 35 14th Street NE</li>
+        <li>2 adultos · sofá cama solicitado</li>
+      </ul>
+      <div class="cancel">⏰ Cancelación gratis YA VENCIDA (10/7). Si pierde ARG: cancelar igual esta noche,
+      multa ~1 noche (~$100), llamar y pedir condonación</div>
+    </div>
+    <div class="rcard">
+      <span class="pill ok">CONFIRMADA</span>
+      <h3>🏨 Sheraton NY Times Square</h3>
+      <div class="fecha">Jue 16 → Vie 17 jul · 1 noche · queen</div>
+      <div class="precio">$168,74 <small>$109 + imp. + tasa destino</small></div>
+      <ul>
+        <li>Conf. #78792661 · 811 7th Ave & 53rd St</li>
+        <li>Pleno Midtown, a pasos de Times Square</li>
+      </ul>
+      <div class="cancel">⏰ Cancelación gratis hasta el lun 13/7 23:59 — queda en AMBOS planes</div>
+    </div>
+    <div class="rcard free">
+      <span class="pill ok">GRATIS 💚</span>
+      <h3>🏡 Lo de Cacho</h3>
+      <div class="fecha">Vie 17 → Lun 20 jul · 3 noches</div>
+      <div class="precio">$0 <small>gracias, amigo</small></div>
+      <ul>
+        <li>El finde completo, incluida la noche de la final</li>
+        <li>Ahorro estimado: ~$450–600 en hoteles</li>
+      </ul>
+    </div>
+    <div class="rcard">
+      <span class="pill ok">CONFIRMADA</span>
+      <h3>🏨 TownePlace Suites Long Island City</h3>
+      <div class="fecha">Lun 20 → Jue 23 jul · 3 noches · suite studio king</div>
+      <div class="precio">$512,22 <small>$144/noche + imp.</small></div>
+      <ul>
+        <li>Conf. #78760763 · 38-42 11th St, LIC</li>
+        <li>Vista a Manhattan, subte a Midtown en 15 min</li>
+      </ul>
+      <div class="cancel">⏰ Cancelación gratis hasta el dom 19/7 23:59</div>
+    </div>
+    <div class="rcard pend">
+      <span class="pill warn">FALTA · PLAN A</span>
+      <h3>✈️🚄 Atlanta → Philadelphia → NY</h3>
+      <div class="fecha">Jue 16 jul · vuelo 2h10 + tren 1h20</div>
+      <div class="precio">~$390 <small>los dos, todo incluido</small></div>
+      <ul>
+        <li>Frontier ATL→PHL directo: €120 p/p (10:10→12:22 el ideal)</li>
+        <li>SEPTA aeropuerto→30th St Station: ~$7 p/p (25 min)</li>
+        <li>Amtrak 30th St→NY Penn: ~$30–60 p/p (1h20)</li>
+        <li>vs. directo ATL→NY: Frontier JFK €264 p/p = ~$612 los dos → ahorro ~$220 💰</li>
+      </ul>
+    </div>
+    <div class="rcard pend">
+      <span class="pill warn">FALTA · PLAN B</span>
+      <h3>🏨 Hotel NY · 13 al 16 jul</h3>
+      <div class="fecha">Solo si Argentina queda afuera · 3 noches</div>
+      <div class="precio">~$550 <small>estimado los dos</small></div>
+      <ul>
+        <li>Único hueco del Plan B: el Sheraton recién arranca el 16</li>
+        <li>Referencia: LIC/Queens ~$150–190 la noche con impuestos</li>
+        <li>Reservar mañana 12/7 si pierde — semana de final, sube rápido</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">🏰 <b>Orlando/Disney: cancelado.</b> El SpringHill Suites (conf. #75099585) ya no corre —
+  la opción Disney quedó descartada el 11/7. Verificar que la cancelación figure sin cargo en la app Bonvoy.</p>
+
+  <!-- LA JUGADA PHILADELPHIA -->
+  <h2 class="sec">🚄 La jugada Philadelphia (Plan A) — por qué conviene</h2>
+  <table>
+    <tr><th>Opción · jue 16/7</th><th class="r">Precio (2 pers.)</th><th class="r">Tiempo puerta a puerta</th><th>Detalle</th></tr>
+    <tr><td>✈️ Directo ATL→JFK (Frontier 9:21→11:50)</td><td class="r">~$612</td><td class="r">~4 hs</td><td class="muted">€264 p/p + AirTrain/subte a Manhattan</td></tr>
+    <tr><td>✈️ Directo ATL→NY (Delta/JetBlue)</td><td class="r">$950–1.700</td><td class="r">~4 hs</td><td class="muted">€411–735 p/p — semana de final, precios por las nubes</td></tr>
+    <tr class="subtotal"><td>✈️🚄 ATL→PHL (Frontier €120) + SEPTA + Amtrak</td><td class="r">~$390</td><td class="r">~6 hs</td><td class="muted">10:10 vuelo → 12:22 PHL → ~16:00 en Penn Station</td></tr>
+  </table>
+  <p class="note">Precios reales de Google Flights al 11/7. La ruta PHL ahorra <b>~$220</b> a cambio de ~2 horas más de viaje —
+  y el tramo en tren por el corredor noreste es cómodo (asientos amplios, wifi, llega a Penn Station, pleno Manhattan, a 15 cuadras del Sheraton).
+  Ojo Frontier: la tarifa base no incluye equipaje — carry-on ~$50–60 por persona/tramo, sumarlo al comparar
+  (aplica igual en ambas opciones Frontier, así que el ahorro se mantiene). Alternativa aún más barata que Amtrak:
+  SEPTA a Trenton + NJ Transit (~$25 p/p, 2h15). Comprar el Amtrak apenas se confirme el plan: sube cerca de la fecha.</p>
+
+  <!-- TIMELINE -->
+  <h2 class="sec">⏱️ Línea de tiempo — las próximas 48 horas</h2>
+  <div class="tline">
+    <div class="tev hot">
+      <div class="cuando">HOY Sáb 11/7 · 22:00 ARG · 21:00 NY · 20:00 Kansas City</div>
+      <h4>⚽ CUARTOS: Argentina vs Suiza — Arrowhead Stadium</h4>
+      <p>El partido que define todo. Gana → Plan A (Atlanta + semi + PHL). Pierde → Plan B (NY directo, cambio KLM).</p>
+    </div>
+    <div class="tev rojo">
+      <div class="cuando">Esta noche, si ARG pierde</div>
+      <h4>🏨 Cancelar el Marriott Atlanta + 📞 llamar a KLM</h4>
+      <p>Cancelar Atlanta esa misma noche (multa ~1 noche, ~$100 — pedir condonación, a veces la dan).
+      Y gestionar el cambio del vuelo internacional a NY: <b>€70 por persona</b> (€140 los dos). Cuanto antes,
+      mejor disponibilidad de asientos.</p>
+    </div>
+    <div class="tev">
+      <div class="cuando">Dom 12/7 — día de compras</div>
+      <h4>✈️ Comprar los tramos del plan ganador</h4>
+      <p><b>Plan A:</b> Frontier ATL→PHL 16/7 (€120 p/p, ideal el de 10:10) + Amtrak PHL→NY Penn (~$30–60 p/p).
+      <b>Plan B:</b> confirmar cambio KLM + reservar hotel NY 13–16/7 (~$550 los dos).
+      En ambos casos comprar YA: semana de final, los precios solo suben.
+      Si es Plan A, arranca también la cacería en FIFA Resale (tope $2.000 por entrada).</p>
+    </div>
+    <div class="tev">
+      <div class="cuando">Lun 13/7 · 23:59 (hora NY)</div>
+      <h4>🏨 Vence la cancelación gratis del Sheraton Times Square</h4>
+      <p>No es un trigger: la noche del 16 al 17 va en ambos planes. Solo se cancelaría ante un cambio total de viaje.</p>
+    </div>
+    <div class="tev hot">
+      <div class="cuando">Mié 15/7</div>
+      <h4>🏟️ Semifinal en el Mercedes-Benz Stadium (Plan A)</h4>
+      <p>Con o sin entrada, ese día Atlanta es una fiesta argentina. Última chance de entradas resale hasta horas antes.</p>
+    </div>
+    <div class="tev">
+      <div class="cuando">Dom 19/7 · 23:59 (hora NY)</div>
+      <h4>🏨 Vence la cancelación gratis del TownePlace LIC</h4>
+      <p>Se usa en ambos planes — solo anotado por completitud. Ese día además es LA FINAL en MetLife. 🤞🇦🇷</p>
+    </div>
+  </div>
+
+  <!-- ENTRADA -->
+  <h2 class="sec">🎫 La entrada de la semifinal — la gran variable</h2>
+  <div class="alerta">
+    <h3>Tope definido: US$ 2.000 por entrada</h3>
+    <p>
+      FIFA publicó la semi de Atlanta con precios dinámicos que en las categorías visibles rondan los
+      <b>$4.360–$9.660</b>, y la reventa oficial (FIFA Resale) fluctúa día a día. La jugada inteligente:
+      esperar el resultado de esta noche y cazar en FIFA Resale, donde los fans que revenden a precio de carátula
+      liberan entradas de Cat. 3 y 4 — históricamente por debajo de los precios dinámicos. Si a $2.000 o menos
+      no aparece nada, bar + fan fest en Atlanta sin culpa: eso también es Mundial.
+    </p>
+    <p style="margin-top:10px">
+      💰 Escenarios: <b>2 entradas × $1.000 = $2.000</b> (optimista) · <b>2 × $2.000 = $4.000</b> (tope máximo) ·
+      <b>$0</b> (no hay a ese precio → bar + fan fest).
+    </p>
+  </div>
+
+  <!-- PRESUPUESTO PLAN A -->
+  <h2 class="sec">💵 Presupuesto Plan A — Argentina a la semi</h2>
+  <table>
+    <tr><th>Concepto</th><th class="r">USD (2 personas)</th><th>Estado</th></tr>
+    <tr><td>Tasas vuelos internacionales (€729 ≈)</td><td class="r">$846</td><td class="muted">✅ Pagado (+101.500 millas)</td></tr>
+    <tr><td>Hotel Atlanta (3 noches)</td><td class="r">$301</td><td class="muted">✅ Reservado</td></tr>
+    <tr><td>Hotel Sheraton NY (1 noche)</td><td class="r">$169</td><td class="muted">✅ Reservado</td></tr>
+    <tr><td>Lo de Cacho (3 noches)</td><td class="r">$0</td><td class="muted">💚 Gratis</td></tr>
+    <tr><td>Hotel TownePlace LIC (3 noches)</td><td class="r">$512</td><td class="muted">✅ Reservado</td></tr>
+    <tr class="subtotal"><td>Subtotal ya comprometido</td><td class="r">$1.828</td><td></td></tr>
+    <tr><td>Vuelo ATL→PHL + SEPTA + Amtrak (16/7)</td><td class="r">~$390</td><td class="muted">🟡 Comprar el 12/7 · ahorra ~$220 vs directo</td></tr>
+    <tr><td>Gastos diarios (10 días × $100 la pareja)</td><td class="r">$1.000</td><td class="muted">🟡 Estimado</td></tr>
+    <tr class="subtotal"><td>Total sin entradas</td><td class="r">~$3.220</td><td></td></tr>
+    <tr><td>Entradas semifinal (escenario optimista)</td><td class="r">+$2.000</td><td class="muted">🎫 2 × $1.000</td></tr>
+    <tr><td>Entradas semifinal (tope máximo)</td><td class="r">+$4.000</td><td class="muted">🎫 2 × $2.000</td></tr>
+    <tr class="total"><td>TOTAL PLAN A</td><td class="r">$5.220 – $7.220</td><td class="muted">con entradas</td></tr>
+  </table>
+  <p class="note">Conversión usada: €1 ≈ US$1,16. Las millas no se valorizan en la tabla (ya estaban en la cuenta).
+  El tramo a NY subió vs la estimación vieja ($240): con la semana de la final los directos volaron de precio,
+  por eso la ruta Philadelphia. Equipaje Frontier no incluido en la tarifa base (sumar si llevan carry-on grande).</p>
+
+  <!-- PLAN B -->
+  <h2 class="sec">🗽 Plan B v3 — Nueva York directo (si Argentina queda afuera esta noche)</h2>
+  <p class="note" style="margin-bottom:14px">
+    <b>Más simple que nunca:</b> chau Orlando, chau vuelos internos. Si Argentina pierde con Suiza, llamamos a KLM
+    y cambiamos el vuelo del 13/7 para aterrizar directo en Nueva York (<b>€70 por persona</b> de cambio).
+    Diez días completos de NY. Único pendiente: hotel del 13 al 16 (después arranca la cadena Sheraton → Cacho → TownePlace
+    que ya está reservada y no se toca).
+  </p>
+  <table>
+    <tr><th>Concepto</th><th class="r">USD (2 personas)</th><th>Detalle</th></tr>
+    <tr><td>Tasas vuelos internacionales</td><td class="r">$846</td><td class="muted">✅ Igual que Plan A</td></tr>
+    <tr><td>Cambio KLM a NY (€70 × 2 = €140)</td><td class="r">~$162</td><td class="muted">📞 Gestionar esta noche/mañana</td></tr>
+    <tr><td>Multa cancelación Marriott Atlanta</td><td class="r">~$100</td><td class="muted">❌ Deadline pasado — llamar y pedir condonación</td></tr>
+    <tr><td>Hotel NY 13–16/7 (3 noches)</td><td class="r">~$550</td><td class="muted">🟡 Reservar el 12/7 · LIC/Queens ~$150–190/noche</td></tr>
+    <tr><td>Sheraton NY (16–17/7)</td><td class="r">$169</td><td class="muted">✅ Se mantiene</td></tr>
+    <tr><td>Lo de Cacho (17–20/7)</td><td class="r">$0</td><td class="muted">💚 Se mantiene</td></tr>
+    <tr><td>Hotel TownePlace LIC (20–23/7)</td><td class="r">$512</td><td class="muted">✅ Se mantiene</td></tr>
+    <tr><td>Gastos diarios (10 días × $100)</td><td class="r">$1.000</td><td class="muted">🟡 Estimado</td></tr>
+    <tr class="total"><td>TOTAL PLAN B v3</td><td class="r">~$3.340</td><td class="muted">~$290 más barato que el Plan B con Disney</td></tr>
+  </table>
+  <p class="note">Sin vuelos internos = sin conexiones, sin riesgo de demoras, sin equipaje extra de low cost.
+  Y con la final del 19/7 en MetLife, NY va a estar en modo Mundial toda la semana igual.
+  El hotel 13–16 es la única variable: si se estira el precio, mirar LIC (como el TownePlace), Astoria o Jersey City.</p>
+
+  <!-- COMPARATIVA -->
+  <h2 class="sec">📊 Comparativa de escenarios</h2>
+  <div class="bars">
+    <div class="bar-row">
+      <div class="lbl"><span>Plan A sin entradas (bar + fan fest)</span><span>~$3.220</span></div>
+      <div class="bar"><div class="f1" style="width:45%">~$3.220</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="lbl"><span>Plan B v3 — NY directo 10 días</span><span>~$3.340</span></div>
+      <div class="bar"><div class="f3" style="width:46%">~$3.340</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="lbl"><span>Plan A con entradas a $1.000</span><span>~$5.220</span></div>
+      <div class="bar"><div class="f2" style="width:72%">~$5.220</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="lbl"><span>Plan A con entradas al tope ($2.000 c/u)</span><span>~$7.220</span></div>
+      <div class="bar"><div class="f2" style="width:100%">~$7.220</div></div>
+    </div>
+  </div>
+  <p class="note">Los dos planes base quedaron casi empatados (~$120 de diferencia). La única variable grande sigue siendo
+  la entrada de la semi. Y eso no tiene precio… pero tiene tope: $2.000. 😄</p>
+
+  <!-- CHECKLIST -->
+  <h2 class="sec">📋 Próximos pasos</h2>
+  <div class="check">
+    <h3>Hoy y mañana (decisivos ⚡)</h3>
+    <label><input type="checkbox" checked> Cancelar SpringHill Orlando ✅ (opción Disney descartada — verificar cancelación sin cargo en Bonvoy)</label>
+    <label><input type="checkbox"> <b>HOY 22:00 ARG</b> — CUARTOS vs Suiza 🇦🇷🇨🇭 (Arrowhead, Kansas City)</label>
+    <label><input type="checkbox"> Si PIERDE: esta noche cancelar Marriott Atlanta (pedir condonación de multa) + gestionar cambio KLM a NY (€70 p/p) <span class="fecha-lim">ESTA NOCHE</span></label>
+    <label><input type="checkbox"> Dom 12/7 · Plan A: comprar Frontier ATL→PHL 16/7 (€120 p/p, ideal 10:10) + Amtrak PHL→NY (~$30–60 p/p)</label>
+    <label><input type="checkbox"> Dom 12/7 · Plan B: reservar hotel NY 13–16/7 (~$550 los dos, mirar LIC/Astoria)</label>
+    <label><input type="checkbox"> Si es Plan A: monitorear FIFA Resale para la semi (tope $2.000/entrada)</label>
+    <label><input type="checkbox"> Confirmar con Cacho el finde 17–20 (corre en ambos planes)</label>
+    <h3>Antes de viajar</h3>
+    <label><input type="checkbox"> Check-in online vuelos internacionales (13/7)</label>
+    <label><input type="checkbox"> Plan A: decidir equipaje Frontier (carry-on ~$50–60 p/p) y comprarlo online, es más barato que en el aeropuerto</label>
+    <label><input type="checkbox"> Descargar apps: FIFA Tickets, Marriott Bonvoy, Amtrak, MARTA (Atlanta), MTA (NY)</label>
+    <label><input type="checkbox"> Seguro de viaje + tarjetas avisadas</label>
+    <h3>Durante el viaje</h3>
+    <label><input type="checkbox"> 15/7 — SEMIFINAL en el Mercedes-Benz Stadium 🙏</label>
+    <label><input type="checkbox"> 19/7 — Final: MetLife o pantalla gigante con Cacho</label>
+    <label><input type="checkbox"> 23/7 — Vuelta a casa con el corazón lleno</label>
+  </div>
+
+  <footer>
+    Hecho con <span class="heart">💙</span> para Mile — Plan de viaje v4 · actualizado 11/7/2026 (día de cuartos)<br>
+    Precios de vuelos: Google Flights al 11/7 · tren y entradas: estimaciones de mercado, pueden variar.<br>
+    Vamos Argentina 🇦🇷
+  </footer>
+</div>
+
+<script>
+  // Persistencia simple de los checkboxes al abrir el archivo localmente
+  document.querySelectorAll('.check input').forEach((cb,i)=>{
+    try{
+      cb.checked = localStorage.getItem('wc26_v4_'+i)==='1';
+      cb.addEventListener('change',()=>localStorage.setItem('wc26_v4_'+i, cb.checked?'1':'0'));
+    }catch(e){}
+  });
+</script>
+</body>
+</html>
