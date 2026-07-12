@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundial 2026 · Nico & Mile · Plan Final v5</title>
+<style>
+  :root{
+    --celeste:#75AADB; --celeste-osc:#4a8bc4; --azul:#0d2b45; --azul2:#123a5c;
+    --oro:#F6B40E; --blanco:#f8fafc; --gris:#94a3b8; --verde:#22c55e;
+    --rojo:#ef4444; --naranja:#f97316; --card:#12314f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
+  body{background:linear-gradient(160deg,#081c30 0%,#0d2b45 60%,#123a5c 100%);color:var(--blanco);padding-bottom:60px}
+  .wrap{max-width:1050px;margin:0 auto;padding:0 18px}
+
+  /* HERO */
+  .hero{text-align:center;padding:48px 16px 30px;background:
+    radial-gradient(circle at 50% -20%,rgba(117,170,219,.35),transparent 60%)}
+  .hero .flag{font-size:52px}
+  .hero h1{font-size:clamp(28px,5vw,46px);letter-spacing:1px;margin:8px 0 4px;
+    background:linear-gradient(90deg,var(--celeste),#fff,var(--celeste));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.sub{color:var(--celeste);font-size:18px;font-weight:600}
+  .hero .update{display:inline-block;margin-top:14px;background:rgba(34,197,94,.15);border:1px solid var(--verde);
+    color:var(--verde);padding:7px 18px;border-radius:999px;font-size:14px;font-weight:700}
+
+  h2.sec{font-size:24px;margin:46px 0 18px;display:flex;align-items:center;gap:10px}
+  h2.sec::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,var(--celeste),transparent)}
+  .note{font-size:13px;color:var(--gris);margin-top:8px;line-height:1.5}
+
+  /* CAMINO */
+  .camino{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  @media(max-width:860px){.camino{grid-template-columns:repeat(2,1fr)}}
+  .paso{background:var(--card);border-radius:14px;padding:16px 12px;text-align:center;border:1px solid rgba(117,170,219,.25);position:relative}
+  .paso.done{border-color:var(--verde)}
+  .paso.now{border:2px solid var(--oro);box-shadow:0 0 22px rgba(246,180,14,.25)}
+  .paso.dream{border:1px dashed var(--celeste);opacity:.95}
+  .paso .etapa{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gris)}
+  .paso .rival{font-size:18px;font-weight:800;margin:6px 0 2px}
+  .paso .det{font-size:12.5px;color:var(--celeste)}
+  .paso .badge{position:absolute;top:-11px;right:10px;background:var(--oro);color:#082032;font-size:11px;font-weight:800;
+    padding:3px 10px;border-radius:999px}
+  .paso .badge.ok{background:var(--verde);color:#052e13}
+  .paso .badge.sky{background:var(--celeste);color:#082032}
+
+  /* CALENDARIO */
+  .cal{display:grid;grid-template-columns:repeat(11,1fr);gap:6px}
+  @media(max-width:860px){.cal{grid-template-columns:repeat(4,1fr)}}
+  .dia{border-radius:12px;padding:10px 6px;text-align:center;min-height:118px;font-size:12px;border:1px solid rgba(255,255,255,.08)}
+  .dia .num{font-size:19px;font-weight:800}
+  .dia .dow{color:var(--gris);font-size:10px;text-transform:uppercase;letter-spacing:1px}
+  .dia .tag{margin-top:6px;border-radius:7px;padding:3px 4px;font-size:10.5px;font-weight:700;line-height:1.25}
+  .d-atl{background:linear-gradient(180deg,rgba(249,115,22,.22),rgba(249,115,22,.08))}
+  .d-atl .tag{background:rgba(249,115,22,.85);color:#fff}
+  .d-ny{background:linear-gradient(180deg,rgba(117,170,219,.25),rgba(117,170,219,.08))}
+  .d-ny .tag{background:var(--celeste-osc);color:#fff}
+  .d-cacho{background:linear-gradient(180deg,rgba(34,197,94,.22),rgba(34,197,94,.06))}
+  .d-cacho .tag{background:var(--verde);color:#052e13}
+  .tag.gold{background:var(--oro)!important;color:#082032!important}
+  .tag.avion{background:#fff!important;color:#0d2b45!important}
+
+  /* KPIs */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .kpi{background:var(--card);border:1px solid rgba(117,170,219,.25);border-radius:14px;padding:16px 14px;text-align:center}
+  .kpi .v{font-size:24px;font-weight:800;color:var(--oro)}
+  .kpi .v.sky{color:var(--celeste)}
+  .kpi .v.green{color:var(--verde)}
+  .kpi .l{font-size:12px;color:var(--gris);margin-top:4px;line-height:1.35}
+
+  /* CARDS RESERVAS */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .rcard{background:var(--card);border-radius:16px;padding:20px;border:1px solid rgba(117,170,219,.25);position:relative}
+  .rcard.free{border-color:var(--verde)}
+  .rcard.dead{opacity:.55;border-style:dashed}
+  .rcard h3{font-size:17px;margin-bottom:2px}
+  .rcard .fecha{color:var(--celeste);font-size:13.5px;font-weight:600}
+  .rcard .precio{font-size:26px;font-weight:800;margin:10px 0 4px}
+  .rcard .precio small{font-size:13px;color:var(--gris);font-weight:400}
+  .rcard ul{list-style:none;margin-top:8px}
+  .rcard li{font-size:13px;color:#cbd5e1;padding:3px 0;border-top:1px dashed rgba(255,255,255,.08)}
+  .pill{position:absolute;top:16px;right:16px;font-size:11px;font-weight:800;padding:4px 11px;border-radius:999px}
+  .pill.ok{background:rgba(34,197,94,.2);color:var(--verde);border:1px solid var(--verde)}
+  .pill.off{background:rgba(148,163,184,.15);color:var(--gris);border:1px solid var(--gris)}
+  .cancel{margin-top:10px;font-size:12px;color:var(--naranja)}
+
+  /* TABLAS */
+  table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden}
+  th{background:rgba(117,170,219,.15);text-align:left;padding:11px 14px;font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--celeste)}
+  td{padding:11px 14px;font-size:14.5px;border-top:1px solid rgba(255,255,255,.06)}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+  tr.subtotal td{background:rgba(117,170,219,.08);font-weight:700}
+  tr.total td{background:rgba(246,180,14,.14);font-weight:800;font-size:16.5px;color:var(--oro)}
+  .muted{color:var(--gris);font-size:12.5px}
+
+  /* SLIDER ENTRADAS */
+  .simulador{background:linear-gradient(135deg,rgba(246,180,14,.1),rgba(117,170,219,.08));
+    border:2px solid var(--oro);border-radius:20px;padding:26px;margin-top:10px}
+  .simulador h3{color:var(--oro);font-size:19px;margin-bottom:4px}
+  .simulador .sub{font-size:13.5px;color:#cbd5e1;line-height:1.55;margin-bottom:18px}
+  .sl-row{margin:20px 0 8px}
+  .sl-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .sl-head .t{font-weight:800;font-size:15.5px}
+  .sl-head .val{font-size:28px;font-weight:800;color:var(--oro);font-variant-numeric:tabular-nums}
+  input[type=range]{width:100%;height:10px;border-radius:6px;appearance:none;-webkit-appearance:none;
+    background:linear-gradient(90deg,var(--verde),var(--oro) 55%,var(--rojo));outline:none;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:28px;height:28px;border-radius:50%;
+    background:#fff;border:4px solid var(--oro);box-shadow:0 0 14px rgba(246,180,14,.7)}
+  input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:4px solid var(--oro)}
+  .marks{display:flex;justify-content:space-between;font-size:10.5px;color:var(--gris);margin-top:6px}
+  .refs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .ref{font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.2);
+    color:#cbd5e1;cursor:pointer;background:rgba(255,255,255,.04)}
+  .ref:hover{border-color:var(--oro);color:var(--oro)}
+  .sim-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:20px}
+  .so{background:rgba(8,28,48,.6);border-radius:14px;padding:14px;text-align:center;border:1px solid rgba(117,170,219,.25)}
+  .so .v{font-size:22px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+  .so .v.big{color:var(--oro);font-size:26px}
+  .so .l{font-size:11.5px;color:var(--gris);margin-top:3px;line-height:1.3}
+  .veredicto{margin-top:16px;text-align:center;font-size:15px;font-weight:700;padding:12px;border-radius:12px;
+    background:rgba(255,255,255,.05)}
+
+  /* MODO SUEÑO */
+  .dreambox{margin-top:22px;border-top:1px dashed rgba(117,170,219,.4);padding-top:18px}
+  .dream-toggle{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+  .dream-toggle .sw{width:52px;height:28px;border-radius:999px;background:rgba(255,255,255,.15);position:relative;transition:.25s;flex-shrink:0}
+  .dream-toggle .sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.25s}
+  .dream-toggle.on .sw{background:var(--celeste)}
+  .dream-toggle.on .sw::after{left:27px}
+  .dream-toggle .txt{font-weight:800;font-size:16px;color:var(--celeste)}
+  #dreamPanel{display:none;margin-top:16px}
+  #dreamPanel.show{display:block;animation:fadein .4s}
+  @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .sl-head .val.sky{color:var(--celeste)}
+  #dreamPanel input[type=range]::-webkit-slider-thumb{border-color:var(--celeste);box-shadow:0 0 14px rgba(117,170,219,.7)}
+
+  /* BARRAS */
+  .bars{background:var(--card);border-radius:16px;padding:22px;border:1px solid rgba(117,170,219,.25)}
+  .bar-row{margin:14px 0}
+  .bar-row .lbl{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:6px}
+  .bar{height:26px;border-radius:8px;background:rgba(255,255,255,.07);overflow:hidden}
+  .bar>div{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;
+    font-size:12.5px;font-weight:800;color:#082032;transition:width .3s;min-width:70px;white-space:nowrap}
+  .f1{background:linear-gradient(90deg,var(--verde),#86efac)}
+  .f2{background:linear-gradient(90deg,var(--oro),#fcd34d)}
+  .f3{background:linear-gradient(90deg,var(--celeste),#a8d0f0)}
+
+  /* TIMELINE */
+  .tline{position:relative;margin-top:6px;padding-left:32px}
+  .tline::before{content:"";position:absolute;left:10px;top:6px;bottom:6px;width:3px;
+    background:linear-gradient(180deg,var(--oro),var(--celeste));border-radius:2px}
+  .tev{position:relative;margin-bottom:16px;background:var(--card);border:1px solid rgba(117,170,219,.25);
+    border-radius:14px;padding:14px 18px}
+  .tev::before{content:"";position:absolute;left:-28px;top:18px;width:14px;height:14px;border-radius:50%;
+    background:var(--celeste);border:3px solid #0d2b45}
+  .tev.hot{border-color:var(--oro)}
+  .tev.hot::before{background:var(--oro);box-shadow:0 0 12px rgba(246,180,14,.7)}
+  .tev .cuando{font-size:12px;font-weight:800;color:var(--oro);text-transform:uppercase;letter-spacing:1.2px}
+  .tev h4{font-size:15.5px;margin:4px 0 5px}
+  .tev p{font-size:13.5px;color:#cbd5e1;line-height:1.55}
+
+  /* CHECKLIST */
+  .check{background:var(--card);border-radius:16px;padding:20px;border:1px solid rgba(117,170,219,.25)}
+  .check h3{color:var(--celeste);font-size:15px;margin:14px 0 6px;text-transform:uppercase;letter-spacing:1px}
+  .check h3:first-child{margin-top:0}
+  .check label{display:flex;gap:10px;align-items:flex-start;padding:7px 4px;font-size:14.5px;cursor:pointer;border-radius:8px}
+  .check label:hover{background:rgba(255,255,255,.04)}
+  .check input{margin-top:3px;accent-color:var(--verde);width:16px;height:16px}
+  .fecha-lim{color:var(--oro);font-weight:700;font-size:12.5px}
+
+  footer{text-align:center;margin-top:56px;color:var(--gris);font-size:13px;line-height:1.7}
+  .heart{color:var(--celeste)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="flag">🇦🇷⚽🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
+  <h1>MUNDIAL 2026 — NICO & MILE</h1>
+  <p class="sub">Atlanta → Nueva York · 13 al 23 de julio · PLAN A CONFIRMADO</p>
+  <div class="update">✅ ¡ARGENTINA A LA SEMIFINAL! · Mié 15/7 vs Inglaterra · Mercedes-Benz Stadium — y nosotros ahí</div>
+  <p class="note" style="max-width:680px;margin:14px auto 0">
+    Actualizado el 12/7/2026. El plan quedó <b>completamente cerrado</b>: se compró el vuelo interno y el tren,
+    se canceló el TownePlace (sin cargo) y volvemos al Sheraton del 20 al 22, con la última noche de nuevo en lo de Cacho.
+    Orlando cancelado. Abajo, el presupuesto final con números reales — y un simulador para jugar con el precio de las entradas.
+  </p>
+</div>
+
+<div class="wrap">
+
+  <!-- CAMINO -->
+  <h2 class="sec">🏆 El camino de la Scaloneta</h2>
+  <div class="camino">
+    <div class="paso done">
+      <span class="badge ok">GANADO</span>
+      <div class="etapa">16avos</div>
+      <div class="rival">vs Cabo Verde ✔</div>
+      <div class="det">Argentina avanzó</div>
+    </div>
+    <div class="paso done">
+      <span class="badge ok">GANADO</span>
+      <div class="etapa">Octavos</div>
+      <div class="rival">Egipto 2–3 ✔</div>
+      <div class="det">Remontada épica · 7/7 Atlanta</div>
+    </div>
+    <div class="paso done">
+      <span class="badge ok">GANADO</span>
+      <div class="etapa">Cuartos</div>
+      <div class="rival">vs Suiza ✔</div>
+      <div class="det">11/7 · Arrowhead, Kansas City</div>
+    </div>
+    <div class="paso now">
+      <span class="badge">NOSOTROS AHÍ 🎫</span>
+      <div class="etapa">Semifinal</div>
+      <div class="rival">vs INGLATERRA 🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
+      <div class="det">Mié 15/7 · 15:00 local<br>Mercedes-Benz Stadium, Atlanta</div>
+    </div>
+    <div class="paso dream">
+      <span class="badge sky">EL SUEÑO 🌟</span>
+      <div class="etapa">Final</div>
+      <div class="rival">¿ARGENTINA?</div>
+      <div class="det">Dom 19/7 · MetLife Stadium, NY<br>…y esos días estamos en NY 🗽</div>
+    </div>
+  </div>
+  <p class="note">Argentina–Inglaterra en semis de un Mundial. Y si se gana… la final es el domingo 19/7 en MetLife,
+  a media hora de lo de Cacho, donde justo vamos a estar durmiendo esa noche. El destino a veces te guiña el ojo.</p>
+
+  <!-- CALENDARIO -->
+  <h2 class="sec">📅 Calendario final del viaje</h2>
+  <div class="cal">
+    <div class="dia d-atl"><div class="dow">Lun</div><div class="num">13</div><div class="tag avion">✈️ Llegada ATL</div><div class="tag">Marriott Midtown</div></div>
+    <div class="dia d-atl"><div class="dow">Mar</div><div class="num">14</div><div class="tag">Atlanta · fan fest</div></div>
+    <div class="dia d-atl"><div class="dow">Mié</div><div class="num">15</div><div class="tag gold">🎫 SEMI vs 🏴󠁧󠁢󠁥󠁮󠁧󠁿</div><div class="tag">Mercedes-Benz</div></div>
+    <div class="dia d-ny"><div class="dow">Jue</div><div class="num">16</div><div class="tag avion">✈️ 5:05 + 🚄 9:45</div><div class="tag">Sheraton Times Sq</div></div>
+    <div class="dia d-cacho"><div class="dow">Vie</div><div class="num">17</div><div class="tag" style="background:var(--celeste-osc);color:#fff">NY · Midtown</div><div class="tag">→ lo de Cacho 🏡</div></div>
+    <div class="dia d-cacho"><div class="dow">Sáb</div><div class="num">18</div><div class="tag">Cacho 🏡 gratis</div></div>
+    <div class="dia d-cacho"><div class="dow">Dom</div><div class="num">19</div><div class="tag">Cacho 🏡</div><div class="tag gold">🏆 FINAL MetLife</div></div>
+    <div class="dia d-ny"><div class="dow">Lun</div><div class="num">20</div><div class="tag">→ Sheraton Times Sq</div></div>
+    <div class="dia d-ny"><div class="dow">Mar</div><div class="num">21</div><div class="tag">Sheraton Times Sq</div></div>
+    <div class="dia d-cacho"><div class="dow">Mié</div><div class="num">22</div><div class="tag">→ lo de Cacho 🏡</div><div class="tag">última noche</div></div>
+    <div class="dia d-ny"><div class="dow">Jue</div><div class="num">23</div><div class="tag avion">✈️ Vuelta 🇦🇷</div></div>
+  </div>
+  <p class="note">🟠 Atlanta · 🔵 Nueva York (hotel) · 🟢 Lo de Cacho (gratis). El jueves 16 es madrugón:
+  vuelo Frontier 5:05 desde ATL (despertador 2:45 ⏰), aterrizamos 7:15 en PHL, SEPTA a 30th Street y
+  tren Amtrak 9:45 → 11:05 en Penn Station, a 15 cuadras del Sheraton. Almorzamos en Manhattan.</p>
+
+  <!-- INDICADORES -->
+  <h2 class="sec">📈 Indicadores del viaje cerrado</h2>
+  <div class="kpis">
+    <div class="kpi"><div class="v">$3.207</div><div class="l">Total del viaje sin entradas<br>(2 personas, 10 días)</div></div>
+    <div class="kpi"><div class="v green">$2.193</div><div class="l">Ya pagado y reservado<br>(68% del total — todo cerrado)</div></div>
+    <div class="kpi"><div class="v sky">$321</div><div class="l">Costo por día la pareja<br>(todo incluido, sin entradas)</div></div>
+    <div class="kpi"><div class="v sky">$40</div><div class="l">Alojamiento por persona<br>por noche (10 noches)</div></div>
+    <div class="kpi"><div class="v green">~$675</div><div class="l">Ahorro por las 4 noches<br>gratis en lo de Cacho 💚</div></div>
+    <div class="kpi"><div class="v green">$175</div><div class="l">Ahorro TownePlace→Sheraton<br>($512 → $337)</div></div>
+    <div class="kpi"><div class="v">$554</div><div class="l">ATL→NY puerta a puerta<br>(vuelo+SEPTA+tren, los dos)</div></div>
+    <div class="kpi"><div class="v">101.500</div><div class="l">Millas usadas en los<br>vuelos internacionales</div></div>
+  </div>
+  <p class="note">El total real sin entradas quedó en <b>$3.207</b> — casi calcado a la proyección de $3.220 del plan v4.
+  La ruta Philadelphia con equipaje y tren incluidos costó $554 los dos, contra ~$730 que costaba el directo a JFK
+  en condiciones comparables: <b>~$175 de ahorro</b> por 2 horas más de viaje (y un paseo en tren por el corredor noreste).</p>
+
+  <!-- RESERVAS -->
+  <h2 class="sec">✅ Reservas — todo confirmado</h2>
+  <div class="cards">
+    <div class="rcard">
+      <span class="pill ok">PAGADO EN MILLAS</span>
+      <h3>✈️ Vuelos internacionales (KLM)</h3>
+      <div class="fecha">Ida 13/7 a Atlanta · Vuelta 23/7 desde NY</div>
+      <div class="precio">$846 <small>tasas €729 (los dos)</small></div>
+      <ul>
+        <li>Ida: €245,50 + 32.000 millas c/u</li>
+        <li>Vuelta: €119 + 18.750 millas c/u</li>
+        <li>Total millas: 101.500 (≈126.875 puntos AMEX)</li>
+      </ul>
+    </div>
+    <div class="rcard">
+      <span class="pill ok">CONFIRMADA</span>
+      <h3>🏨 Atlanta Marriott Suites Midtown</h3>
+      <div class="fecha">Lun 13 → Jue 16 jul · 3 noches · suite king</div>
+      <div class="precio">$301,05 <small>$79/noche + imp.</small></div>
+      <ul>
+        <li>Conf. #75810609 · 35 14th Street NE</li>
+        <li>2 adultos · sofá cama solicitado</li>
+      </ul>
+    </div>
+    <div class="rcard">
+      <span class="pill ok">COMPRADO 12/7</span>
+      <h3>✈️ Frontier 1004 · ATL → PHL</h3>
+      <div class="fecha">Jue 16 jul · 5:05 → 7:15 · directo 2h10</div>
+      <div class="precio">$393,96 <small>los dos, con Economy Bundle</small></div>
+      <ul>
+        <li>Conf. JL98QK · Nicolás + Milena</li>
+        <li>Bundle incluye carry-on, asiento y flexibilidad</li>
+        <li>Check-in online desde el 15/7 a las 5:05</li>
+      </ul>
+    </div>
+    <div class="rcard">
+      <span class="pill ok">COMPRADO 12/7</span>
+      <h3>🚄 Amtrak Keystone 644 · PHL → NY Penn</h3>
+      <div class="fecha">Jue 16 jul · 9:45 → 11:05 · 2 coach seats</div>
+      <div class="precio">$146,00 <small>los dos</small></div>
+      <ul>
+        <li>Res. 8C348D · sale de 30th St Station</li>
+        <li>Llega a Moynihan Train Hall (Penn Station)</li>
+        <li>Antes: SEPTA Airport Line → 30th St (~$14 los dos, se paga allá)</li>
+      </ul>
+    </div>
+    <div class="rcard">
+      <span class="pill ok">CONFIRMADA</span>
+      <h3>🏨 Sheraton NY Times Square · estadía 1</h3>
+      <div class="fecha">Jue 16 → Vie 17 jul · 1 noche</div>
+      <div class="precio">$168,74 <small>conf. #78792661</small></div>
+      <ul>
+        <li>811 7th Ave & 53rd St · pleno Midtown</li>
+        <li>Cancelación gratis venció el 13/7 — va sí o sí</li>
+      </ul>
+    </div>
+    <div class="rcard free">
+      <span class="pill ok">GRATIS 💚</span>
+      <h3>🏡 Lo de Cacho · ×2</h3>
+      <div class="fecha">Vie 17 → Lun 20 · y Mié 22 → Jue 23 · 4 noches</div>
+      <div class="precio">$0 <small>gracias, amigo</small></div>
+      <ul>
+        <li>Incluye la noche de LA FINAL (19/7) 🤞</li>
+        <li>Y la última noche antes de volver</li>
+        <li>Ahorro estimado: ~$675 en hoteles</li>
+      </ul>
+    </div>
+    <div class="rcard">
+      <span class="pill ok">CONFIRMADA · NUEVA</span>
+      <h3>🏨 Sheraton NY Times Square · estadía 2</h3>
+      <div class="fecha">Lun 20 → Mié 22 jul · 2 noches · king</div>
+      <div class="precio">$337,48 <small>conf. #95406720 · $168,74/noche</small></div>
+      <ul>
+        <li>Mismo hotel, misma zona que nos gustó</li>
+        <li>Reemplaza al TownePlace: <b>$175 más barato</b> y en Manhattan</li>
+      </ul>
+      <div class="cancel">⏰ Cancelación gratis hasta el sáb 18/7 (verificar en Bonvoy)</div>
+    </div>
+    <div class="rcard dead">
+      <span class="pill off">CANCELADO SIN CARGO</span>
+      <h3>🏨 TownePlace Suites LIC</h3>
+      <div class="fecha">Era 20 → 23 jul · $512,22</div>
+      <div class="precio" style="text-decoration:line-through">$512,22</div>
+      <ul>
+        <li>Conf. #78760763 cancelada el 12/7, sin multa</li>
+        <li>También cancelado: SpringHill Orlando (#75099585)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PRESUPUESTO FINAL -->
+  <h2 class="sec">💵 Presupuesto final — números reales</h2>
+  <table>
+    <tr><th>Concepto</th><th class="r">USD (2 personas)</th><th>Estado</th></tr>
+    <tr><td>Tasas vuelos internacionales (€729)</td><td class="r">$845,64</td><td class="muted">✅ Pagado (+101.500 millas)</td></tr>
+    <tr><td>Hotel Atlanta Marriott (3 noches)</td><td class="r">$301,05</td><td class="muted">✅ Conf. #75810609</td></tr>
+    <tr><td>Frontier ATL→PHL 16/7 (con bundle)</td><td class="r">$393,96</td><td class="muted">✅ Conf. JL98QK</td></tr>
+    <tr><td>Amtrak PHL→NY Penn 16/7</td><td class="r">$146,00</td><td class="muted">✅ Res. 8C348D</td></tr>
+    <tr><td>Sheraton NY 16–17/7 (1 noche)</td><td class="r">$168,74</td><td class="muted">✅ Conf. #78792661</td></tr>
+    <tr><td>Lo de Cacho 17–20 y 22–23 (4 noches)</td><td class="r">$0,00</td><td class="muted">💚 Gratis</td></tr>
+    <tr><td>Sheraton NY 20–22/7 (2 noches)</td><td class="r">$337,48</td><td class="muted">✅ Conf. #95406720</td></tr>
+    <tr class="subtotal"><td>Subtotal comprometido (todo cerrado)</td><td class="r">$2.192,87</td><td class="muted">68% del total</td></tr>
+    <tr><td>SEPTA Airport Line → 30th St (16/7)</td><td class="r">~$14</td><td class="muted">🟡 Se paga allá</td></tr>
+    <tr><td>Gastos diarios (10 días × $100 la pareja)</td><td class="r">$1.000</td><td class="muted">🟡 Estimado</td></tr>
+    <tr class="total"><td>TOTAL SIN ENTRADAS</td><td class="r">$3.207</td><td class="muted">vs $3.220 proyectado en v4 ✅</td></tr>
+  </table>
+  <p class="note">Conversión: €1 ≈ US$1,16. Las millas no se valorizan en la tabla. Único gasto grande que queda abierto:
+  <b>las entradas</b>. Para eso, el simulador 👇</p>
+
+  <!-- SIMULADOR ENTRADAS -->
+  <h2 class="sec">🎫 Simulador de entradas — jugá con el precio</h2>
+  <div class="simulador">
+    <h3>Semifinal · Argentina vs Inglaterra · mié 15/7</h3>
+    <p class="sub">
+      Mercado hoy (12/7): en FIFA Resale las entradas aparecen y desaparecen a valor de carátula; en reventa
+      StubHub arranca en ~$1.181 y TickPick lista desde ~$2.150 (las de "England" desde $2.890).
+      Nuestro tope original era <b>$2.000 por entrada</b>. Movete el precio y mirá qué pasa con el presupuesto:
+    </p>
+    <div class="sl-row">
+      <div class="sl-head">
+        <span class="t">Precio por entrada (vamos los dos 💑)</span>
+        <span class="val" id="semiVal">$2.000</span>
+      </div>
+      <input type="range" id="semiSlider" min="0" max="3500" step="50" value="2000">
+      <div class="marks"><span>$0 · fan fest</span><span>$1.000</span><span>$2.000 · tope</span><span>$3.500</span></div>
+      <div class="refs">
+        <span class="ref" data-v="0">🍺 No conseguimos · $0</span>
+        <span class="ref" data-v="1200">📉 Mínimo StubHub ~$1.200</span>
+        <span class="ref" data-v="2000">🎯 Nuestro tope $2.000</span>
+        <span class="ref" data-v="2900">🏴󠁧󠁢󠁥󠁮󠁧󠁿 TickPick England $2.900</span>
+      </div>
+    </div>
+
+    <div class="dreambox">
+      <div class="dream-toggle" id="dreamToggle">
+        <div class="sw"></div>
+        <div class="txt">🌟 Modo sueño: ¿y si Argentina juega LA FINAL en MetLife el 19/7?</div>
+      </div>
+      <div id="dreamPanel">
+        <p class="sub" style="margin:10px 0 0">
+          Estamos en NY ese día, durmiendo en lo de Cacho a media hora del estadio. El problema: la final es
+          carísima — FIFA vende Cat. 2 a $7.380 y en su Resale se vieron mínimos de ~$7.150; la reventa promedia
+          más de $11.000. Pero soñar es gratis (el slider, no tanto):
+        </p>
+        <div class="sl-row">
+          <div class="sl-head">
+            <span class="t">Precio por entrada de la final</span>
+            <span class="val sky" id="finalVal">$0</span>
+          </div>
+          <input type="range" id="finalSlider" min="0" max="12000" step="100" value="0">
+          <div class="marks"><span>$0 · pantalla con Cacho</span><span>$4.000</span><span>$7.400 · FIFA</span><span>$12.000</span></div>
+          <div class="refs">
+            <span class="ref" data-f="0">📺 Pantalla gigante · $0</span>
+            <span class="ref" data-f="7150">🎫 Mín. FIFA Resale ~$7.150</span>
+            <span class="ref" data-f="7380">🏟️ FIFA Cat.2 $7.380</span>
+            <span class="ref" data-f="11000">💸 Promedio reventa ~$11.000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sim-out">
+      <div class="so"><div class="v" id="outEntradas">$4.000</div><div class="l">Entradas (los dos)</div></div>
+      <div class="so"><div class="v big" id="outTotal">$7.207</div><div class="l">TOTAL DEL VIAJE</div></div>
+      <div class="so"><div class="v" id="outPct">55%</div><div class="l">Peso de las entradas<br>en el total</div></div>
+      <div class="so"><div class="v" id="outDia">$721</div><div class="l">Costo por día<br>la pareja</div></div>
+    </div>
+    <div class="veredicto" id="veredicto">🎯 En el tope que definimos: $2.000 por cabeza. Duele, pero es LA semifinal.</div>
+  </div>
+
+  <!-- COMPARATIVA -->
+  <h2 class="sec">📊 Escenarios (se mueven con el simulador)</h2>
+  <div class="bars">
+    <div class="bar-row">
+      <div class="lbl"><span>Viaje cerrado, sin entradas (fan fest + bares)</span><span>$3.207</span></div>
+      <div class="bar"><div class="f1" id="bar1" style="width:15%">$3.207</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="lbl"><span id="lblSemi">Con entradas a la semi</span><span id="lblSemiV">$7.207</span></div>
+      <div class="bar"><div class="f2" id="bar2" style="width:33%">$7.207</div></div>
+    </div>
+    <div class="bar-row" id="rowDream" style="display:none">
+      <div class="lbl"><span>🌟 Modo sueño: semi + FINAL</span><span id="lblDreamV">—</span></div>
+      <div class="bar"><div class="f3" id="bar3" style="width:0%">—</div></div>
+    </div>
+  </div>
+  <p class="note">Referencia de escala: la barra llena equivale a ~$22.000 (viaje + semi al tope + final a precio FIFA).
+  Ojalá tengamos ese "problema". 🙏</p>
+
+  <!-- TIMELINE -->
+  <h2 class="sec">⏱️ Los próximos días</h2>
+  <div class="tline">
+    <div class="tev hot">
+      <div class="cuando">Ya mismo → mié 15/7</div>
+      <h4>🎫 Cacería en FIFA Resale para la semi</h4>
+      <p>Revisar el marketplace oficial varias veces por día (aparecen de a tandas y vuelan). Tener la cuenta FIFA
+      logueada y la tarjeta cargada. Tope acordado: $2.000 por entrada — si no aparece, fan fest y bar sin culpa.</p>
+    </div>
+    <div class="tev">
+      <div class="cuando">Lun 13/7</div>
+      <h4>✈️ Volamos a Atlanta</h4>
+      <p>Check-in KLM online. Llegada y hotel Marriott Midtown (conf. #75810609).</p>
+    </div>
+    <div class="tev hot">
+      <div class="cuando">Mié 15/7 · 15:00</div>
+      <h4>🏟️ SEMIFINAL: Argentina vs Inglaterra — Mercedes-Benz Stadium</h4>
+      <p>Con o sin entrada, Atlanta va a ser una fiesta albiceleste. Partido a la tarde: la noche queda libre
+      para festejar (con moderación: el despertador del jueves suena 2:45 ⏰).</p>
+    </div>
+    <div class="tev">
+      <div class="cuando">Jue 16/7 · madrugón</div>
+      <h4>✈️🚄 Atlanta → Philadelphia → Nueva York</h4>
+      <p>Frontier 1004 a las 5:05 (estar 3:30 en ATL) → 7:15 PHL → SEPTA a 30th St → Amtrak 9:45 → 11:05 Penn Station
+      → Sheraton Times Square. Todo comprado ✅.</p>
+    </div>
+    <div class="tev hot">
+      <div class="cuando">Dom 19/7</div>
+      <h4>🏆 LA FINAL en MetLife — ¿con Argentina?</h4>
+      <p>Si la Scaloneta está, se activa el modo sueño (ver simulador). Si no llegamos al estadio: pantalla
+      gigante con Cacho, que a media hora del MetLife también se vive.</p>
+    </div>
+    <div class="tev">
+      <div class="cuando">Sáb 18/7 aprox.</div>
+      <h4>🏨 Último deadline de cancelación: Sheraton 20–22</h4>
+      <p>Solo por completitud — el plan ya está fijo. Verificar la fecha exacta en la app Bonvoy.</p>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <h2 class="sec">📋 Checklist final</h2>
+  <div class="check">
+    <h3>Cerrado ✅</h3>
+    <label><input type="checkbox" checked> Argentina a semis 🇦🇷 — cuartos ganados vs Suiza</label>
+    <label><input type="checkbox" checked> Frontier ATL→PHL comprado (JL98QK, $393,96 con bundle)</label>
+    <label><input type="checkbox" checked> Amtrak PHL→NY comprado (8C348D, $146)</label>
+    <label><input type="checkbox" checked> Sheraton 20–22/7 reservado (#95406720, $337,48)</label>
+    <label><input type="checkbox" checked> TownePlace cancelado sin cargo · SpringHill Orlando cancelado</label>
+    <label><input type="checkbox" checked> Cacho confirmado: 17–20 y última noche 22–23 💚</label>
+    <h3>Antes de viajar (¡mañana volamos!)</h3>
+    <label><input type="checkbox"> Monitorear FIFA Resale — semi, tope $2.000/entrada <span class="fecha-lim">HASTA EL 15/7</span></label>
+    <label><input type="checkbox"> Check-in online KLM (vuelo del 13/7)</label>
+    <label><input type="checkbox"> Descargar apps: FIFA Tickets, Bonvoy, Amtrak, SEPTA, MARTA, MTA</label>
+    <label><input type="checkbox"> Seguro de viaje + avisar a las tarjetas</label>
+    <label><input type="checkbox"> Efectivo chico para SEPTA (~$14) y propinas</label>
+    <h3>Durante el viaje</h3>
+    <label><input type="checkbox"> 15/7 — SEMIFINAL vs Inglaterra 🙏</label>
+    <label><input type="checkbox"> 15/7 a la noche — armar valijas (despertador 2:45)</label>
+    <label><input type="checkbox"> 19/7 — Final: ¿MetLife o pantalla con Cacho?</label>
+    <label><input type="checkbox"> 23/7 — Vuelta a casa con el corazón lleno</label>
+  </div>
+
+  <footer>
+    Hecho con <span class="heart">💙</span> para Mile — Plan de viaje v5 FINAL · actualizado 12/7/2026 (rumbo a la semi)<br>
+    Reservas: montos reales de confirmaciones · Entradas: referencias de FIFA Resale, StubHub y TickPick al 12/7, varían hora a hora.<br>
+    Vamos Argentina 🇦🇷 — nos vemos en Atlanta… ¿y en MetLife? 🌟
+  </footer>
+</div>
+
+<script>
+  var BASE = 3207; // total sin entradas (2 personas, 10 días)
+  var ESCALA = 22000; // ancho de referencia de las barras
+  var fmt = function(n){ return '$' + Math.round(n).toLocaleString('es-AR'); };
+
+  var semiS = document.getElementById('semiSlider');
+  var finalS = document.getElementById('finalSlider');
+  var dreamOn = false;
+
+  function veredictoTxt(p){
+    if(p===0) return '🍺 Sin entradas: fan fest, bar y pantalla gigante. También es Mundial, y el viaje queda en $3.207.';
+    if(p<=1200) return '😍 A este precio es COMPRAR SIN DUDAR — está por debajo del mínimo de reventa que se vio hoy.';
+    if(p<=2000) return '🎯 Dentro del tope que definimos ($2.000). Duele, pero es una semifinal de Mundial con la Scaloneta.';
+    if(p<=2900) return '😬 Arriba del tope. Acá hay que respirar hondo y decidir juntos si lo estiramos.';
+    return '🚨 Zona peligrosa: a este precio conviene guardar el resto del presupuesto (¿o soñar con la final?).';
+  }
+
+  function update(){
+    var ps = parseInt(semiS.value,10);
+    var pf = dreamOn ? parseInt(finalS.value,10) : 0;
+    var entradas = ps*2 + pf*2;
+    var total = BASE + entradas;
+
+    document.getElementById('semiVal').textContent = fmt(ps);
+    document.getElementById('finalVal').textContent = fmt(pf);
+    document.getElementById('outEntradas').textContent = fmt(entradas);
+    document.getElementById('outTotal').textContent = fmt(total);
+    document.getElementById('outPct').textContent = total>0 ? Math.round(entradas/total*100)+'%' : '0%';
+    document.getElementById('outDia').textContent = fmt(total/10);
+    document.getElementById('veredicto').textContent = dreamOn && pf>0
+      ? '🌟 Modo sueño activado: semi + final = ' + fmt(entradas) + ' en entradas. Si pasa, se cuenta a los nietos.'
+      : veredictoTxt(ps);
+
+    // barras
+    var semiTotal = BASE + ps*2;
+    document.getElementById('bar1').style.width = Math.max(BASE/ESCALA*100,10)+'%';
+    var b2 = document.getElementById('bar2');
+    b2.style.width = Math.min(Math.max(semiTotal/ESCALA*100,12),100)+'%';
+    b2.textContent = fmt(semiTotal);
+    document.getElementById('lblSemi').textContent = ps>0 ? 'Con entradas a la semi ('+fmt(ps)+' c/u)' : 'Semi sin entradas (igual al viaje base)';
+    document.getElementById('lblSemiV').textContent = fmt(semiTotal);
+
+    var row3 = document.getElementById('rowDream');
+    if(dreamOn && pf>0){
+      row3.style.display='';
+      var b3 = document.getElementById('bar3');
+      b3.style.width = Math.min(Math.max(total/ESCALA*100,14),100)+'%';
+      b3.textContent = fmt(total);
+      document.getElementById('lblDreamV').textContent = fmt(total);
+    } else { row3.style.display='none'; }
+  }
+
+  semiS.addEventListener('input',update);
+  finalS.addEventListener('input',update);
+
+  document.getElementById('dreamToggle').addEventListener('click',function(){
+    dreamOn = !dreamOn;
+    this.classList.toggle('on',dreamOn);
+    document.getElementById('dreamPanel').classList.toggle('show',dreamOn);
+    if(dreamOn && parseInt(finalS.value,10)===0){ finalS.value = 7400; }
+    update();
+  });
+
+  document.querySelectorAll('.ref[data-v]').forEach(function(r){
+    r.addEventListener('click',function(){ semiS.value=this.dataset.v; update(); });
+  });
+  document.querySelectorAll('.ref[data-f]').forEach(function(r){
+    r.addEventListener('click',function(){ finalS.value=this.dataset.f; update(); });
+  });
+
+  // checkboxes persistentes
+  document.querySelectorAll('.check input').forEach(function(cb,i){
+    try{
+      var k='wc26_v5_'+i;
+      if(localStorage.getItem(k)!==null){ cb.checked = localStorage.getItem(k)==='1'; }
+      cb.addEventListener('change',function(){ localStorage.setItem(k, cb.checked?'1':'0'); });
+    }catch(e){}
+  });
+
+  update();
+</script>
+</body>
+</html>
