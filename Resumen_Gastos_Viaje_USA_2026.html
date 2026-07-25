@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>USA 2026 · Nico &amp; Mile · Los números del viaje</title>
+<style>
+:root{--celeste:#75AADB;--azul:#0d2b45;--oro:#F6B40E;--blanco:#f8fafc;--gris:#94a3b8;
+--verde:#22c55e;--rojo:#ef4444;--naranja:#f97316;--violeta:#a855f7;--card:#12314f;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:linear-gradient(160deg,#081c30 0%,#0d2b45 55%,#123a5c 100%);color:var(--blanco);padding-bottom:70px}
+.wrap{max-width:1060px;margin:0 auto;padding:0 18px}
+.hero{text-align:center;padding:52px 16px 26px;background:radial-gradient(circle at 50% -20%,rgba(117,170,219,.35),transparent 62%)}
+.hero .flag{font-size:50px;letter-spacing:6px}
+.hero h1{font-size:clamp(28px,5.2vw,48px);letter-spacing:1px;margin:10px 0 6px;
+background:linear-gradient(90deg,var(--celeste),#fff,var(--oro));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{color:var(--celeste);font-size:18px;font-weight:600}
+.hero .update{display:inline-block;margin-top:16px;background:rgba(117,170,219,.14);border:1px solid var(--celeste);
+color:var(--celeste);padding:8px 20px;border-radius:999px;font-size:14px;font-weight:700}
+h2.sec{font-size:23px;margin:52px 0 8px;display:flex;align-items:center;gap:10px}
+h2.sec::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,var(--celeste),transparent)}
+.lead{color:#cbd5e1;font-size:14.5px;line-height:1.6;margin:0 0 20px;max-width:770px}
+.note{font-size:12.5px;color:var(--gris);margin-top:12px;line-height:1.6}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid rgba(117,170,219,.25);border-radius:15px;padding:18px 14px;text-align:center}
+.kpi .v{font-size:25px;font-weight:800;color:var(--oro);line-height:1.15}
+.kpi .v small{display:block;font-size:12px;color:var(--gris);font-weight:500;margin-top:3px}
+.kpi .v.sky{color:var(--celeste)} .kpi .v.green{color:var(--verde)}
+.kpi .l{font-size:12px;color:var(--gris);margin-top:7px;line-height:1.4}
+.chart{background:var(--card);border:1px solid rgba(117,170,219,.22);border-radius:16px;padding:24px 16px 14px;overflow-x:auto}
+.bars{display:flex;gap:8px;align-items:flex-end;min-width:640px;height:300px}
+.bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.bar .val{font-size:11px;color:var(--gris);margin-bottom:5px;font-variant-numeric:tabular-nums}
+.bar .stack{width:100%;display:flex;flex-direction:column-reverse;border-radius:6px 6px 0 0;overflow:hidden}
+.bar .stack i{display:block;width:100%}
+.bar .dlbl{margin-top:8px;text-align:center;border-top:2px solid transparent;padding-top:6px;width:100%}
+.bar .dlbl b{display:block;font-size:16px} .bar .dlbl span{font-size:10px;color:var(--gris)}
+.b-atl .dlbl{border-color:var(--naranja)} .b-ny .dlbl{border-color:var(--celeste)}
+.b-via .dlbl{border-color:#fff} .b-final .dlbl{border-color:var(--oro)}
+.leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-size:12.5px;color:#cbd5e1}
+.leg span{display:flex;align-items:center;gap:6px}
+.leg i{width:13px;height:13px;border-radius:3px;display:inline-block}
+.crow{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid rgba(117,170,219,.2);
+border-radius:14px;padding:15px 18px;margin-bottom:10px}
+.cico{font-size:26px;width:38px;text-align:center;flex:none}
+.cbody{flex:1;min-width:0}
+.ctop{display:flex;justify-content:space-between;gap:10px;font-size:15px;flex-wrap:wrap}
+.ctop span{font-weight:800;font-variant-numeric:tabular-nums} .ctop small{color:var(--gris);font-weight:500;font-size:12px}
+.cbar{height:9px;background:rgba(255,255,255,.07);border-radius:99px;margin:9px 0 7px;overflow:hidden}
+.cbar span{display:block;height:100%;border-radius:99px}
+.cnote{font-size:12px;color:var(--gris)}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden}
+th{background:rgba(117,170,219,.15);text-align:left;padding:11px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--celeste)}
+td{padding:10px 14px;font-size:14px;border-top:1px solid rgba(255,255,255,.06)}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums} td.c,th.c{text-align:center}
+tr.tot td{background:rgba(246,180,14,.12);font-weight:800;border-top:2px solid var(--oro)}
+tr.sub td{background:rgba(117,170,219,.09);font-weight:700}
+tr.free td{color:var(--verde)}
+tr.zero td{color:var(--gris)}
+.chip{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.mb{width:90px;height:7px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;display:inline-block;vertical-align:middle}
+.mb span{display:block;height:100%}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px}
+.fc{background:var(--card);border:1px solid rgba(117,170,219,.22);border-radius:15px;padding:20px}
+.fc .n{font-size:29px;font-weight:900;color:var(--celeste);line-height:1}
+.fc .n.gold{color:var(--oro)} .fc .n.green{color:var(--verde)} .fc .n.red{color:var(--rojo)}
+.fc p{font-size:13.5px;color:#cbd5e1;line-height:1.55;margin-top:8px}
+.tl{position:relative;padding-left:26px}
+.tl::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--naranja),var(--celeste),var(--oro))}
+.tli{position:relative;padding:0 0 20px 6px}
+.tli::before{content:"";position:absolute;left:-24px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--celeste);border:2px solid var(--azul)}
+.tli.atl::before{background:var(--naranja)} .tli.gold::before{background:var(--oro);box-shadow:0 0 12px var(--oro)}
+.tli .dd{font-size:12px;color:var(--gris);text-transform:uppercase;letter-spacing:1px}
+.tli .tt{font-size:16px;font-weight:700;margin:2px 0 3px}
+.tli .pp{font-size:13.5px;color:#cbd5e1;line-height:1.55}
+.warn{background:rgba(249,115,22,.1);border:1px solid var(--naranja);border-radius:14px;padding:18px 20px;margin-top:18px}
+.warn b{color:var(--naranja)} .warn p{font-size:13.5px;color:#cbd5e1;line-height:1.65;margin-top:6px}
+.info{background:rgba(117,170,219,.1);border:1px solid var(--celeste);border-radius:14px;padding:18px 20px;margin-top:18px}
+.info b{color:var(--celeste)} .info p{font-size:13.5px;color:#cbd5e1;line-height:1.65;margin-top:6px}
+footer{text-align:center;color:var(--gris);font-size:12.5px;margin-top:56px;line-height:1.7}
+@media(max-width:640px){.crow{padding:13px} .cico{font-size:21px;width:28px}}
+</style></head><body>
+
+<div class="hero">
+  <div class="flag">🇦🇷 🏆 🇺🇸</div>
+  <h1>Los números del viaje</h1>
+  <p class="sub">Nico &amp; Mile · Atlanta + Nueva York · 13 al 24 de julio 2026</p>
+  <div class="update">162 movimientos reales de la cuenta conjunta</div>
+</div>
+
+<div class="wrap">
+
+<h2 class="sec">📊 El viaje en 6 números</h2>
+<p class="lead">Sale del extracto real de la cuenta conjunta más lo que pagamos por fuera. El tipo de cambio que aplicó Revolut durante el viaje fue <b>€1 = US$1,1365</b>.</p>
+<div class="kpis">
+  <div class="kpi"><div class="v">€8.496,97<small>$9.666,24</small></div><div class="l">Costo total del viaje<br>(todo incluido)</div></div>
+  <div class="kpi"><div class="v sky">€3.446,41<small>$3.916,24</small></div><div class="l">Costo del viaje<br><b>sin</b> la entrada a la final</div></div>
+  <div class="kpi"><div class="v green">€120,89<small>$137,40 · los dos</small></div><div class="l">Gasto por día<br>comida, transporte y paseos</div></div>
+  <div class="kpi"><div class="v green">€60,44<small>$68,70</small></div><div class="l">Gasto por persona<br>por día</div></div>
+  <div class="kpi"><div class="v sky">€59,25<small>$67,33</small></div><div class="l">Hotel por persona<br>por noche paga</div></div>
+  <div class="kpi"><div class="v">11<small>+ 1 de vuelta</small></div><div class="l">Días en Estados Unidos<br>13 al 23 de julio</div></div>
+</div>
+
+<h2 class="sec">🧮 El resumen completo</h2>
+<table>
+<thead><tr><th>Bloque</th><th>Qué incluye</th><th class="r">Euros</th><th class="r">Dólares</th></tr></thead>
+<tbody>
+<tr><td>Gasto del día a día</td><td>Comida, transporte local, paseos y souvenirs · 11 días</td><td class="r">€1.329,78</td><td class="r">$1.511,35</td></tr>
+<tr><td>Alojamiento</td><td>6 noches pagas de 10 (4 gratis en lo de Cacho)</td><td class="r">€710,94</td><td class="r">$807,27</td></tr>
+<tr><td>Transporte de largo alcance</td><td>Vuelos internacionales, Frontier y Amtrak</td><td class="r">€1.204,14</td><td class="r">$1.368,55</td></tr>
+<tr><td>Gastos puntuales</td><td>Uber al estadio (€89,18) y la cena con Cacho en Hold Fast (€112,37) · van aparte del promedio</td><td class="r">€201,55</td><td class="r">$229,07</td></tr>
+<tr class="sub"><td>SUBTOTAL SIN LA ENTRADA</td><td>—</td><td class="r">€3.446,41</td><td class="r">$3.916,24</td></tr>
+<tr><td>Entrada a la final</td><td>MetLife Stadium, domingo 19 de julio</td><td class="r">€5.050,56</td><td class="r">$5.750,00</td></tr>
+<tr class="tot"><td>TOTAL DEL VIAJE</td><td>—</td><td class="r">€8.496,97</td><td class="r">$9.666,24</td></tr>
+</tbody></table>
+<div class="info">
+  <b>💵 Aparte: $800,00 en efectivo</b>
+  <p>Ropa, la valija y algunas cosas más se pagaron en efectivo (unos €703,89) y no pasan por ninguna cuenta, así que quedan fuera de todos los cuadros de arriba. Sumándolo, el viaje redondea <b>$10.466,24</b>.</p>
+</div>
+
+<h2 class="sec">📅 Cuánto gastamos cada día</h2>
+<p class="lead">Gasto diario de los dos: comida, transporte local, entradas a museos y compras. <b>No incluye</b> hoteles, vuelos, la entrada a la final, el Uber al estadio ni la cena con Cacho, para que se vea el ritmo real del día a día.</p>
+<div class="chart">
+  <div class="bars"><div class="bar b-atl"><div class="val">€52,84</div><div class="stack"><i style="height:35.0px;background:#f6b40e" title="Comida: €27,74"></i><i style="height:28.9px;background:#94a3b8" title="eSIM: €22,89"></i><i style="height:2.8px;background:#75AADB" title="Transporte: €2,21"></i></div><div class="dlbl"><b>13</b><span>Lun</span></div></div><div class="bar b-atl"><div class="val">€139,11</div><div class="stack"><i style="height:137.1px;background:#f6b40e" title="Comida: €108,55"></i><i style="height:27.5px;background:#22c55e" title="Compras: €21,75"></i><i style="height:11.1px;background:#75AADB" title="Transporte: €8,81"></i></div><div class="dlbl"><b>14</b><span>Mar</span></div></div><div class="bar b-atl"><div class="val">€128,17</div><div class="stack"><i style="height:148.0px;background:#f6b40e" title="Comida: €117,17"></i><i style="height:13.9px;background:#75AADB" title="Transporte: €11,00"></i></div><div class="dlbl"><b>15</b><span>Mié</span></div></div><div class="bar b-via"><div class="val">€62,82</div><div class="stack"><i style="height:43.1px;background:#75AADB" title="Transporte: €34,08"></i><i style="height:36.3px;background:#f6b40e" title="Comida: €28,74"></i></div><div class="dlbl"><b>16</b><span>Jue</span></div></div><div class="bar b-ny"><div class="val">€152,26</div><div class="stack"><i style="height:156.3px;background:#f6b40e" title="Comida: €123,70"></i><i style="height:36.1px;background:#75AADB" title="Transporte: €28,56"></i></div><div class="dlbl"><b>17</b><span>Vie</span></div></div><div class="bar b-ny"><div class="val">€164,37</div><div class="stack"><i style="height:97.7px;background:#f6b40e" title="Comida: €77,36"></i><i style="height:79.9px;background:#a855f7" title="Atracciones: €63,25"></i><i style="height:30.0px;background:#75AADB" title="Transporte: €23,76"></i></div><div class="dlbl"><b>18</b><span>Sáb</span></div></div><div class="bar b-final"><div class="val">€107,63</div><div class="stack"><i style="height:86.9px;background:#f6b40e" title="Comida: €68,77"></i><i style="height:32.4px;background:#a855f7" title="Atracciones: €25,66"></i><i style="height:16.7px;background:#75AADB" title="Transporte: €13,20"></i></div><div class="dlbl"><b>19</b><span>Dom ⭐</span></div></div><div class="bar b-ny"><div class="val">€78,88</div><div class="stack"><i style="height:81.8px;background:#f6b40e" title="Comida: €64,74"></i><i style="height:17.9px;background:#75AADB" title="Transporte: €14,14"></i></div><div class="dlbl"><b>20</b><span>Lun</span></div></div><div class="bar b-ny"><div class="val">€117,99</div><div class="stack"><i style="height:118.7px;background:#f6b40e" title="Comida: €93,97"></i><i style="height:30.3px;background:#22c55e" title="Compras: €24,02"></i></div><div class="dlbl"><b>21</b><span>Mar</span></div></div><div class="bar b-ny"><div class="val">€182,06</div><div class="stack"><i style="height:119.8px;background:#a855f7" title="Atracciones: €94,83"></i><i style="height:81.2px;background:#f6b40e" title="Comida: €64,24"></i><i style="height:29.0px;background:#22c55e" title="Compras: €22,99"></i></div><div class="dlbl"><b>22</b><span>Mié</span></div></div><div class="bar b-ny"><div class="val">€143,65</div><div class="stack"><i style="height:91.1px;background:#22c55e" title="Compras: €72,11"></i><i style="height:70.8px;background:#f6b40e" title="Comida: €56,08"></i><i style="height:19.5px;background:#75AADB" title="Transporte: €15,46"></i></div><div class="dlbl"><b>23</b><span>Jue</span></div></div></div>
+  <div class="leg">
+    <span><i style="background:#f6b40e"></i>Comida y bebida</span>
+    <span><i style="background:#22c55e"></i>Compras y souvenirs</span>
+    <span><i style="background:#a855f7"></i>Atracciones</span>
+    <span><i style="background:#75AADB"></i>Transporte local</span>
+    <span><i style="background:#94a3b8"></i>eSIM</span>
+  </div>
+</div>
+<div class="cards" style="margin-top:16px">
+  <div class="fc"><div class="n gold">€182,06</div><p><b>Día más caro:</b> miércoles 22. Top of the Rock (€93,94) y la última vuelta por Manhattan.</p></div>
+  <div class="fc"><div class="n green">€52,84</div><p><b>Día más barato:</b> lunes 13, el de la llegada. Whole Foods y las dos eSIM.</p></div>
+  <div class="fc"><div class="n sky">€120,89</div><p><b>Promedio diario</b> de los dos a lo largo de los 11 días en Estados Unidos.</p></div>
+</div>
+
+<h2 class="sec">🧾 En qué se fue la plata del día a día</h2>
+<p class="lead">Total: <b>€1.329,78</b> ($1.511,35) en 11 días.</p>
+<div class="crow"><div class="cico">🍔</div><div class="cbody">
+<div class="ctop"><b>Comida y bebida</b><span>€831,06 <small>· $944,53</small></span></div>
+<div class="cbar"><span style="width:62.5%;background:#f6b40e"></span></div>
+<div class="cnote">Whole Foods, bakeries, burgers, helados — <b style="color:#f6b40e">62.5%</b> · €75,55/día</div></div></div><div class="crow"><div class="cico">🎟️</div><div class="cbody">
+<div class="ctop"><b>Atracciones</b><span>€183,74 <small>· $208,83</small></span></div>
+<div class="cbar"><span style="width:13.8%;background:#a855f7"></span></div>
+<div class="cnote">9/11 Memorial, Top of the Rock, estadio — <b style="color:#a855f7">13.8%</b> · €16,70/día</div></div></div><div class="crow"><div class="cico">🚇</div><div class="cbody">
+<div class="ctop"><b>Transporte local</b><span>€151,22 <small>· $171,87</small></span></div>
+<div class="cbar"><span style="width:11.4%;background:#75AADB"></span></div>
+<div class="cnote">MTA, MARTA, SEPTA, NJ Transit — 38 viajes — <b style="color:#75AADB">11.4%</b> · €13,75/día</div></div></div><div class="crow"><div class="cico">🛍️</div><div class="cbody">
+<div class="ctop"><b>Compras y souvenirs</b><span>€140,87 <small>· $160,10</small></span></div>
+<div class="cbar"><span style="width:10.6%;background:#22c55e"></span></div>
+<div class="cnote">M&amp;M's, Nintendo, Apple, CVS — <b style="color:#22c55e">10.6%</b> · €12,81/día</div></div></div><div class="crow"><div class="cico">📱</div><div class="cbody">
+<div class="ctop"><b>eSIM / datos</b><span>€22,89 <small>· $26,02</small></span></div>
+<div class="cbar"><span style="width:1.7%;background:#94a3b8"></span></div>
+<div class="cnote">2 MobiMatter — <b style="color:#94a3b8">1.7%</b> · €2,08/día</div></div></div>
+<p class="note">La comida se llevó más de la mitad y aun así promedió €75,55 por día para los dos — menos de €37,78 por persona en Atlanta y Nueva York.</p>
+
+<h2 class="sec">🏨 Alojamiento — 10 noches, 6 pagas</h2>
+<p class="lead">La jugada del viaje fueron las 4 noches en lo de Cacho. Sin eso, el alojamiento hubiera costado casi el doble.</p>
+<table>
+<thead><tr><th>Dónde</th><th class="c">Noches</th><th>Fechas</th><th class="r">Total</th><th class="r">Por noche</th><th class="r">P/persona/noche</th></tr></thead>
+<tbody>
+<tr><td>🍑 Marriott Suites Midtown · Atlanta</td><td class="c">3</td><td>13 → 16 jul</td><td class="r">€265,70</td><td class="r">€88,57</td><td class="r">€44,28</td></tr>
+<tr><td>🗽 Sheraton NY Times Square</td><td class="c">1</td><td>16 → 17 jul</td><td class="r">€148,12</td><td class="r">€148,12</td><td class="r">€74,06</td></tr>
+<tr class="free"><td>🏠 Casa de Cacho</td><td class="c">3</td><td>17 → 20 jul</td><td class="r">GRATIS</td><td class="r">—</td><td class="r">—</td></tr>
+<tr><td>🗽 Sheraton NY Times Square</td><td class="c">2</td><td>20 → 22 jul</td><td class="r">€297,12</td><td class="r">€148,56</td><td class="r">€74,28</td></tr>
+<tr class="free"><td>🏠 Casa de Cacho</td><td class="c">1</td><td>22 → 23 jul</td><td class="r">GRATIS</td><td class="r">—</td><td class="r">—</td></tr>
+<tr class="tot"><td>TOTAL ALOJAMIENTO</td><td class="c">10</td><td>6 pagas + 4 gratis</td><td class="r">€710,94</td><td class="r">€118,49</td><td class="r">€59,25</td></tr>
+</tbody></table>
+<div class="warn">
+  <b>💚 Cuánto nos ahorró Cacho</b>
+  <p>4 noches al precio del Sheraton (€148,41 cada una) = <b>€593,65</b> ($674,71). Es más de lo que gastamos en comida durante 8 días enteros. Prorrateando el alojamiento sobre las 10 noches, dormimos a <b>€35,55 por persona por noche</b> en dos de las ciudades más caras de Estados Unidos.</p>
+  <p style="margin-top:10px">Los dos Sheraton los pagó Nico desde su Revolut personal ($168,74 y $337,48); el Marriott de Atlanta salió de la cuenta conjunta.</p>
+</div>
+
+<h2 class="sec">✈️ Cómo nos movimos</h2>
+<table>
+<thead><tr><th>Tramo</th><th>Fecha</th><th>Medio</th><th class="r">Costo (2 personas)</th></tr></thead>
+<tbody>
+<tr><td>Ámsterdam → Atlanta y Nueva York → Ámsterdam</td><td>13 y 24 jul</td><td>Vuelos con millas (solo tasas)</td><td class="r">€729,00 <small style="color:#94a3b8">+ 101.500 millas</small></td></tr>
+<tr><td>Atlanta → Philadelphia</td><td>17 jul, 5:05 AM</td><td>Frontier 1004</td><td class="r">€346,63</td></tr>
+<tr><td>Philadelphia → Nueva York Penn</td><td>17 jul</td><td>Amtrak Keystone 644</td><td class="r">€128,51</td></tr>
+<tr class="sub"><td>SUBTOTAL LARGO ALCANCE</td><td>—</td><td>—</td><td class="r">€1.204,14</td></tr>
+<tr><td>Subtes y buses (MTA, MARTA, SEPTA, NJ Transit)</td><td>todo el viaje</td><td>38 viajes</td><td class="r">€151,22</td></tr>
+<tr><td>Uber al MetLife</td><td>19 jul, 16:36</td><td>Uber · tarifa dinámica</td><td class="r">€89,18</td></tr>
+<tr class="tot"><td>TOTAL TRANSPORTE</td><td>—</td><td>—</td><td class="r">€1.444,54</td></tr>
+</tbody></table>
+<p class="note">El desvío Atlanta → Philadelphia → Nueva York (vuelo low cost + tren) salió <b>€475,14</b> los dos, contra unos €619,00 del vuelo directo con equipaje: alrededor de <b>€143,86</b> de ahorro.</p>
+
+<h2 class="sec">🔄 Movimientos que entraron y volvieron a salir</h2>
+<p class="lead">Tres cosas pasaron por la cuenta conjunta y netearon en cero. No son gasto, pero inflaban los números si no se separaban.</p>
+<table>
+<thead><tr><th>Concepto</th><th>Qué pasó</th><th class="r">Entró</th><th class="r">Salió</th><th class="r">Neto</th></tr></thead>
+<tbody>
+<tr class="zero"><td>Fondo para la semifinal</td><td>Juntamos la plata el 15/7 (recarga de €1.800,00 + €1.200,00 de Mile). No conseguimos entradas y esa misma noche volvió a salir.</td><td class="r">+€3.000,00</td><td class="r">−€3.000,00</td><td class="r"><b>€0,00</b></td></tr>
+<tr class="zero"><td>Camiseta de Adidas</td><td>Compra del 23/7 para un amigo. Él la devolvió y el reembolso entró a la conjunta el mismo día.</td><td class="r">+€144,16</td><td class="r">−€144,16</td><td class="r"><b>€0,00</b></td></tr>
+<tr><td>Fondo para la entrada de la final</td><td>Aportes de los dos el 19/7 para cubrir la compra. Este sí terminó en gasto.</td><td class="r">+€5.027,06</td><td class="r">−€5.050,56</td><td class="r">−€23,50</td></tr>
+</tbody></table>
+<p class="note">Además hubo idas y vueltas de saldo entre las cuentas personales y la conjunta durante todo el viaje (reposiciones y devoluciones) que tampoco son gasto y quedaron excluidas. El saldo final de la cuenta cierra en €373,64, igual que el extracto.</p>
+
+<h2 class="sec">🛒 Dónde más gastamos</h2>
+<table>
+<thead><tr><th>Comercio</th><th class="c">Categoría</th><th class="r">Veces</th><th class="r"></th><th class="r">Total</th></tr></thead>
+<tbody><tr><td>Whole Foods Market</td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">7×</td><td class="r"><div class="mb"><span style="width:100%;background:#f6b40e"></span></div></td>
+<td class="r"><b>€158,49</b></td></tr><tr><td>Hold Fast Nyc <small style="color:#94a3b8">· cena con Cacho · fuera del promedio</small></td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">1×</td><td class="r"><div class="mb"><span style="width:71%;background:#22c55e"></span></div></td>
+<td class="r"><b>€112,37</b></td></tr><tr><td>Levy Restaurants</td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">6×</td><td class="r"><div class="mb"><span style="width:62%;background:#f6b40e"></span></div></td>
+<td class="r"><b>€98,26</b></td></tr><tr><td>Top of the Rock</td>
+<td class="c"><span class="chip" style="background:#a855f722;color:#a855f7">Atracciones</span></td>
+<td class="r">1×</td><td class="r"><div class="mb"><span style="width:59%;background:#a855f7"></span></div></td>
+<td class="r"><b>€93,94</b></td></tr><tr><td>Uber <small style="color:#94a3b8">· al estadio · fuera del promedio</small></td>
+<td class="c"><span class="chip" style="background:#75AADB22;color:#75AADB">Transporte</span></td>
+<td class="r">1×</td><td class="r"><div class="mb"><span style="width:56%;background:#75AADB"></span></div></td>
+<td class="r"><b>€89,18</b></td></tr><tr><td>MTA (subte NY)</td>
+<td class="c"><span class="chip" style="background:#75AADB22;color:#75AADB">Transporte</span></td>
+<td class="r">27×</td><td class="r"><div class="mb"><span style="width:50%;background:#75AADB"></span></div></td>
+<td class="r"><b>€79,76</b></td></tr><tr><td>M&amp;M's Store</td>
+<td class="c"><span class="chip" style="background:#22c55e22;color:#22c55e">Compras</span></td>
+<td class="r">2×</td><td class="r"><div class="mb"><span style="width:49%;background:#22c55e"></span></div></td>
+<td class="r"><b>€76,91</b></td></tr><tr><td>Van Leeuwen</td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">3×</td><td class="r"><div class="mb"><span style="width:42%;background:#f6b40e"></span></div></td>
+<td class="r"><b>€65,79</b></td></tr><tr><td>9/11 Memorial</td>
+<td class="c"><span class="chip" style="background:#a855f722;color:#a855f7">Atracciones</span></td>
+<td class="r">1×</td><td class="r"><div class="mb"><span style="width:40%;background:#a855f7"></span></div></td>
+<td class="r"><b>€63,25</b></td></tr><tr><td>7th Street Burger</td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">2×</td><td class="r"><div class="mb"><span style="width:39%;background:#f6b40e"></span></div></td>
+<td class="r"><b>€62,53</b></td></tr><tr><td>Corner Bakery</td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">3×</td><td class="r"><div class="mb"><span style="width:38%;background:#f6b40e"></span></div></td>
+<td class="r"><b>€59,83</b></td></tr><tr><td>Porchlight</td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">1×</td><td class="r"><div class="mb"><span style="width:34%;background:#f6b40e"></span></div></td>
+<td class="r"><b>€53,20</b></td></tr><tr><td>El Paso Taqueria</td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">1×</td><td class="r"><div class="mb"><span style="width:20%;background:#f6b40e"></span></div></td>
+<td class="r"><b>€31,89</b></td></tr><tr><td>Rosetta Bakery</td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">1×</td><td class="r"><div class="mb"><span style="width:19%;background:#f6b40e"></span></div></td>
+<td class="r"><b>€29,84</b></td></tr><tr><td>Liberty Bagels</td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">2×</td><td class="r"><div class="mb"><span style="width:17%;background:#f6b40e"></span></div></td>
+<td class="r"><b>€27,30</b></td></tr><tr><td>MARTA (subte Atlanta)</td>
+<td class="c"><span class="chip" style="background:#75AADB22;color:#75AADB">Transporte</span></td>
+<td class="r">6×</td><td class="r"><div class="mb"><span style="width:17%;background:#75AADB"></span></div></td>
+<td class="r"><b>€26,41</b></td></tr><tr><td>MetLife Stadium</td>
+<td class="c"><span class="chip" style="background:#a855f722;color:#a855f7">Atracciones</span></td>
+<td class="r">3×</td><td class="r"><div class="mb"><span style="width:16%;background:#a855f7"></span></div></td>
+<td class="r"><b>€25,66</b></td></tr><tr><td>Corner Cafe</td>
+<td class="c"><span class="chip" style="background:#f6b40e22;color:#f6b40e">Comida</span></td>
+<td class="r">1×</td><td class="r"><div class="mb"><span style="width:16%;background:#f6b40e"></span></div></td>
+<td class="r"><b>€25,40</b></td></tr></tbody></table>
+<p class="note">Whole Foods 7 veces por €158,49 fue la estrategia que más plata ahorró: desayunar y picar del súper en vez de restaurantes. 27 viajes de subte en Nueva York costaron €79,76 — menos que una sola cena. La compra de Adidas (€144,16) no figura acá porque fue reembolsada. Hold Fast es la cena con la que les devolvimos la mano a Cacho y su novia.</p>
+
+<h2 class="sec">🗺️ El viaje, día por día</h2>
+<div class="tl">
+  <div class="tli atl"><div class="dd">Lun 13 jul</div><div class="tt">Llegada a Atlanta</div><div class="pp">Check-in en el Marriott Midtown, dos eSIM de MobiMatter y primer Whole Foods. Gasto del día: €52,84.</div></div>
+  <div class="tli atl"><div class="dd">Mar 14 jul</div><div class="tt">Atlanta a pleno</div><div class="pp">MARTA para todos lados, CVS y primera vuelta por la zona del estadio. €139,11.</div></div>
+  <div class="tli atl"><div class="dd">Mié 15 jul</div><div class="tt">Día de la semifinal</div><div class="pp">Juntamos €3.000,00 en la conjunta para las entradas, pero no conseguimos y la plata volvió a las cuentas esa misma noche. Gastamos €128,17 en el día, casi todo en comida.</div></div>
+  <div class="tli"><div class="dd">Jue 16 – Vie 17 jul</div><div class="tt">Atlanta → Philadelphia → Nueva York</div><div class="pp">Último MARTA a la mañana, Frontier de madrugada, SEPTA hasta 30th Street y Amtrak a Penn Station. Primera noche en el Sheraton de Times Square.</div></div>
+  <div class="tli"><div class="dd">Sáb 18 jul</div><div class="tt">9/11 Memorial</div><div class="pp">€63,25 de entradas, Highline Pizzeria y Porchlight. Nos mudamos a lo de Cacho.</div></div>
+  <div class="tli gold"><div class="dd">Dom 19 jul</div><div class="tt">⭐ La final en el MetLife</div><div class="pp">Entrada comprada a las 16:30 y Uber al estadio a las 16:36 (€89,18). Era una sola entrada, así que Nico fue y Mile lo vio desde Nueva York. Fuera de eso, €107,63 en el día.</div></div>
+  <div class="tli"><div class="dd">Lun 20 – Mar 21 jul</div><div class="tt">Nueva York tranquilo</div><div class="pp">Vuelta al Sheraton, cafés, Levain Bakery, 7th Street Burger y Times Square. Los dos días más baratos de la etapa neoyorquina.</div></div>
+  <div class="tli"><div class="dd">Mié 22 – Jue 23 jul</div><div class="tt">Modo souvenir</div><div class="pp">Top of the Rock (€93,94) y M&amp;M's (€76,91). La noche anterior les invitamos la cena a Cacho y su novia en Hold Fast (€112,37), que va aparte del promedio.</div></div>
+  <div class="tli"><div class="dd">Vie 24 jul</div><div class="tt">Vuelta a casa</div><div class="pp">Primer gasto de vuelta en Holanda: Kruidvat, €10,00. Se terminó.</div></div>
+</div>
+
+<h2 class="sec">🎯 Presupuesto vs. realidad</h2>
+<table>
+<thead><tr><th>Concepto</th><th class="r">Planeado (plan v5)</th><th class="r">Real</th><th class="r">Diferencia</th></tr></thead>
+<tbody>
+<tr><td>Alojamiento (6 noches pagas)</td><td class="r">$807,27</td><td class="r">$807,27</td><td class="r" style="color:var(--verde)">clavado</td></tr>
+<tr><td>Transporte largo (vuelos, Frontier, Amtrak)</td><td class="r">$1.368,55</td><td class="r">$1.368,55</td><td class="r" style="color:var(--verde)">clavado</td></tr>
+<tr><td>Gasto diario (comida, subte, paseos, souvenirs)</td><td class="r">$1.014,00</td><td class="r">$1.511,35</td><td class="r" style="color:var(--rojo)">+49%</td></tr>
+<tr><td>Gastos puntuales (Uber al estadio + cena con Cacho)</td><td class="r">no previstos</td><td class="r">$229,07</td><td class="r">—</td></tr>
+<tr class="tot"><td>TOTAL SIN LA ENTRADA</td><td class="r">$3.189,82</td><td class="r">$3.916,24</td><td class="r" style="color:var(--naranja)">+23%</td></tr>
+</tbody></table>
+<div class="warn">
+  <b>⚠️ Dónde se rompió el presupuesto</b>
+  <p>Los vuelos y los hoteles salieron <b>exactamente</b> como estaban planeados: ahí la planificación funcionó perfecto. Lo que se desbordó fue el día a día. Presupuestamos US$100 diarios para los dos y gastamos <b>$137,40</b>. Y no fue por comer caro — la comida promedió €75,55 diarios entre los dos. Fueron los souvenirs de los últimos días: <b>€207,47</b> solo entre el 22 y el 23, que no estaban contemplados en ningún lado.</p>
+</div>
+
+<h2 class="sec">🤓 Datos de color</h2>
+<div class="cards">
+  <div class="fc"><div class="n">27</div><p>viajes en el subte de Nueva York por €79,76 en total: <b>€2,95</b> cada uno.</p></div>
+  <div class="fc"><div class="n green">7</div><p>visitas a Whole Foods. Comer del súper fue la decisión que más plata ahorró del viaje.</p></div>
+  <div class="fc"><div class="n sky">€75,55</div><p>por día en comida para los dos. Menos de €37,78 por persona.</p></div>
+  <div class="fc"><div class="n">38</div><p>viajes en transporte público entre las cuatro ciudades, por €151,22 en total.</p></div>
+  <div class="fc"><div class="n green">€593,65</div><p>ahorrados gracias a las 4 noches en lo de Cacho.</p></div>
+  <div class="fc"><div class="n red">€89,18</div><p>el Uber al MetLife. Tarifa dinámica de día de final: el viaje más caro del viaje.</p></div>
+</div>
+
+<h2 class="sec">📌 Las conclusiones</h2>
+<div class="cards">
+  <div class="fc"><div class="n green">1</div><p><b>Cacho fue el MVP.</b> €593,65 ahorrados en 4 noches, sin resignar absolutamente nada.</p></div>
+  <div class="fc"><div class="n green">2</div><p><b>Las millas ganaron.</b> Los dos vuelos transatlánticos costaron solo €729,00 de tasas.</p></div>
+  <div class="fc"><div class="n sky">3</div><p><b>El desvío por Philadelphia funcionó.</b> €475,14 puerta a puerta, unos €143,86 menos que el vuelo directo.</p></div>
+  <div class="fc"><div class="n red">4</div><p><b>El día a día se fue 62% arriba,</b> pero no por comer: por los souvenirs de último momento.</p></div>
+  <div class="fc"><div class="n gold">5</div><p><b>La final fue el sueño cumplido.</b> Un gasto aparte, que no entra en ninguna cuenta ni en ninguna comparación.</p></div>
+</div>
+
+<footer>
+  Armado con los 162 movimientos reales de la cuenta conjunta (1 al 25 de julio de 2026).<br>
+  Los vuelos internacionales, el Frontier y los dos Sheraton se pagaron por fuera de la cuenta conjunta.<br>
+  Tipo de cambio real aplicado por Revolut durante el viaje: €1 = US$1,1365 · Horarios en hora de Nueva York (EDT).<br><br>
+  <b style="color:#75AADB">Nico &amp; Mile · Mundial 2026 🇦🇷</b>
+</footer>
+</div></body></html>
