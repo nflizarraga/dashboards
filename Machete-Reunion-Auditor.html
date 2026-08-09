@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FAF8F4">
+<title>Machete · reunión con el auditor</title>
+<style>
+:root{
+--bg:#FAF8F4;--surf:#fff;--surf2:#F3F0E9;--ink:#221F19;--mut:#6D675C;
+--line:#E5E0D5;--line2:#D2CBBD;
+--acc:#A8531F;--accbg:#FBEFE7;
+--tl:#136456;--tlbg:#E3F2EC;
+--co:#B04528;--cobg:#FCEAE2;
+--pu:#544AA6;--pubg:#EEEDFA;
+--am:#855208;--ambg:#FAF0DA;
+--sat:env(safe-area-inset-top,0px);
+}
+html[data-t="dark"]{
+--bg:#131210;--surf:#1C1A16;--surf2:#232019;--ink:#EDE9E0;--mut:#A49D8F;
+--line:#332F27;--line2:#443F35;
+--acc:#E0A277;--accbg:#2E2018;
+--tl:#6FCBB2;--tlbg:#12261F;
+--co:#EC9C7F;--cobg:#2E1B14;
+--pu:#A9A2E8;--pubg:#1E1C2E;
+--am:#E2B267;--ambg:#2B2312;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+font-size:15.5px;-webkit-text-size-adjust:100%}
+
+.bar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);
+padding-top:var(--sat)}
+.bar .r1{display:flex;align-items:center;gap:8px;padding:9px 14px 0;max-width:820px;margin:0 auto}
+.bar .r1 b{flex:1;font-size:14px;font-weight:500;color:var(--mut)}
+.bar button{border:0;background:transparent;color:var(--ink);width:32px;height:32px;
+border-radius:8px;cursor:pointer;font-size:15px;display:grid;place-items:center}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 14px 9px;max-width:820px;margin:0 auto;
+-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips a{flex:0 0 auto;font-size:12.5px;text-decoration:none;color:var(--mut);
+border:1px solid var(--line2);border-radius:20px;padding:4px 11px;white-space:nowrap}
+.chips a.on{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+
+main{max-width:820px;margin:0 auto;padding:16px 14px 70px}
+h1{font-size:23px;font-weight:500;margin:6px 0 4px;letter-spacing:-.2px}
+.sub{color:var(--mut);font-size:14.5px;margin:0 0 18px}
+h2{font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);
+margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+p{margin:0 0 10px}
+b,strong{font-weight:500}
+
+.g{display:grid;gap:8px;grid-template-columns:1fr}
+@media(min-width:640px){.g.c2{grid-template-columns:1fr 1fr}.g.c3{grid-template-columns:repeat(3,1fr)}}
+.k{border:1px solid var(--line);background:var(--surf);border-radius:10px;padding:10px 12px}
+.k h3{margin:0 0 3px;font-size:14.5px;font-weight:500}
+.k p{margin:0;font-size:14px;color:var(--mut);line-height:1.45}
+.k.tl{border-color:var(--tl);background:var(--tlbg)}.k.tl h3{color:var(--tl)}
+.k.co{border-color:var(--co);background:var(--cobg)}.k.co h3{color:var(--co)}
+.k.pu{border-color:var(--pu);background:var(--pubg)}.k.pu h3{color:var(--pu)}
+.k.am{border-color:var(--am);background:var(--ambg)}.k.am h3{color:var(--am)}
+.k.tl p,.k.co p,.k.pu p,.k.am p{color:inherit;opacity:.85}
+
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 4px}
+@media(min-width:640px){.nums{grid-template-columns:repeat(6,1fr)}}
+.nums div{border:1px solid var(--line);border-radius:9px;padding:8px 4px;text-align:center;
+background:var(--surf)}
+.nums b{display:block;font-size:20px;font-weight:500;color:var(--acc);line-height:1.1}
+.nums span{font-size:11px;color:var(--mut);line-height:1.25;display:block;margin-top:2px}
+
+table{border-collapse:collapse;width:100%;font-size:14px}
+.tw{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:0 0 10px}
+td,th{padding:6px 11px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left;
+line-height:1.4}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:500;white-space:nowrap}
+.voc td:first-child{color:var(--acc)}
+.voc td:nth-child(2){color:var(--mut);font-size:13.5px}
+
+ol.q{list-style:none;padding:0;margin:0;counter-reset:q}
+ol.q li{counter-increment:q;border:1px solid var(--line);background:var(--surf);
+border-radius:10px;padding:10px 12px 10px 40px;position:relative;margin:0 0 8px}
+ol.q li:before{content:counter(q);position:absolute;left:11px;top:10px;width:20px;height:20px;
+border-radius:6px;background:var(--surf2);color:var(--mut);font-size:11.5px;
+display:grid;place-items:center;font-weight:500}
+ol.q li.star{border-color:var(--acc);background:var(--accbg)}
+ol.q li.star:before{content:"★";background:var(--acc);color:var(--bg);font-size:11px}
+ol.q li p{margin:0;font-size:14px}
+ol.q li .why{display:block;margin-top:4px;font-size:12.5px;color:var(--mut);font-style:italic}
+ol.q li.star .why{color:inherit;opacity:.8}
+
+.deb{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:0 0 8px;background:var(--surf)}
+.deb .t{padding:9px 12px;font-size:14.5px;font-weight:500;border-bottom:1px solid var(--line)}
+.deb .s{display:grid;grid-template-columns:1fr}
+@media(min-width:640px){.deb .s{grid-template-columns:1fr 1fr}}
+.deb .s>div{padding:9px 12px;font-size:13.5px;color:var(--mut);line-height:1.45}
+.deb .s>div:first-child{border-bottom:1px solid var(--line)}
+@media(min-width:640px){.deb .s>div:first-child{border-bottom:0;border-right:1px solid var(--line)}}
+.deb .s em{font-style:normal;font-weight:500;display:block;font-size:11.5px;
+letter-spacing:.07em;text-transform:uppercase;margin-bottom:2px}
+.deb .s>div:first-child em{color:var(--tl)}
+.deb .s>div:last-child em{color:var(--co)}
+
+.say{border-left:3px solid var(--tl);background:var(--tlbg);padding:9px 12px;border-radius:0 8px 8px 0;
+margin:0 0 8px;font-size:14.5px}
+.no{border-left:3px solid var(--co);background:var(--cobg);padding:9px 12px;border-radius:0 8px 8px 0;
+margin:0 0 8px;font-size:14px}
+.ft{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
+@media print{
+ .bar{display:none}main{padding-top:0;max-width:none}
+ .k,.tw,ol.q li,.deb{break-inside:avoid}
+ h2{break-after:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="r1"><b>Machete · caso de auditoría interna</b>
+  <button id="fm" aria-label="Achicar">A−</button>
+  <button id="fp" aria-label="Agrandar">A+</button>
+  <button id="tg" aria-label="Tema">◐</button></div>
+  <div class="chips" id="ch">
+    <a href="#c1">El caso</a><a href="#c2">Vocabulario</a><a href="#c3">Datos para citar</a>
+    <a href="#c4">Frases</a><a href="#c5">Para debatir</a><a href="#c6">Preguntas</a><a href="#c7">Qué no hacer</a>
+  </div>
+</div>
+
+<main>
+<h1>Para la charla con el auditor</h1>
+<p class="sub">Lo mínimo para sostener una conversación de igual a igual sobre este caso. Todo anonimizado.</p>
+
+<h2 id="c1">1 · El caso en treinta segundos</h2>
+<p>Revisión integral de procesos (<b>Business Process Review</b>) de una filial regional de un grupo industrial de izaje pesado y alquiler de grúas. Dos líneas de negocio muy distintas: proyectos contratados, y alquiler transaccional de alta rotación. Período revisado: 12 meses. Campo: una semana in situ.</p>
+<div class="nums">
+  <div><b>73</b><span>controles</span></div>
+  <div><b>10</b><span>con prueba de detalle</span></div>
+  <div><b>12</b><span>conclusiones escritas</span></div>
+  <div><b>15</b><span>hallazgos</span></div>
+  <div><b>44</b><span>documentos pedidos</span></div>
+  <div><b>22</b><span>entrevistas</span></div>
+</div>
+<p style="margin-top:12px"><b>El detalle que define todo:</b> el archivo está a medio completar. La hoja de evaluación de riesgos quedó en blanco, y en los hallazgos están vacías las columnas de calificación, causa raíz y referencia al control.</p>
+
+<h2 id="c2">2 · Vocabulario que va a salir</h2>
+<div class="tw"><table class="voc">
+<tr><td>Work program</td><td>Programa de trabajo · la lista de pruebas</td></tr>
+<tr><td>Expected design</td><td>Diseño esperado · <b>es el criterio de auditoría</b></td></tr>
+<tr><td>Design vs operating</td><td>El control no existe / existe pero no se ejecuta bien</td></tr>
+<tr><td>Inherent vs residual</td><td>Riesgo antes / después de considerar los controles</td></tr>
+<tr><td>To be sampled</td><td>Si se hace prueba de detalle o solo indagación</td></tr>
+<tr><td>Test of details</td><td>Prueba de detalle · verificar transacciones una por una</td></tr>
+<tr><td>Inquiry</td><td>Indagación · <b>nunca suficiente sola</b></td></tr>
+<tr><td>Re-performance</td><td>El auditor rehace el control · la evidencia más fuerte</td></tr>
+<tr><td>PBC list</td><td>Lista de pedidos al auditado</td></tr>
+<tr><td>Population completeness</td><td>Integridad de la población de la que sacás la muestra</td></tr>
+<tr><td>Tickmarks</td><td>Marcas de auditoría · necesitan leyenda en el papel</td></tr>
+<tr><td>SoD · four-eyes</td><td>Segregación de funciones · doble aprobación</td></tr>
+<tr><td>Compensating control</td><td>Control alternativo que cubre el mismo objetivo</td></tr>
+<tr><td>Professional skepticism</td><td>Verificar en vez de aceptar</td></tr>
+<tr><td>Scope limitation</td><td>Lo que no se pudo probar, dicho en el informe</td></tr>
+<tr><td>Condition · criteria · cause · effect</td><td>Los cuatro elementos de un hallazgo</td></tr>
+<tr><td>Root cause</td><td>Causa raíz · <b>por qué</b> falló, no <b>qué</b> falló</td></tr>
+<tr><td>Management comment</td><td>Acción + responsable + fecha. Sin las tres, no está cerrado</td></tr>
+<tr><td>Risk acceptance</td><td>El management decide convivir con el riesgo, formalmente</td></tr>
+<tr><td>Follow-up</td><td>Seguimiento hasta el cierre <b>verificado</b></td></tr>
+</table></div>
+
+<h2 id="c3">3 · Los datos concretos que podés citar</h2>
+<p class="sub" style="margin-bottom:10px">Esto es lo que te da credibilidad: no hablar en general, sino de <em>este</em> archivo.</p>
+<div class="g c2">
+  <div class="k co"><h3>Las minutas fechadas el día del pedido</h3><p>El management dijo que había minutas de reuniones de riesgo. El auditor las pidió y <b>miró la fecha de creación del archivo</b>: era del mismo día. El mejor momento de escepticismo del expediente.</p></div>
+  <div class="k co"><h3>Factura antes de la orden de compra: 4 de 7</h3><p>La conciliación a tres vías da match perfecto <b>porque la orden se copió de la factura</b>. El control informa «conforme» justo cuando falló.</p></div>
+  <div class="k co"><h3>Cinco proyectos con costo y sin ingreso</h3><p>Salió de cruzar el reporte de resultados operativos. Quedó como <b>asunto abierto</b> y nunca se cerró. Fuga de ingresos potencial.</p></div>
+  <div class="k co"><h3>Excepción del 100% que no llegó a hallazgos</h3><p>Ninguno de los cinco proyectos muestreados de una línea fue cerrado en el sistema. Está en la conclusión y no en la lista de hallazgos.</p></div>
+  <div class="k am"><h3>«¿A qué objetivos te referís?»</h3><p>Respuesta local a un pedido sobre un control corporativo vigente hace cuatro años con reporte mensual obligatorio. <b>La confusión es la evidencia.</b></p></div>
+  <div class="k am"><h3>Conteos de inventario sin planilla</h3><p>Se hacen, nadie miente, pero no dejan rastro. Un control sin evidencia no puede ser confiado por terceros — incluido el propio jefe de quien lo ejecuta.</p></div>
+  <div class="k tl"><h3>La orden de venta de grúa</h3><p>Tres sucursales la usan y funciona; dos no. La recomendación fue extenderla. <b>La mejor recomendación no suele ser un control nuevo.</b></p></div>
+  <div class="k tl"><h3>Órdenes de cambio: 2 de 5, calificadas distinto</h3><p>Misma falla formal, riesgo distinto, y el razonamiento escrito. Una tenía precedente del año anterior; la otra no tenía aceptación del cliente.</p></div>
+</div>
+
+<h2 id="c4">4 · Cinco frases para hablar de igual a igual</h2>
+<div class="say"><b>1.</b> «Lo que más me llamó la atención es que los hallazgos no salieron de donde pusieron el alcance: salieron del recorrido del predio, de un tablero que la empresa ya generaba y de un documento que no existía.»</div>
+<div class="say"><b>2.</b> «Hay un patrón en todo el ciclo de proyectos: el formulario existe y está firmado, pero vacío. Eso es un control cosmético, y es más difícil de reportar que un control ausente.»</div>
+<div class="say"><b>3.</b> «Casi ninguna causa raíz probable es falta de competencia. Predomina que el control no es practicable y que faltan recursos. Si eso se confirma, el mensaje no es para la filial, es para el grupo.»</div>
+<div class="say"><b>4.</b> «Me quedé pensando en la circularidad: segregación de funciones se calificó riesgo bajo y no se muestreó, pero mirar el tablero produjo uno de los hallazgos más severos.»</div>
+<div class="say"><b>5.</b> «Lo que el auditor no pudo hacer tiene que ser tan visible como lo que hizo. Acá hay una prueba que nunca se ejecutó porque no llegó la evidencia, y no aparece en ningún lado.»</div>
+
+<h2 id="c5">5 · Los cinco temas para debatir</h2>
+<p class="sub" style="margin-bottom:10px">No tienen respuesta obvia. Son donde podés tener una opinión y él va a tener otra.</p>
+
+<div class="deb"><div class="t">¿El alcance estuvo bien puesto?</div><div class="s">
+<div><em>A favor</em>Se concentró en compromisos con terceros, horas y activos — coherente con el negocio. Y compras, el único ciclo con input de calidad, entregó los hallazgos más específicos.</div>
+<div><em>En contra</em>De los 10 controles con prueba de detalle solo compras produjo resultado; horas y activos ni siquiera tienen conclusión. Y todo el bloque comercial, que fija precio y riesgo, quedó sin concluir.</div></div></div>
+
+<div class="deb"><div class="t">¿Se puede exigir segregación de funciones en una entidad chica?</div><div class="s">
+<div><em>Sí</em>La política del grupo ya prevé la salida: controles mitigantes documentados y liberación formal del CFO por seis meses. El hallazgo real es que no se usó esa vía.</div>
+<div><em>No</em>Si la causa es que no hay gente, «resolver los conflictos» es inejecutable. Un hallazgo cuya remediación honesta es contratar personal pone al auditor en un lugar incómodo.</div></div></div>
+
+<div class="deb"><div class="t">Proporcionalidad: ¿dónde está la línea?</div><div class="s">
+<div><em>Ser flexible</em>El propio programa dice que en ubicaciones chicas la firma puede ser menos formal, y que el objetivo es que el control ocurra, no que haya una casilla tildada.</div>
+<div><em>Ser estricto</em>Sin evidencia el control no es revisable ni resiste la rotación. Y cuarenta hallazgos de formalismo hacen que los tres importantes tampoco se arreglen.</div></div></div>
+
+<div class="deb"><div class="t">Aceptar un control equivalente: ¿criterio o dejarse convencer?</div><div class="s">
+<div><em>Criterio</em>La línea de alquiler no puede usar el formulario de proyectos grandes. El auditor buscó el equivalente y encontró uno mejor documentado. Sustancia sobre forma.</div>
+<div><em>Riesgo</em>Es la puerta por la que entra cualquier explicación. ¿Qué tenés que ver antes de aceptarlo como equivalente? Ahí está la técnica.</div></div></div>
+
+<div class="deb"><div class="t">La evidencia fabricada para la auditoría</div><div class="s">
+<div><em>Decirlo en el momento</em>Es honesto, y evita que el hallazgo aparezca de sorpresa en el cierre.</div>
+<div><em>Guardarlo</em>Preservás la relación durante los días que quedan de campo, y llegás al cierre con el hecho documentado en vez de con una acusación.</div></div></div>
+
+<h2 id="c6">6 · Las preguntas</h2>
+<ol class="q">
+<li class="star"><p>La hoja de evaluación de riesgos está en blanco, pero 57 controles dicen «riesgo bajo según la evaluación de riesgos». <b>¿Dónde vive realmente esa evaluación cuando trabajás?</b></p><span class="why">Es la brecha entre la metodología escrita y la práctica.</span></li>
+<li class="star"><p>Las minutas estaban fechadas el mismo día del pedido. <b>¿Cómo se maneja eso en la sala, y cómo se escribe sin acusar a nadie de fabricar evidencia?</b></p><span class="why">La situación más incómoda del oficio, y no hay manual.</span></li>
+<li class="star"><p>En la línea de alquiler el formulario global no aplicaba y se aceptó un documento local. <b>¿Cuándo aceptar un control equivalente es buen criterio y cuándo es dejarse convencer?</b></p><span class="why">La frontera entre sustancia sobre forma y que te vendan un buzón.</span></li>
+<li class="star"><p>Una excepción del 100% quedó en la conclusión y nunca llegó a la lista de hallazgos. <b>¿Qué criterio usás para no reportar una excepción, y esa decisión se documenta?</b></p><span class="why">La decisión de no reportar casi nunca deja rastro. Ahí se cuela el sesgo.</span></li>
+<li><p>Segregación de funciones se calificó bajo riesgo y no se muestreó, pero el tablero dio un hallazgo severo. <b>¿Cómo evitás esa circularidad? ¿Hay regla de rotación de pruebas?</b></p></li>
+<li><p>Dos consultas escritas de dueños globales quedaron sin control asociado. <b>¿Le contestás al que la mandó cuando descartás un input? ¿Qué le decís?</b></p></li>
+<li><p>Seis de diecisiete contestaron «no tengo preocupaciones». <b>¿Cómo distinguís al que monitorea del que no está mirando?</b></p></li>
+<li><p>El programa dice que en ubicaciones chicas la firma puede ser menos formal. <b>¿Dónde ponés la línea? Dame dos casos: uno que no reportaste y uno que sí.</b></p></li>
+<li><p>Cinco proyectos con costo y sin ingreso quedaron como asunto abierto. <b>¿Qué pasa con un asunto abierto cuando termina la semana de campo?</b></p></li>
+<li><p>La evidencia de un control nunca llegó y quedó sin probar. <b>¿Cuál es tu palanca cuando la segunda etapa de pedidos no aparece?</b></p></li>
+<li><p>No dice cómo se eligieron los cinco proyectos ni de qué tamaño era la población. <b>¿Cómo elegís la muestra, y qué contestás si te dicen «agarraste los peores»?</b></p></li>
+<li><p>La columna de causa raíz quedó vacía en los quince hallazgos. <b>¿Cómo lográs que te den la causa real y no «falta de capacitación»?</b></p></li>
+<li><p>El director pidió revisar si la gente se siente cómoda hablando, y se entrevistó a una sola persona fuera del management. <b>¿Cómo se audita cultura en cinco días?</b></p></li>
+<li><p><b>¿Cuál fue el hallazgo que más te costó defender, y cómo lo sostuviste?</b></p><span class="why">Si hay confianza. Es la que más rápido muestra dónde está el músculo.</span></li>
+</ol>
+
+<h2 id="c7">7 · Qué no hacer en la charla</h2>
+<div class="no"><b>No hables de «errores» del equipo.</b> Todo lo que marcamos son cosas normales en un expediente a medio terminar. Preguntá «¿cómo se resuelve esto normalmente?» en vez de «¿por qué está vacío?».</div>
+<div class="no"><b>No proyectes muestras dirigidas.</b> Nunca digas «el 40% falla» con una muestra de 5 elegida por criterio. Se dice «encontraron 2 casos».</div>
+<div class="no"><b>No confundas control ausente con control sin evidencia.</b> Los conteos de inventario se hacen; lo que falta es el rastro. Decirlo mal te deja mal parado.</div>
+<div class="no"><b>No opines sobre la empresa ni las personas.</b> El material es confidencial y el valor de la charla está en el método, no en el caso.</div>
+
+<div class="ft">Las tres ideas de fondo, por si te quedás en blanco: <b>todo lo que no se pudo hacer tiene que ser tan visible como lo que se hizo</b> · <b>la calidad de la prueba es hija de la calidad del riesgo</b> · <b>el remedio tiene que coincidir con la causa</b>.</div>
+</main>
+
+<script>
+(function(){
+var K='mach-v1',r=document.documentElement;
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(K+k);localStorage.setItem(K+k,v)}catch(e){return null}}
+function ap(t){if(t==='auto'){var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;r.setAttribute('data-t',d?'dark':'light')}else r.setAttribute('data-t',t)}
+ap(ls('th')||'auto');
+document.getElementById('tg').onclick=function(){var c=r.getAttribute('data-t')==='dark'?'light':'dark';ls('th',c);ap(c)};
+var fs=parseInt(ls('fs')||'15.5',10)||15;
+function sf(n){fs=Math.max(13,Math.min(21,n));document.body.style.fontSize=fs+'px';ls('fs',fs)}
+sf(fs);
+document.getElementById('fp').onclick=function(){sf(fs+1)};
+document.getElementById('fm').onclick=function(){sf(fs-1)};
+var links=[].slice.call(document.querySelectorAll('.chips a'));
+var secs=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1))});
+var tk=false;
+function sp(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;
+ var cur=0;secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<=110)cur=i});
+ links.forEach(function(a,i){a.classList.toggle('on',i===cur)});
+ ls('pos',Math.round(window.scrollY));});}
+window.addEventListener('scroll',sp,{passive:true});sp();
+var p=parseInt(ls('pos')||'0',10);if(!location.hash&&p>250)window.scrollTo(0,p);
+function sv(){ls('pos',Math.round(window.scrollY))}
+document.addEventListener('visibilitychange',function(){if(document.hidden)sv()});
+window.addEventListener('pagehide',sv);
+})();
+</script>
+</body>
+</html>
