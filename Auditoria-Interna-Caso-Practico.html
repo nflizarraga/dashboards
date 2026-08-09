@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FAF8F4">
+<title>Auditoría Interna · Caso práctico comentado</title>
+<style>
+:root{
+--bg:#FAF8F4; --surf:#FFFFFF; --surf2:#F4F1EA; --ink:#221F19; --muted:#6D675C;
+--line:#E6E1D6; --line2:#D3CCBE;
+--acc:#A8531F; --accbg:#FBEFE7;
+--teal:#136456; --tealbg:#E3F2EC;
+--coral:#B04528; --coralbg:#FCEAE2;
+--purp:#544AA6; --purpbg:#EEEDFA;
+--amber:#855208; --amberbg:#FAF0DA;
+--gray:#5F5A50; --graybg:#F0EDE5;
+--fs:17px; --rad:12px;
+--sat:env(safe-area-inset-top,0px);
+}
+html[data-theme="dark"]{
+--bg:#131210; --surf:#1C1A16; --surf2:#232019; --ink:#EDE9E0; --muted:#A49D8F;
+--line:#332F27; --line2:#443F35;
+--acc:#E0A277; --accbg:#2E2018;
+--teal:#6FCBB2; --tealbg:#12261F;
+--coral:#EC9C7F; --coralbg:#2E1B14;
+--purp:#A9A2E8; --purpbg:#1E1C2E;
+--amber:#E2B267; --amberbg:#2B2312;
+--gray:#B3ADA1; --graybg:#232019;
+}
+html[data-theme="dark"]{--amber:#E2B267;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{
+margin:0;background:var(--bg);color:var(--ink);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+font-size:var(--fs);line-height:1.72;-webkit-text-size-adjust:100%;
+}
+
+/* ---------- top bar ---------- */
+.top{position:fixed;top:0;left:0;right:0;z-index:60;background:var(--bg);
+border-bottom:1px solid var(--line);padding-top:var(--sat)}
+.top .in{height:52px;display:flex;align-items:center;gap:6px;padding:0 8px;
+max-width:900px;margin:0 auto}
+.ib{width:40px;height:40px;border:0;background:transparent;color:var(--ink);
+border-radius:10px;display:grid;place-items:center;cursor:pointer;flex:0 0 auto;font-size:15px}
+.ib:active{background:var(--surf2)}
+.ib svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.7;
+stroke-linecap:round;stroke-linejoin:round}
+.ttl{flex:1;min-width:0;font-size:14px;font-weight:500;color:var(--muted);
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pbar{height:2px;background:var(--line)}
+.pbar i{display:block;height:100%;width:0;background:var(--acc);transition:width .12s linear}
+
+/* ---------- drawer ---------- */
+.scrim{position:fixed;inset:0;background:rgba(20,18,14,.45);opacity:0;pointer-events:none;
+transition:opacity .22s;z-index:70}
+.scrim.on{opacity:1;pointer-events:auto}
+.dw{position:fixed;top:0;bottom:0;left:0;width:min(330px,86vw);background:var(--surf);
+z-index:80;transform:translateX(-102%);transition:transform .24s cubic-bezier(.3,.7,.3,1);
+overflow-y:auto;overscroll-behavior:contain;border-right:1px solid var(--line);
+padding:calc(14px + var(--sat)) 0 40px}
+.dw.on{transform:none}
+.dwh{padding:6px 18px 12px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.dwh b{display:block;font-size:16px;font-weight:500}
+.dwh span{font-size:13px;color:var(--muted)}
+.dwp{border-bottom:1px solid var(--line)}
+.dwp>a{display:flex;align-items:center;gap:10px;padding:11px 18px;text-decoration:none;
+color:var(--ink);font-size:15px;font-weight:500}
+.dwn{width:22px;height:22px;flex:0 0 auto;border-radius:6px;background:var(--surf2);
+color:var(--muted);font-size:12px;display:grid;place-items:center;font-weight:500}
+.dwp.done .dwn{background:var(--tealbg);color:var(--teal)}
+.dwp.cur>a{background:var(--accbg)}
+.dwp.cur .dwn{background:var(--acc);color:var(--bg)}
+.dws{display:none;padding:0 0 8px}
+.dwp.cur .dws{display:block}
+.dws a{display:block;padding:6px 18px 6px 50px;text-decoration:none;color:var(--muted);font-size:14px}
+.dws a.on{color:var(--acc)}
+
+/* ---------- layout ---------- */
+main{max-width:760px;margin:0 auto;padding:calc(70px + var(--sat)) 18px 90px}
+h1{font-size:26px;line-height:1.25;font-weight:500;margin:0 0 6px;letter-spacing:-.2px}
+h2{font-size:21px;line-height:1.3;font-weight:500;margin:44px 0 10px;letter-spacing:-.15px}
+h3{font-size:17px;font-weight:500;margin:30px 0 8px}
+p{margin:0 0 15px}
+ul,ol{margin:0 0 15px;padding-left:22px}
+li{margin:0 0 7px}
+strong{font-weight:500;color:var(--ink)}
+em{font-style:italic}
+a{color:var(--acc)}
+hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;
+background:var(--surf2);padding:1px 5px;border-radius:5px}
+
+/* part header */
+.ph{margin:0 0 26px;padding:18px 0 20px;border-bottom:2px solid var(--line2)}
+.pk{display:inline-block;font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+color:var(--acc);font-weight:500;margin-bottom:8px}
+.pmeta{font-size:14px;color:var(--muted);margin-top:8px}
+.lead{font-size:18px;color:var(--muted);margin:0}
+
+/* ---------- callouts ---------- */
+.no{border-left:3px solid var(--c,var(--acc));background:var(--cb,var(--accbg));
+padding:13px 15px;border-radius:0 10px 10px 0;margin:20px 0;font-size:16px}
+.no p:last-child{margin:0}
+.no .lb{display:block;font-size:12px;letter-spacing:.07em;text-transform:uppercase;
+color:var(--c,var(--acc));font-weight:500;margin-bottom:5px}
+.idea{--c:var(--teal);--cb:var(--tealbg)}
+.warn{--c:var(--coral);--cb:var(--coralbg)}
+.ex{--c:var(--purp);--cb:var(--purpbg)}
+.qt{--c:var(--amber);--cb:var(--amberbg);font-style:italic}
+
+/* ---------- flow ---------- */
+.flow{margin:24px 0}
+.st{border:1px solid var(--line);background:var(--surf);border-radius:var(--rad);
+padding:11px 14px}
+.st b{display:block;font-weight:500;font-size:16px}
+.st span{display:block;color:var(--muted);font-size:14px;line-height:1.5;margin-top:1px}
+.st.tl{border-color:var(--teal);background:var(--tealbg)}
+.st.tl b{color:var(--teal)}
+.st.co{border-color:var(--coral);background:var(--coralbg)}
+.st.co b{color:var(--coral)}
+.st.pu{border-color:var(--purp);background:var(--purpbg)}
+.st.pu b{color:var(--purp)}
+.st.gy{background:var(--graybg);border-color:var(--line2)}
+.st.gy b{color:var(--gray)}
+.st.am{border-color:var(--amber);background:var(--amberbg)}
+.st.am b{color:var(--amber)}
+.ar{height:20px;display:grid;place-items:center;color:var(--line2)}
+.ar svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;
+stroke-linecap:round;stroke-linejoin:round}
+.tagl{display:inline-block;font-size:12px;font-family:ui-monospace,Menlo,monospace;
+background:rgba(0,0,0,.05);padding:1px 6px;border-radius:5px;margin:4px 4px 0 0;color:var(--muted)}
+html[data-theme="dark"] .tagl{background:rgba(255,255,255,.07)}
+
+/* ---------- grids ---------- */
+.cards{display:grid;gap:10px;grid-template-columns:1fr;margin:22px 0}
+@media(min-width:600px){.cards.c2{grid-template-columns:1fr 1fr}}
+.cd{border:1px solid var(--line);border-radius:var(--rad);padding:13px 15px;background:var(--surf)}
+.cd h4{margin:0 0 5px;font-size:15px;font-weight:500}
+.cd p{margin:0;font-size:15px;color:var(--muted);line-height:1.55}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:22px 0}
+@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}}
+.sv{border:1px solid var(--line);border-radius:var(--rad);padding:12px;background:var(--surf);
+text-align:center}
+.sv b{display:block;font-size:26px;font-weight:500;line-height:1.1;color:var(--acc)}
+.sv span{display:block;font-size:12.5px;color:var(--muted);line-height:1.35;margin-top:4px}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;margin:22px 0;-webkit-overflow-scrolling:touch;
+border:1px solid var(--line);border-radius:var(--rad)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:480px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;
+line-height:1.5}
+th{background:var(--surf2);font-weight:500;font-size:13px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.tw.nrw table{min-width:0}
+
+/* matrix */
+.mx table{min-width:560px;font-size:13px}
+.mx td,.mx th{padding:6px 8px;text-align:center}
+.mx td:first-child,.mx th:first-child{text-align:left;white-space:nowrap;
+position:sticky;left:0;background:var(--surf)}
+.mx th:first-child{background:var(--surf2)}
+.mx .rf{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);
+font-weight:400}
+.pill{display:inline-block;min-width:34px;padding:2px 7px;border-radius:20px;font-size:12px}
+.pill.y{background:var(--tealbg);color:var(--teal)}
+.pill.n{background:var(--graybg);color:var(--gray)}
+.pill.q{background:var(--coralbg);color:var(--coral)}
+.lg{display:flex;flex-wrap:wrap;gap:12px;margin:-10px 0 22px;font-size:13px;color:var(--muted)}
+.lg i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:5px;
+vertical-align:-1px}
+
+/* layered stack */
+.stack{margin:24px 0}
+.ly{border:1px solid var(--teal);background:var(--tealbg);color:var(--teal);
+border-radius:10px;padding:11px 14px;font-size:15px;font-weight:500;text-align:center}
+.ly small{display:block;font-family:ui-monospace,Menlo,monospace;font-size:11px;
+font-weight:400;opacity:.75;letter-spacing:.04em}
+
+/* two column compare */
+.cmp{display:grid;gap:10px;grid-template-columns:1fr;margin:22px 0}
+@media(min-width:600px){.cmp{grid-template-columns:1fr 1fr}}
+.cmp>div{border:1px solid var(--line);border-radius:var(--rad);padding:13px 15px;background:var(--surf)}
+.cmp .hd{font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:500;margin-bottom:7px}
+.cmp .ok .hd{color:var(--teal)}
+.cmp .bad .hd{color:var(--coral)}
+.cmp .ok{border-color:var(--teal)}
+.cmp .bad{border-color:var(--coral)}
+.cmp p{font-size:15px;margin:0 0 8px;line-height:1.55}
+.cmp p:last-child{margin:0}
+
+/* part nav */
+.pn{display:flex;gap:10px;margin:50px 0 0;padding-top:22px;border-top:1px solid var(--line)}
+.pn a{flex:1;text-decoration:none;border:1px solid var(--line);border-radius:var(--rad);
+padding:12px 14px;background:var(--surf);color:var(--ink)}
+.pn a span{display:block;font-size:12px;color:var(--muted)}
+.pn a b{font-weight:500;font-size:15px}
+.pn a.nx{border-color:var(--acc);background:var(--accbg)}
+.pn a.nx b{color:var(--acc)}
+
+/* toast + fab */
+.toast{position:fixed;left:50%;transform:translateX(-50%) translateY(80px);bottom:18px;
+background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:22px;font-size:14px;
+z-index:90;opacity:0;transition:.3s;pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.fab{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));
+width:44px;height:44px;border-radius:50%;background:var(--surf);border:1px solid var(--line2);
+color:var(--ink);display:grid;place-items:center;z-index:55;opacity:0;pointer-events:none;
+transition:.2s;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.1)}
+.fab.on{opacity:1;pointer-events:auto}
+.fab svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;
+stroke-linecap:round;stroke-linejoin:round}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="in">
+    <button class="ib" id="mb" aria-label="Índice"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <div class="ttl" id="tt">Auditoría interna · caso práctico</div>
+    <button class="ib" id="fm" aria-label="Achicar texto">A<span style="font-size:10px">−</span></button>
+    <button class="ib" id="fp" aria-label="Agrandar texto">A<span style="font-size:10px">+</span></button>
+    <button class="ib" id="th" aria-label="Tema"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9 7 7 0 01-9-9z"/></svg></button>
+  </div>
+  <div class="pbar"><i id="pg"></i></div>
+</header>
+
+<div class="scrim" id="sc"></div>
+<nav class="dw" id="dw" aria-label="Índice">
+  <div class="dwh"><b>Índice</b><span>8 partes · caso de auditoría interna</span></div>
+  <div id="toc"></div>
+</nav>
+
+<main id="mn">
+
+<div class="ph">
+  <span class="pk">Caso práctico comentado</span>
+  <h1>Cómo leer una auditoría interna de principio a fin</h1>
+  <p class="lead">Un programa de trabajo real, desmontado pieza por pieza: qué se audita, por qué, qué se prueba, qué se encuentra y cómo se convierte en una recomendación que alguien realmente implementa.</p>
+  <p class="pmeta">Todo el material está anonimizado. Nombres, empresa, personas y datos sensibles fueron removidos o reemplazados por roles.</p>
+</div>
+
+<div class="stats">
+  <div class="sv"><b>11</b><span>pestañas<br>(7 visibles)</span></div>
+  <div class="sv"><b>73</b><span>controles en el<br>programa</span></div>
+  <div class="sv"><b>44</b><span>documentos<br>solicitados</span></div>
+  <div class="sv"><b>22</b><span>entrevistas en<br>5 días</span></div>
+  <div class="sv"><b>10</b><span>controles con<br>prueba de detalle</span></div>
+  <div class="sv"><b>12</b><span>conclusiones<br>escritas</span></div>
+  <div class="sv"><b>15</b><span>hallazgos<br>preliminares</span></div>
+  <div class="sv"><b>4</b><span>auditores en<br>el equipo</span></div>
+</div>
+
+<div class="no idea">
+  <span class="lb">Cómo usar esto</span>
+  <p>Tocá el ícono de arriba a la izquierda para abrir el índice. La posición de lectura se guarda sola: si cerrás la pestaña o el navegador descarta la página, volvés exactamente donde estabas. Las partes que ya leíste se marcan solas en el índice.</p>
+</div>
+
+<p>Cada parte se puede leer sola, pero el orden está pensado: la parte 1 arma el mapa, las partes 2 y 3 explican cómo se prepara una auditoría, las partes 4 a 6 son el trabajo técnico, la 7 es donde todo se convierte en valor, y la 8 son las preguntas que te van a servir cuando tengas enfrente a alguien con veinte años de oficio.</p>
+
+<div class="pn"><a class="nx" href="#p1"><span>Empezar por</span><b>Parte 1 · El mapa →</b></a></div>
+
+<section id="p1" class="part" data-t="El mapa del workbook">
+<div class="ph">
+  <span class="pk">Parte 1</span>
+  <h1>El mapa del workbook</h1>
+  <p class="lead">Qué contiene cada pestaña, cómo se conectan y cuál fue el recorrido real de la auditoría.</p>
+</div>
+
+<h2 id="s1a">Qué es este archivo</h2>
+<p>No es un informe de auditoría. Es el <strong>papel de trabajo maestro</strong> (<em>master workpaper</em>): el archivo donde el equipo planifica, documenta y concluye. El informe se escribe después, a partir de esto.</p>
+<p>Y algo importante: está capturado a mitad de camino. De 73 controles, solo 12 tienen conclusión escrita. Eso no es un defecto del caso — te deja ver el trabajo <em>en construcción</em>, que es donde se aprende el oficio.</p>
+
+<h2 id="s1b">Qué se audita y por qué</h2>
+<div class="cards c2">
+  <div class="cd"><h4>El auditado</h4><p>Una unidad de negocio regional de un grupo industrial multinacional: izaje pesado, transporte especializado y alquiler de grúas con operador. Varias sucursales y dos líneas muy distintas — proyectos contratados, y alquiler transaccional de alta rotación.</p></div>
+  <div class="cd"><h4>Tipo de auditoría</h4><p><em>Business Process Review</em>: revisión integral de los procesos de una entidad completa, no de un solo tema. Es el formato típico de visita a filial.</p></div>
+  <div class="cd"><h4>Período y campo</h4><p>Período bajo revisión (<em>audit period</em>): 12 meses. Trabajo de campo (<em>fieldwork</em>): una semana in situ, de lunes a viernes.</p></div>
+  <div class="cd"><h4>El equipo</h4><p>Cuatro auditores identificados por iniciales, cada uno dueño de procesos distintos. Uno de ellos es un especialista técnico — es habitual sumar un experto (<em>subject matter expert</em>) al equipo.</p></div>
+</div>
+<p>No hay una sospecha puntual detrás. Es cobertura del <strong>universo auditable</strong> (<em>audit universe</em>) según un plan anual basado en riesgo. La entidad entra al plan porque combina volumen financiero, operación descentralizada en sucursales, uso intensivo de subcontratistas y activos de altísimo valor.</p>
+
+<h2 id="s1c">Las once pestañas</h2>
+<div class="tw">
+<table>
+<tr><th>Pestaña</th><th>Qué es</th><th>Rol</th></tr>
+<tr><td><b>To do</b></td><td>Checklist de 23 tareas del encargo, en tres fases</td><td>Gestión del encargo</td></tr>
+<tr><td><b>GPO Input</b></td><td>Consultas a 17 dueños globales de proceso: «¿qué te preocupa de esta entidad?»</td><td>Insumo de riesgo</td></tr>
+<tr><td><b>Risk assessment</b></td><td>Formulario de scoping: factores + 15 áreas auditables</td><td>La bisagra del expediente</td></tr>
+<tr><td><b>Interview Schedule</b></td><td>Agenda hora por hora de la semana de campo</td><td>Logística y cobertura</td></tr>
+<tr><td><b>Work program</b></td><td>73 controles × 17 columnas</td><td><b>El corazón</b></td></tr>
+<tr><td><b>PBC list</b></td><td>44 documentos solicitados al auditado</td><td>Pedidos de información</td></tr>
+<tr><td><b>Preliminary findings</b></td><td>15 hallazgos, con calificación y causa raíz vacías</td><td>Borrador de hallazgos</td></tr>
+<tr><td><b>Samples</b> <i>(oculta)</i></td><td>Matrices de muestreo por atributos</td><td>Detalle de las pruebas</td></tr>
+<tr><td><b>Sheet2</b> <i>(oculta)</i></td><td>Una lista de pedidos de tres años antes</td><td>Residuo de plantilla</td></tr>
+<tr><td><b>Sheet1 / Aux</b> <i>(ocultas)</i></td><td>Listas maestras de los desplegables</td><td>Infraestructura</td></tr>
+</table>
+</div>
+
+<h2 id="s1d">El flujo de la auditoría</h2>
+<p>Esta es la secuencia lógica real, y la clave para leer el archivo.</p>
+
+<div class="flow">
+  <div class="st gy"><b>1 · Anuncio y entendimiento del negocio</b><span>Entrevista introductoria con el management local</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st pu"><b>2 · Cuatro fuentes de riesgo, en paralelo</b><span>Input de dueños globales · auditorías previas y autoevaluación del grupo · fraudes e incidentes · analítica sobre los financieros</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st am"><b>3 · Evaluación de riesgos y scoping</b><span>Por cada una de 15 áreas: riesgo alto/medio/bajo y alcance completo o limitado. Requiere aprobación del jefe de auditoría</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>4 · Programa de trabajo</b><span>73 controles. La columna «¿se muestrea?» se deriva del paso anterior</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st"><b>5 · Dos salidas paralelas</b><span>Lista de pedidos al auditado (44 ítems) &nbsp;+&nbsp; agenda de entrevistas (22 sesiones)</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>6 · Trabajo de campo</b><span>Pruebas → matrices de muestreo y columna «conclusión del trabajo realizado»</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>7 · Hallazgos preliminares</b><span>Calificación + causa raíz → reunión de cierre con el auditado</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>8 · Informe y seguimiento</b><span>Borrador al auditado → comentarios del management → informe final → sistema de seguimiento</span></div>
+</div>
+
+<div class="no idea">
+  <span class="lb">La idea central</span>
+  <p>En auditoría interna el alcance no se decide por costumbre ni por tamaño contable: se <strong>deriva</strong> de una evaluación de riesgos documentada. Por eso la columna «¿se muestrea?» no dice sí o no — dice <em>«YES (Medium/High risk as per Risk assessment)»</em>. Cada decisión de prueba lleva su justificación pegada al lado. Eso es trazabilidad, y es lo primero que busca un revisor.</p>
+</div>
+
+<h2 id="s1e">Las conexiones técnicas reales</h2>
+<p>No son solo conceptuales; hay plumbing en el archivo.</p>
+<ul>
+<li><strong>Evaluación de riesgos → programa:</strong> una columna con <code>VLOOKUP</code> busca cada área evaluada dentro de la lista de procesos del programa. Es un <strong>control de integridad</strong> que el auditor se construyó a sí mismo: si devuelve error, hay un área evaluada por riesgo que ningún control cubre.</li>
+<li><strong>Aux → desplegables:</strong> tres listas alimentan las columnas de calificación, de muestreo y la <strong>taxonomía de causa raíz</strong> — lo mejor del archivo, y sin usar.</li>
+<li><strong>Columna «control relacionado»:</strong> enlaza controles entre sí. Reconoce que un mismo riesgo se cubre desde Finanzas <em>y</em> desde Operaciones, y obliga a concluir de forma consistente.</li>
+<li><strong>Columna «BSF»:</strong> números que remiten al marco de controles clave de la casa matriz. Sin ese ancla, el criterio sería opinión del auditor; con él, es incumplimiento de una norma interna.</li>
+</ul>
+
+<h2 id="s1f">Vocabulario mínimo</h2>
+<div class="tw nrw">
+<table>
+<tr><th>Inglés</th><th>Español</th><th>Qué significa acá</th></tr>
+<tr><td>Work program</td><td>Programa de trabajo</td><td>Lista de pruebas a ejecutar</td></tr>
+<tr><td>Risk / Description</td><td>Riesgo</td><td>Qué puede salir mal y qué efecto tiene</td></tr>
+<tr><td>Expected design</td><td>Diseño esperado</td><td>Cómo <em>debería</em> funcionar el control</td></tr>
+<tr><td>Pre-work</td><td>Trabajo previo</td><td>Qué hay que tener antes de probar</td></tr>
+<tr><td>Test</td><td>Procedimiento de auditoría</td><td>Los pasos concretos</td></tr>
+<tr><td>To be sampled?</td><td>¿Prueba de detalle?</td><td>Decisión de muestreo</td></tr>
+<tr><td>Key attention points</td><td>Puntos de atención</td><td>Notas del senior al ejecutor</td></tr>
+<tr><td>Finding</td><td>Hallazgo</td><td>Excepción con impacto que se reporta</td></tr>
+<tr><td>Root cause</td><td>Causa raíz</td><td><em>Por qué</em> falló, no <em>qué</em> falló</td></tr>
+<tr><td>PBC list</td><td>Lista de pedidos</td><td>Documentación solicitada al auditado</td></tr>
+<tr><td>SoD</td><td>Segregación de funciones</td><td>Que nadie controle un ciclo completo</td></tr>
+<tr><td>Four-eyes principle</td><td>Principio de cuatro ojos</td><td>Doble aprobación</td></tr>
+<tr><td>Test of details</td><td>Prueba de detalle</td><td>Verificar transacciones individuales</td></tr>
+<tr><td>Sign-off</td><td>Aprobación formal</td><td>Revisión documentada del supervisor</td></tr>
+</table>
+</div>
+
+<h2 id="s1g">Seis cosas que ya se ven a simple vista</h2>
+<p>Las abrimos más adelante, pero vale anotarlas: son los mejores momentos de enseñanza del archivo.</p>
+<ol>
+<li><strong>La hoja de evaluación de riesgos está prácticamente vacía</strong>, y sin embargo 57 controles dicen «riesgo bajo según la evaluación de riesgos». El programa invoca una evaluación que el papel no evidencia.</li>
+<li><strong>La pestaña de muestras contiene datos de otra región</strong> (clientes y proyectos de otro continente). Plantilla arrastrada y no limpiada.</li>
+<li><strong>Hay referencias duplicadas</strong>: tres códigos de control aparecen dos veces cada uno. Y una fila entera tiene las columnas corridas.</li>
+<li><strong>Dos consultas de dueños globales quedaron sin control asociado</strong>: impuestos laborales sobre personal extranjero, y acuerdos con comunidades que actuaban como agentes de venta.</li>
+<li><strong>En cambio, el input de Compras se rastrea de punta a punta</strong>: pedido del dueño global → alcance profundo → prueba → hallazgo concreto. Es el circuito funcionando bien.</li>
+<li><strong>Una prueba analítica generó un asunto abierto</strong>: cinco proyectos con costos de personal y equipo pero sin ingreso asociado. Fuga de ingresos detectada por analítica, no por muestreo.</li>
+</ol>
+
+<div class="pn">
+  <a href="#top"><span>Volver</span><b>← Inicio</b></a>
+  <a class="nx" href="#p2"><span>Sigue</span><b>Parte 2 · Planificación →</b></a>
+</div>
+</section>
+
+
+<section id="p2" class="part" data-t="La planificación">
+<div class="ph">
+  <span class="pk">Parte 2</span>
+  <h1>La planificación</h1>
+  <p class="lead">Por qué el auditor hace cada movimiento antes de tocar una sola transacción.</p>
+</div>
+
+<h2 id="s2a">El encargo como proyecto</h2>
+<p>Veintitrés tareas en tres fases. Parece burocracia; no lo es. <strong>Ocho tareas suceden antes de pisar la oficina del auditado</strong> — esa proporción ya te dice que la planificación es la mitad del trabajo intelectual.</p>
+
+<div class="tw">
+<table>
+<tr><th>Tarea</th><th>Regla profesional detrás</th></tr>
+<tr><td>Enviar el anuncio del encargo</td><td>La auditoría interna <b>se anuncia</b>. El elemento sorpresa se reserva para investigaciones de fraude, que son otra disciplina. Auditar sin anunciar destruye la cooperación que necesitás durante cinco días de entrevistas</td></tr>
+<tr><td>Entendimiento del negocio</td><td>No se puede evaluar el riesgo de un proceso que no entendés. Esta tarea precede a la evaluación, no al revés</td></tr>
+<tr><td>Revisar fraudes e incidentes previos</td><td>El mejor predictor de riesgo disponible, y es gratis</td></tr>
+<tr><td>Obtener input de analítica de datos</td><td>Analítica <b>en planificación</b>: sirve para dirigir el muestreo, no para reemplazarlo</td></tr>
+<tr><td>Evaluación de riesgos y scoping<br><i>«marcar como sí solo después de la aprobación del jefe de auditoría»</i></td><td>El alcance no lo decide el auditor de campo solo</td></tr>
+<tr><td>Firma de los pasos de planificación<br><i>«no avanzar al paso 9 hasta que esto esté»</i></td><td>Una <b>compuerta</b>: no arranca el campo sin planificación aprobada. Protege al auditor tanto como al auditado</td></tr>
+</table>
+</div>
+
+<h3>La instrucción más importante del archivo</h3>
+<div class="no qt">
+  <p>«Documentar los resultados (por ejemplo: hallazgos, <strong>sin excepciones</strong>, <strong>no se hizo prueba de detalle y por qué</strong>, etc.) por cada proceso y paso de este programa de trabajo.»</p>
+</div>
+<p>Traducción del criterio: <strong>hay que documentar el resultado negativo con el mismo rigor que el positivo.</strong></p>
+<ul>
+<li>«Probé y no encontré excepciones» es una conclusión de auditoría, y necesita evidencia igual que un hallazgo.</li>
+<li>«No hice prueba de detalle <em>y este es el motivo</em>» también es una conclusión que hay que sostener.</li>
+</ul>
+<p>Es contraintuitivo si venís de contabilidad: ahí el papel se llena cuando hay algo. Acá el papel se llena siempre, porque lo que se documenta no es el resultado sino <strong>la suficiencia del trabajo</strong>. La norma de referencia: un auditor experimentado, sin conexión previa con el encargo, debe poder leer los papeles y llegar a la misma conclusión.</p>
+
+<h3>Por qué el borrador va primero al auditado</h3>
+<p>El auditado ve el informe antes que el board o el comité de auditoría. Dos razones, y las dos importan:</p>
+<div class="cards c2">
+  <div class="cd"><h4>Precisión fáctica</h4><p>Si el auditor entendió mal un proceso, este es el momento de corregirlo. Un hallazgo fácticamente errado destruye la credibilidad de todo el informe.</p></div>
+  <div class="cd"><h4>Apropiación de la remediación</h4><p>El auditor <b>no</b> decide cómo se arregla el problema. Escribe los comentarios <em>del management</em>, con acción, responsable y fecha. Auditoría identifica; la gerencia remedia. Si el auditor diseña la solución, pierde independencia para auditarla después.</p></div>
+</div>
+<p>Y la última tarea —registrar los hallazgos en el sistema de seguimiento— es el <strong>follow-up</strong>. Un hallazgo sin seguimiento es una queja. La auditoría no termina en el informe; termina cuando el hallazgo se cierra y se verifica.</p>
+
+<h2 id="s2b">Pedirle riesgo a quien mira desde arriba</h2>
+<p>Diecisiete dueños globales de proceso (<em>Global Process Owners</em>) consultados antes del campo. El problema que resuelve: <strong>el auditor llega a una entidad que no conoce, por una semana, y tiene que saber dónde mirar.</strong> El management local le va a dar su versión. Los dueños globales le dan la otra — y sobre todo, tienen un <em>benchmark comparativo</em> entre regiones que el auditor no tiene.</p>
+<p>En el modelo de tres líneas, los dueños globales son <strong>segunda línea de defensa</strong>: gobiernan sin ejecutar. Auditoría interna es la tercera.</p>
+
+<h3>Las cuatro clases de respuesta, y cómo se leen</h3>
+<div class="flow">
+  <div class="st gy"><b>Silencio · 3 casos</b><span>«No response» no equivale a «no risk». Es información faltante. ¿Se insistió? Una función global que no responde sobre una región puede ser, en sí misma, un síntoma de gobernanza débil</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st am"><b>«Sin preocupaciones» · 6 casos</b><span>La trampa clásica. Puede significar que el dueño tiene visibilidad y está tranquilo, o que <b>no tiene visibilidad y por eso no tiene preocupaciones</b>. El auditor debería poder distinguir cuál de los dos</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st"><b>Recomendaciones genéricas · 3 casos</b><span>Cortesía. Aporta poco, no cuesta nada verificarlo si ya estás en el área</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>Riesgo específico y accionable · 5 casos</b><span>Acá está el valor real</span></div>
+</div>
+
+<h3>Tres inputs de alta calidad, y por qué lo son</h3>
+<div class="no ex">
+  <span class="lb">Compras</span>
+  <p>«Escanear segregación de funciones; órdenes de compra creadas después de la fecha de la factura; pagos manuales a proveedores fuera del ciclo regular; facturas contabilizadas sin orden de compra; uso de cotizaciones y contratos; si los precios unitarios de las órdenes coinciden con el acuerdo con el proveedor.»</p>
+</div>
+<p>Esto es una <strong>lista de pruebas ya diseñada</strong>: seis condiciones observables, todas verificables con datos del ERP. Es un dueño de proceso que conoce las debilidades de su propio ciclo. Y es el único input que se rastrea limpiamente hasta un hallazgo.</p>
+
+<div class="no ex">
+  <span class="lb">Impuestos</span>
+  <p>«Preocupación con la situación donde se usa mano de obra extranjera en proyectos locales. Por ejemplo, para un proyecto local la mano de obra viene de la entidad de otro continente. Existe la preocupación de que el proceso de impuestos laborales locales no esté plenamente en control.»</p>
+</div>
+<p>Calidad alta por tres motivos: identifica <strong>el mecanismo</strong> (personal de otras entidades del grupo trabajando en jurisdicción local genera obligaciones de empleador locales); usa lenguaje de control interno («no está plenamente en control»); y tiene contraparte externa —la autoridad fiscal— así que el riesgo no es hipotético.</p>
+
+<div class="no ex">
+  <span class="lb">Ética y cumplimiento</span>
+  <p>«¿Podés verificar si hay acuerdos con comunidades vigentes? Hace unos años hubo una participación creciente de estas comunidades para ayudarnos a conseguir proyectos, básicamente actuando como agentes de venta. Sin embargo, <strong>hace tiempo que no escucho nada sobre estas actividades</strong>.»</p>
+</div>
+<p>Este tiene una estructura que conviene reconocer: <strong>el riesgo no es lo que se sabe, es lo que dejó de saberse.</strong> Terceros que «ayudan a conseguir proyectos» son intermediarios comerciales, y los intermediarios son el vector número uno de riesgo de soborno. Que el dueño global de compliance diga que hace tiempo no escucha nada significa que <em>una relación de alto riesgo salió del radar</em>. Eso es peor que una relación de alto riesgo monitoreada.</p>
+
+<h3>Dos joyas menores</h3>
+<p>El director regional pidió revisar «la seguridad psicológica, la dinámica de equipo, la accesibilidad del liderazgo, y si los empleados se sienten cómodos hablando». Eso es <strong>riesgo cultural</strong>, y es difícil de auditar porque no deja rastro documental — pero es el mejor predictor blando que existe: donde la gente no se anima a hablar, los problemas se descubren tarde.</p>
+<p>Y el dueño global de gestión de contratos, al que se le preguntó cómo desplegó el manual revisado, contestó: <em>«implementamos el contenido primero y publicamos el manual después»</em>. Guardá esa respuesta:</p>
+<div class="no warn">
+  <span class="lb">Consecuencia técnica</span>
+  <p>Si la práctica precede a la política, <strong>no podés usar la fecha de publicación de la política como criterio de auditoría</strong>. Un auditor descuidado diría «esta transacción de marzo no cumple el manual publicado en septiembre». Uno cuidadoso pregunta desde cuándo la regla era exigible. El criterio tiene que ser justo, no solo verificable.</p>
+</div>
+
+<h2 id="s2c">La evaluación de riesgos: la pestaña más importante y la más vacía</h2>
+
+<div class="flow">
+  <div class="st pu"><b>Factores considerados</b><span>Auditorías previas · resultados de la autoevaluación del grupo · fraudes e incidentes · input de dueños globales · análisis de financieros · otros factores externos</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st am"><b>Juicio profesional de Auditoría Interna</b><span>«Según los factores listados arriba y el juicio profesional de IA, identificamos los siguientes riesgos significativos»</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st"><b>15 áreas auditables</b><span>Cada una con: alcance · riesgo · impacto en los procedimientos de auditoría</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>Dos niveles de alcance, definidos en la hoja</b><span><b>Completo:</b> procedimientos sustantivos extensos — analítica, indagación, pruebas de muestra.<br><b>Limitado:</b> solo indagación y revisión analítica, <b>sin prueba de detalle</b></span></div>
+</div>
+
+<h3>Riesgo inherente vs. residual</h3>
+<p>Esta distinción separa un scoping bueno de uno circular.</p>
+<div class="cmp">
+  <div class="ok"><div class="hd">Riesgo inherente</div><p>El riesgo del proceso <b>suponiendo que no hay controles</b>. Depende del negocio: volumen, complejidad, manejo de efectivo, contacto con funcionarios públicos, valor de los activos, descentralización.</p></div>
+  <div><div class="hd">Riesgo residual</div><p>Lo que queda <b>después</b> de considerar que los controles funcionan.</p></div>
+</div>
+<div class="no warn">
+  <span class="lb">Por qué importa</span>
+  <p>El alcance debe basarse principalmente en el <strong>riesgo inherente</strong>. Si asumís que el control funciona y por eso no lo probás, nunca vas a descubrir que no funciona. Es una profecía autocumplida: el control mejor «reputado» queda permanentemente sin verificar.</p>
+</div>
+
+<p>Un ejemplo perfecto está en una nota del propio programa, sobre caja chica:</p>
+<div class="no qt">
+  <p>«La caja chica es inherentemente propensa a soborno, fraude y abuso. Podrían existir cajas negras o fondos ocultos desde una perspectiva de riesgo inherente — por ejemplo, alimentados con la venta de chatarra y repuestos usados.»</p>
+</div>
+<p>Fijate el razonamiento: <strong>no dice que exista un fondo oculto.</strong> Dice que las condiciones para que exista están dadas. Eso es pensamiento de riesgo inherente en estado puro: razonar sobre <em>la oportunidad</em>, no sobre la sospecha.</p>
+
+<h3>Las 15 áreas, y qué revela la lista</h3>
+<p><span class="tagl">Ventas</span><span class="tagl">Compras</span><span class="tagl">Planificación de equipos</span><span class="tagl">Inversiones y desinversiones</span><span class="tagl">Registro de horas · personal de campo</span><span class="tagl">Finanzas</span><span class="tagl">RRHH</span><span class="tagl">Ética y cumplimiento</span><span class="tagl">Project Management</span><span class="tagl">Project Control</span><span class="tagl">Gestión de contratos</span><span class="tagl">Gestión de activos</span><span class="tagl">Inventarios</span><span class="tagl">Seguridad y calidad</span><span class="tagl">Gobernanza · SoD</span></p>
+
+<div class="cards c2">
+  <div class="cd"><h4>El registro de horas es un área propia</h4><p>Separada de RRHH y de Operaciones. Eso no sale de un organigrama: sale del modelo de negocio. En una empresa de servicios con personal en obra, <b>las horas son el costo principal y a la vez la base de facturación</b>. Una hora mal registrada infla el costo y pierde ingreso a la vez.</p></div>
+  <div class="cd"><h4>Project Management y Project Control están separados</h4><p>Uno es Operaciones —el jefe de proyecto ejecuta—, el otro es Finanzas —el controller mide—. Auditarlos por separado permite <b>contrastar las dos versiones del mismo proyecto</b>. Si el PM dice que va bien y el controller muestra desvío, esa contradicción es el hallazgo.</p></div>
+</div>
+
+<h3>El scoping que sí se puede reconstruir</h3>
+<p>Las columnas de riesgo y alcance están vacías, pero el resultado quedó grabado en el programa:</p>
+<div class="tw nrw">
+<table>
+<tr><th>Decisión</th><th>Controles</th><th>Áreas</th></tr>
+<tr><td>Riesgo medio/alto → prueba de detalle</td><td><b>10</b></td><td>Gestión de contratos (1) · Registro de horas (3) · Inversiones y activos (2) · <b>Compras (los 4)</b></td></tr>
+<tr><td>Riesgo bajo → sin prueba de detalle</td><td><b>57</b></td><td>Finanzas, Ventas, RRHH, Ética, Seguridad, Gobernanza</td></tr>
+<tr><td>Fuera de alcance</td><td><b>3</b></td><td>Mantenimiento, registro de activos de mantenimiento, fabricación</td></tr>
+</table>
+</div>
+<p>Leído como auditor: el riesgo medio/alto se concentró en <strong>compromisos con terceros, horas y activos</strong>. Para una empresa que alquila equipos de altísimo valor, ejecuta con personal de campo y subcontrata pesado, esa concentración es coherente. La decisión de scoping, aunque no esté escrita, fue razonable.</p>
+<div class="no idea">
+  <span class="lb">El circuito que funcionó</span>
+  <p>Compras es el único ciclo donde los cuatro controles se marcaron para prueba de detalle. ¿Por qué? Porque el dueño global entregó una lista de seis debilidades concretas. <strong>El input de mayor calidad produjo el alcance más profundo, y el alcance más profundo produjo los hallazgos más específicos.</strong></p>
+</div>
+
+<h3>Tres problemas de calidad</h3>
+<ol>
+<li><strong>La evaluación no está documentada.</strong> Cincuenta y siete controles invocan un documento que el papel no contiene. Si mañana ocurre un fraude en un área calificada «bajo riesgo», el auditor no puede demostrar sobre qué base la calificó así. Se puede reejecutar el <em>resultado</em>; no el <em>razonamiento</em>.</li>
+<li><strong>Tensión entre «fuera de alcance» y lo que se hizo.</strong> Mantenimiento y fabricación están marcados fuera de alcance, pero hay sesiones de ambos en la agenda. Probablemente sea la diferencia entre «fuera de alcance para prueba de detalle» y «no lo miro» — pero el papel no lo dice.</li>
+<li><strong>Dos inputs de dueños globales se perdieron</strong> sin justificación de exclusión.</li>
+</ol>
+<div class="no warn">
+  <span class="lb">La lección más transferible</span>
+  <p>Excluirlos podía ser perfectamente correcto. <strong>El defecto no es la exclusión: es la exclusión sin rastro.</strong> El formulario tiene una columna llamada literalmente «impacto en los procedimientos y el alcance de auditoría», pensada para escribir esa justificación. Está vacía.</p>
+</div>
+
+<div class="pn">
+  <a href="#p1"><span>Anterior</span><b>← Parte 1</b></a>
+  <a class="nx" href="#p3"><span>Sigue</span><b>Parte 3 · El campo →</b></a>
+</div>
+</section>
+
+<section id="p3" class="part" data-t="La preparación del campo">
+<div class="ph">
+  <span class="pk">Parte 3</span>
+  <h1>La preparación del campo</h1>
+  <p class="lead">La lista de pedidos y la agenda de entrevistas. Parecen administrativas: son donde se decide si las pruebas se van a poder ejecutar.</p>
+</div>
+
+<h2 id="s3a">La lista de pedidos (PBC)</h2>
+<p><strong>PBC = Provided By Client</strong>, «provisto por el cliente». Es la lista formal de documentación que Auditoría solicita antes de llegar. Cuarenta y cuatro pedidos, con estado de recepción y comentarios.</p>
+
+<h3>De dónde sale cada línea</h3>
+<p>La lista <strong>no es una lista de deseos</strong>: es una salida derivada del programa de trabajo. La columna «trabajo previo» de cada control declara qué necesita tener en la mano antes de empezar, y esas declaraciones se consolidan.</p>
+<div class="no warn">
+  <span class="lb">Por qué importa el orden</span>
+  <p>Si armás la lista primero y el programa después, pedís cosas que no vas a usar —y quemás capital político con el auditado, que dedicó horas a juntarlas— y descubrís en el día 2 del campo que te falta algo que ya no llega a tiempo.</p>
+</div>
+
+<h3>La regla de las dos etapas</h3>
+<div class="flow">
+  <div class="st pu"><b>Etapa 1 · dos semanas antes</b><span>Se pide <b>la población</b>: «lista de todos los proyectos abiertos y cerrados del período», «todos los proveedores nuevos con gasto mayor a 50K»</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st am"><b>El auditor selecciona la muestra</b><span>La selección es del auditor, sobre una población que recibió completa</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>Etapa 2 · durante el campo</b><span>Se pide <b>la evidencia</b> de los ítems seleccionados: «para estos 5 proyectos: contrato firmado, formulario de traspaso, análisis de riesgos, facturas»</span></div>
+</div>
+<div class="no idea">
+  <p><strong>Nunca se pide «dame cinco ejemplos».</strong> Si el auditado elige la muestra, elige los cinco buenos, y la prueba no vale nada.</p>
+</div>
+
+<h3>Fecha de corte vs. período</h3>
+<div class="cmp">
+  <div><div class="hd">«A una fecha»</div><p>Aging de cuentas por cobrar y pagar, previsión por incobrables, balance y resultados, provisión de vacaciones, registro de activos, matriz de capacitación.</p><p><em>Son saldos. Solo tienen sentido a un momento puntual.</em></p></div>
+  <div><div class="hd">«Del período X al Y»</div><p>Cambios en datos maestros de proveedores, pagos realizados, empleados nuevos, bajas, órdenes de compra, clientes nuevos, incidentes de seguridad.</p><p><em>Son flujos. Solo tienen sentido a lo largo de un intervalo.</em></p></div>
+</div>
+<p>Y las 44 líneas usan <strong>la misma fecha de corte y el mismo período, sin excepción</strong>. No es obvio: en papeles mal armados uno ve «últimos 6 meses», «año fiscal» y «desde enero» mezclados, y después las poblaciones no se pueden cruzar entre sí.</p>
+
+<h3>El pedido mejor diseñado del archivo</h3>
+<div class="no qt">
+  <p>«Política salarial aplicable, incluyendo compensación y beneficios <strong>(si no existe una política formal documentada, por favor decilo)</strong>.»</p>
+</div>
+<p>Esa cláusula entre paréntesis es criterio profesional puro. Si pedís «la política» y no te contestan, tenés una ambigüedad irresoluble: ¿se traspapeló? ¿la persona está de licencia? ¿no existe? Un silencio no es evidencia de nada.</p>
+<p>Al pedir la declaración explícita, el auditor <strong>convierte la ausencia en una afirmación positiva</strong>. Y funcionó: la respuesta fue «no tenemos una política salarial específica para esta unidad». Eso no es un pedido fallido — <strong>eso es la evidencia</strong>. Se llama <em>confirmación negativa</em>.</p>
+
+<div class="cmp">
+  <div class="bad"><div class="hd">Deficiencia de diseño</div><p>El control no existe, o existe pero aunque funcione perfecto no mitigaría el riesgo.</p><p><b>No hay nada que probar.</b> Se reporta directo.</p></div>
+  <div class="bad"><div class="hd">Deficiencia de operación</div><p>El control está bien diseñado pero no se ejecuta, o se ejecuta mal.</p><p><b>Se detecta probando.</b></p></div>
+</div>
+<p>Confundirlas es un error común. Si el control no existe, no tiene sentido tomar una muestra: no hay nada que muestrear.</p>
+
+<h3>Los cuatro «No», y por qué son más informativos que los cuarenta «Sí»</h3>
+<p>Cuatro pedidos no se recibieron, <strong>y cada uno por un motivo de naturaleza distinta</strong>. Aprender a clasificarlos es aprender a leer una lista de pedidos.</p>
+
+<div class="flow">
+  <div class="st co"><b>1 · La ausencia es el hallazgo</b><span>Política salarial → «no tenemos una». Deficiencia de diseño. Se reporta sin necesidad de prueba</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>2 · La pregunta de vuelta es peor que el «no»</b><span>Reporte de objetivos de compras → «¿a qué objetivos te referís?». El programa dice que existen desde hace más de cuatro años, con reporte mensual obligatorio al responsable global</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st am"><b>3 · El control existe en sustancia y falla en evidencia</b><span>Conteos de inventario → «se hacen conteos cíclicos y el inventario está actualizado, pero <b>no se usan planillas formales</b>»</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st gy"><b>4 · El error es del auditor</b><span>Se pidió documentación usando <b>el código de otra entidad del grupo</b>, arrastrado de una plantilla anterior</span></div>
+</div>
+
+<p><strong>Sobre el segundo:</strong> el reflejo natural —y equivocado— es explicar mejor el pedido, conseguir el reporte y seguir. El reflejo correcto es entender que <em>la confusión no es un obstáculo para obtener la evidencia: la confusión <strong>es</strong> la evidencia</em>. Un control corporativo vigente hace años cuyo responsable local no reconoce indica un desfase de implementación. Y conecta directamente con lo que el director regional había pedido en la planificación: «en qué medida se aplica consistentemente la forma única de trabajar».</p>
+
+<p><strong>Sobre el tercero</strong>, que es el caso más frecuente en la vida real: la actividad se hace, nadie miente, pero no deja rastro. Consecuencias: no es auditable, <strong>no es revisable por el propio jefe de quien lo ejecuta</strong>, no resiste la rotación de personal, y no sostiene la valuación contable.</p>
+<div class="no warn">
+  <span class="lb">Principio general</span>
+  <p>En control interno, <strong>un control que no deja evidencia es equivalente —a efectos de confianza— a un control que no existe.</strong> No por mala fe, sino porque la confianza en un control no puede depender de la palabra de quien lo ejecuta. Ese es todo el punto de tener controles.</p>
+</div>
+<p>Y fijate cómo se redactó el hallazgo: <em>«implementar una metodología formal de conteo»</em>, no <em>«el inventario no se cuenta»</em> —que sería falso e injusto—. El auditor separó el problema real de un problema imaginario. Eso es lo que hace que el management acepte un hallazgo en vez de pelearlo.</p>
+
+<p><strong>Sobre el cuarto:</strong> un ítem no recibido no es automáticamente culpa del auditado. Antes de escribir «el auditado no proporcionó la información» —frase con peso, porque insinúa falta de cooperación— hay que revisar el propio pedido.</p>
+
+<h3>El riesgo que la columna «recibido» no captura</h3>
+<p>Cuarenta ítems dicen «sí». Eso significa <strong>recibido</strong>. No significa <strong>completo</strong> ni <strong>exacto</strong>.</p>
+<div class="no warn">
+  <span class="lb">El punto ciego del muestreo</span>
+  <p>Si la población que te entregaron está incompleta, tu muestra es válida sobre una población equivocada y tu conclusión es inválida — <strong>pero se ve exactamente igual que una conclusión válida.</strong></p>
+</div>
+<p>Ejemplo: pedís «todos los proveedores nuevos con gasto mayor a 50K». Te dan 30. Elegís 3, están perfectos, concluís «sin excepciones». Pero eran 47, y los 17 faltantes son justo los creados sin debida diligencia.</p>
+<p>Se mitiga <strong>probando la integridad de la población</strong>: anclar la lista recibida a una fuente independiente. Pagos contra la salida de caja del mayor; aging de deudores contra el balance; lista de proyectos contra los ingresos.</p>
+<div class="no idea">
+  <p>Ahí aparece la función que probablemente no notaste del ítem «balance y estado de resultados» en la lista de pedidos. No está solo para hacer revisión analítica: está para ser <strong>el ancla contra la cual se verifica la integridad de todas las demás poblaciones</strong>. Los estados financieros son el único dato que el auditado no puede recortar sin que se note.</p>
+</div>
+
+<h2 id="s3b">La agenda de entrevistas</h2>
+<p>Veintidós sesiones en cinco días, con entrevistado, auditor líder y auditor de apoyo. Es un papel de trabajo, no un calendario: evidencia de cobertura, trazabilidad de la fuente («se discutió con…»), e insumo del informe.</p>
+
+<h3>La secuencia, y por qué está en ese orden</h3>
+<div class="tw">
+<table>
+<tr><th>Día</th><th>Sesiones</th></tr>
+<tr><td><b>Lunes</b></td><td>Reunión de apertura (todos) → <b>recorrido del predio</b> (2 h, todo el equipo) → <b>gobernanza y ética con el director de la unidad</b> (2,5 h, todo el equipo) → gestión de contratos</td></tr>
+<tr><td><b>Martes</b></td><td>RRHH y nóminas ∥ seguridad · compras · project management (proyectos) · registro de horas</td></tr>
+<tr><td><b>Miércoles</b></td><td><i>Catch-up interno 8:30</i> · finanzas · segregación de funciones ∥ gestión de activos · project management (alquiler) ∥ mantenimiento · inventarios</td></tr>
+<tr><td><b>Jueves</b></td><td>Ventas · project control · planificación de equipos · fabricación</td></tr>
+<tr><td><b>Viernes</b></td><td><i>Catch-up interno 8:30</i> · <b>mañana libre a propósito</b> · reunión de cierre 14:00</td></tr>
+</table>
+</div>
+
+<div class="cards c2">
+  <div class="cd"><h4>El recorrido del predio es lo segundo del día 1</h4><p>La <b>observación física</b> es la evidencia menos mediada que existe. Hacerla <em>antes</em> de las entrevistas significa que formás tu propia impresión antes de que el management te dé su marco interpretativo. Y un lunes a media mañana ves el predio en un día normal, no preparado.</p></div>
+  <div class="cd"><h4>Y produjo el 20% de los hallazgos</h4><p>Tres de los quince hallazgos salieron de caminar dos horas: riesgos en duchas de emergencia y lavaojos, orden y limpieza en talleres, y equipo de protección distinto al estándar global.</p></div>
+  <div class="cd"><h4>El director de la unidad, día 1, 2,5 horas, todo el equipo</h4><p>La sesión más larga de la semana. El <b>tono desde arriba</b> se evalúa primero, todo el equipo escucha el contexto sin intermediarios, y —razón práctica— es quien puede destrabar el acceso a información durante los cuatro días siguientes.</p></div>
+  <div class="cd"><h4>Ventas y project control quedan para el jueves</h4><p>Contraintuitivo. Pero si entrevistás al controller el lunes obtenés <b>una descripción del proceso</b>; el jueves, cuando ya viste cinco reportes y detectaste proyectos con costo y sin ingreso, obtenés <b>explicaciones de anomalías concretas</b>.</p></div>
+</div>
+<p>Y la mañana del viernes vacía no es un descuido: es el <strong>buffer</strong> para cerrar asuntos abiertos, conseguir la evidencia faltante y armar las láminas del cierre. Un cronograma de campo sin holgura al final es un cronograma que termina mal.</p>
+
+<h3>Dos auditores por entrevista</h3>
+<ol>
+<li>No se puede conducir bien una entrevista y tomar notas al mismo tiempo.</li>
+<li><strong>Corroboración.</strong> Cuando en el cierre el entrevistado dice «yo no dije eso», dos auditores valen mucho más que uno.</li>
+<li><strong>Formación.</strong> El junior aprende mirando cómo el senior repregunta. No hay otra forma.</li>
+<li>Perspectivas cruzadas: el especialista técnico oye cosas que el auditor financiero deja pasar.</li>
+</ol>
+<p>La excepción documentada: la sesión de segregación de funciones tiene <strong>un solo auditor</strong>, porque corre en paralelo con otra. Y terminó siendo uno de los hallazgos más severos de la auditoría.</p>
+
+<h3>Triangulación: el mismo entrevistado, distintos auditores</h3>
+<div class="tw">
+<table>
+<tr><th>Persona</th><th>Sesiones</th><th>Auditor líder</th></tr>
+<tr><td>Gerente de RRHH</td><td>RRHH · registro de horas · segregación de funciones</td><td>tres auditores distintos</td></tr>
+<tr><td>Director de operaciones (proyectos)</td><td>Project management · activos · mantenimiento · fabricación</td><td>tres auditores distintos</td></tr>
+<tr><td>Directora de operaciones</td><td>Alquiler · activos · planificación de equipos</td><td>dos auditores distintos</td></tr>
+</table>
+</div>
+<p>A la misma persona se le pregunta por temas que se solapan, desde ángulos distintos, en días distintos. Si las respuestas son consistentes, aumenta la confiabilidad. Si son inconsistentes, <strong>eso es una pista</strong>. Nadie lo escribe en el papel, pero es el motivo por el cual una agenda de auditoría se ve redundante y no lo es.</p>
+
+<h3>Quién no fue entrevistado</h3>
+<div class="no warn">
+  <p>Repasá la lista: director de la unidad, directores de operaciones, director de ventas, gerentes de finanzas, RRHH, compras y seguridad, contract managers, project controller… <strong>y un supervisor de depósito.</strong> Es la única persona por debajo del nivel gerencial en toda la semana.</p>
+  <p>La ironía: el director regional había pedido explícitamente que se revisara «si los empleados se sienten cómodos hablando». <strong>No se puede evaluar eso entrevistando solamente a los jefes.</strong> Es una limitación real de casi cualquier auditoría de una semana — pero un auditor experimentado la nombra en el informe como <em>limitación de alcance</em> en lugar de dejarla implícita.</p>
+</div>
+<p>Detalle bien pensado, en cambio: la sesión de inventarios entrevista al gerente <strong>y</strong> al supervisor juntos. El gerente describe la política, el supervisor describe la práctica, y el hueco entre ambas respuestas es donde vive el hallazgo. Ahí apareció el tema de los conteos sin planilla.</p>
+
+<h3>La regla que hay que tatuarse</h3>
+<div class="no idea">
+  <p><strong>La indagación, por sí sola, nunca es evidencia de auditoría suficiente.</strong> Siempre requiere corroboración.</p>
+</div>
+<p>El mejor ejemplo del archivo de la regla aplicada:</p>
+<div class="no qt">
+  <p>«Se discutió que estos temas se conversan con el director de proyectos y los controllers, y que se llevan minutas. Se pidieron las minutas pero <strong>el archivo estaba fechado el mismo día del pedido</strong> y no tiene ningún detalle sobre identificación continua de riesgos y oportunidades.»</p>
+</div>
+<ol>
+<li>Probó el control documentado y encontró contenido pobre.</li>
+<li>El management ofreció un <strong>control compensatorio</strong>: «el tema se discute en reuniones y hay minutas».</li>
+<li>El auditor <strong>no aceptó la afirmación</strong>: pidió las minutas.</li>
+<li>Le entregaron un archivo, y <strong>miró la fecha de creación</strong>.</li>
+<li>Conclusión: la minuta no documenta una reunión pasada; se generó para responder a la auditoría.</li>
+</ol>
+<p>Ese chequeo es la mejor demostración de <strong>escepticismo profesional</strong> de todo el workbook. No es desconfianza: es verificar en lugar de aceptar, que es literalmente la función del rol. Y está <em>documentado en la conclusión</em> — sin esa oración, la conclusión sería indefendible.</p>
+<p>Contrastá con la conclusión sobre permisos: «se discutió el proceso; los jefes de proyecto tienen apoyo de un grupo interno; se usan casillas funcionales». Indagación pura, ningún permiso verificado. Está bien, porque el alcance era limitado. Pero con esa evidencia podés escribir «entendimos el proceso»; <strong>no</strong> podés escribir «el control opera efectivamente».</p>
+
+<div class="pn">
+  <a href="#p2"><span>Anterior</span><b>← Parte 2</b></a>
+  <a class="nx" href="#p4"><span>Sigue</span><b>Parte 4 · Anatomía →</b></a>
+</div>
+</section>
+
+
+<section id="p4" class="part" data-t="Anatomía de un control">
+<div class="ph">
+  <span class="pk">Parte 4</span>
+  <h1>Anatomía de un control</h1>
+  <p class="lead">Las 17 columnas del programa de trabajo forman una cadena lógica que no admite saltos.</p>
+</div>
+
+<h2 id="s4a">La cadena</h2>
+<div class="flow">
+  <div class="st co"><b>Riesgo</b><span>¿Por qué esto importa?</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st am"><b>Diseño esperado</b><span>¿Qué debería estar pasando? → <b>el criterio</b></span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st am"><b>Política</b><span>¿Dónde dice que debería pasar? → <b>la autoridad del criterio</b></span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st pu"><b>Frecuencia</b><span>¿Cuántas veces ocurre? → determina el <b>tamaño de muestra</b></span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st pu"><b>Trabajo previo</b><span>¿Qué necesito tener? → alimenta la lista de pedidos</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st"><b>Prueba</b><span>¿Cómo lo verifico?</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st"><b>¿Se muestrea?</b><span>¿Con cuánta profundidad? ← viene de la evaluación de riesgos</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>Conclusión</b><span>¿Qué encontré?</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>¿Hallazgo?</b><span>→ pestaña de hallazgos preliminares</span></div>
+</div>
+<div class="no warn">
+  <p>Si una columna está vacía o mal escrita, <strong>todo lo que está aguas abajo se degrada</strong>. Lo vas a ver una y otra vez en este archivo.</p>
+</div>
+
+<h2 id="s4b">La referencia: la columna más aburrida y más importante</h2>
+<p>Códigos por proceso: <code>CM01</code>, <code>EC01–05</code>, <code>FIN01–23</code>, <code>GOV01</code>, <code>HR01–11</code>, <code>OPS01–20</code>, <code>PRO01–04</code>, <code>SAL01–09</code>, <code>SHEQ01–06</code>.</p>
+<p>Es la <strong>clave de unión</strong> de todo el expediente. Un revisor tiene que poder tomar un hallazgo del informe y llegar, en dos saltos, a la prueba que lo sostiene y a la evidencia que la sostiene. Sin referencias consistentes, el expediente es un montón de documentos, no un archivo.</p>
+<div class="cmp">
+  <div class="ok"><div class="hd">Los huecos son buenos</div><p>Faltan varios números en cada serie: son controles del programa global que no aplican y se borraron. Mantener la numeración global estable significa que un mismo código es el mismo control en todas las regiones, lo que permite comparar resultados entre auditorías.</p></div>
+  <div class="bad"><div class="hd">Los duplicados son graves</div><p>Tres códigos aparecen <b>dos veces cada uno</b>, en controles totalmente distintos. Cuando un hallazgo cita uno de ellos, nadie sabe cuál. Y en la pestaña de muestras hay cinco columnas encabezadas literalmente <code>FINxx</code>: referencias sin asignar.</p></div>
+</div>
+
+<h2 id="s4c">El enunciado del riesgo: la columna decisiva</h2>
+<p>Casi los 73 enunciados siguen la misma gramática:</p>
+<div class="no idea">
+  <p><strong>[condición o evento]</strong> puede <strong>[consecuencia]</strong> llevando a <strong>[impacto en un objetivo]</strong></p>
+</div>
+<ul>
+<li><em>«Cambios no autorizados a los datos maestros de proveedores pueden llevar en última instancia a pagos a cuentas bancarias equivocadas.»</em></li>
+<li><em>«Sobreestimación de horas trabajadas y ausencias no aprobadas pueden llevar a costos innecesarios y errores en los costos.»</em></li>
+<li><em>«Monitoreo inadecuado del proyecto puede dificultar la ejecución, generar estados financieros inexactos y llevar a pérdida de ingresos.»</em></li>
+</ul>
+<p><strong>«Datos maestros de proveedores» no es un riesgo: es un proceso.</strong> El riesgo es lo que puede salir mal ahí y qué consecuencia tiene.</p>
+<div class="no idea">
+  <span class="lb">La prueba ácida</span>
+  <p>Leé el enunciado y preguntá «¿y qué?». Si la respuesta ya está adentro de la oración, el riesgo está bien escrito.</p>
+</div>
+
+<h3>Un mismo riesgo, varios controles</h3>
+<div class="tw nrw">
+<table>
+<tr><th>Riesgo</th><th>Controles que lo mitigan</th></tr>
+<tr><td>Incumplimiento por sobornos a través de terceros</td><td>Lista de agentes · medidas de proceso · monitoreo</td></tr>
+<tr><td>Monitoreo inadecuado del proyecto</td><td>Uno en Finanzas · uno en Operaciones</td></tr>
+<tr><td>Facturación incompleta o inoportuna</td><td>Uno en Finanzas · uno en Operaciones</td></tr>
+<tr><td>No preservar lecciones aprendidas</td><td>Tres controles distintos</td></tr>
+</table>
+</div>
+<p>No es duplicación por pereza. <strong>El riesgo es la unidad de análisis; los controles son respuestas.</strong> Consecuencias prácticas: las conclusiones tienen que ser consistentes entre controles hermanos, y si el riesgo se materializa el hallazgo no es «falló el control X» sino «el riesgo Y quedó descubierto porque fallaron varias capas».</p>
+
+<h3>La calidad de la prueba es hija de la calidad del riesgo</h3>
+<div class="cmp">
+  <div class="ok">
+    <div class="hd">Riesgo bien escrito</div>
+    <p><em>«Cambios no autorizados a los datos maestros de proveedores pueden llevar a pagos a cuentas bancarias equivocadas.»</em></p>
+    <p><b>Prueba resultante:</b> «Verificar para 5 proveedores si existe documentación de respaldo que concilie con el cambio, y si el cambio fue validado <b>por teléfono</b> con el contacto autorizado y documentado en el sistema.»</p>
+    <p>Ejecutable, con atributos binarios, tamaño definido, resultado no discutible.</p>
+  </div>
+  <div class="bad">
+    <div class="hd">Riesgo genérico</div>
+    <p><em>«Una estructura poco clara del equipo de ventas puede dañar la rentabilidad.»</em></p>
+    <p><b>Prueba resultante:</b> «Discutir la estructura y composición del equipo. ¿Cómo evalúa la unidad la inteligencia de mercado del equipo?»</p>
+    <p>Una conversación. No hay atributo que pueda dar cumple / no cumple.</p>
+  </div>
+</div>
+<div class="no idea">
+  <p>Cuando te toque escribir un programa y no sepas cómo diseñar la prueba, <strong>casi siempre el problema está una casilla más arriba</strong>, en cómo escribiste el riesgo.</p>
+</div>
+<p class="pmeta">Nota: la validación telefónica es un control anti-fraude específico contra el <em>fraude de cambio de cuenta bancaria</em> — el esquema donde alguien se hace pasar por un proveedor y pide «actualizar nuestros datos». La llamada al contacto conocido, por un canal distinto al que llegó el pedido, es el único control que lo frena.</p>
+
+<h2 id="s4d">El diseño esperado: el criterio de auditoría</h2>
+<p>No podés concluir que algo está mal sin un estándar previo que diga qué es estar bien. Ese estándar se escribe <strong>antes</strong> de ir al campo. Si el criterio se define después de ver lo que pasó, la auditoría deja de ser auditoría y pasa a ser opinión.</p>
+<p>Un diseño esperado bien escrito tiene cuatro elementos: <strong>actor + acción + umbral + evidencia</strong>.</p>
+<div class="no qt">
+  <p>«Al comprometerse en una obligación vinculante <strong>superior a 100 000 euros</strong>, el principio de cuatro ojos —dos firmantes— está en vigor.»</p>
+</div>
+<p><strong>Los umbrales son lo que hace testeable un control.</strong> «Las reparaciones grandes requieren aprobación» es inauditable: «grande» es discutible y el auditado siempre va a decir que ésta no lo era.</p>
+
+<h3>La palabra que aparece en todo el archivo</h3>
+<p><em>Visibly</em>: «visiblemente firmado», «visiblemente aprobado», «visiblemente revisado».</p>
+<div class="cmp">
+  <div class="bad"><div class="hd">Inauditable</div><p>«El jefe de proyecto aprueba la factura.»</p><p>Puede haberla mirado y dicho «dale» por teléfono. No hay forma de verificarlo ni de que su jefe lo supervise.</p></div>
+  <div class="ok"><div class="hd">Auditable</div><p>«El jefe de proyecto aprueba <b>visiblemente</b> la factura, por firma física o correo, <b>antes</b> de su envío.»</p><p>Hay un artefacto, con fecha, atribuible a una persona, anterior al evento.</p></div>
+</div>
+
+<h2 id="s4e">La frecuencia: la columna que se subestima</h2>
+<p>Sirve para <strong>dimensionar la muestra</strong>. Convención habitual en pruebas de controles:</p>
+<div class="tw nrw">
+<table>
+<tr><th>Frecuencia</th><th>Veces al año</th><th>Muestra típica</th></tr>
+<tr><td>Anual</td><td>1</td><td>1</td></tr>
+<tr><td>Trimestral</td><td>4</td><td>2</td></tr>
+<tr><td>Mensual</td><td>12</td><td>2 – 5</td></tr>
+<tr><td>Semanal</td><td>52</td><td>5 – 10</td></tr>
+<tr><td>Diaria</td><td>~250</td><td>15 – 25</td></tr>
+<tr><td>Muchas veces por día</td><td>miles</td><td>25 – 45</td></tr>
+</table>
+</div>
+<div class="no idea">
+  <p>El tamaño de muestra en pruebas de controles <strong>no depende del monto de la población</strong>. Ésa es la diferencia grande con el muestreo sustantivo, donde sí importa la materialidad. Acá estás probando <em>la consistencia de un comportamiento</em>, no la exactitud de un saldo.</p>
+</div>
+<div class="no warn">
+  <span class="lb">El defecto</span>
+  <p>Once controles dicen «recurrente» u «ongoing». <strong>No se puede dimensionar una muestra a partir de «recurrente».</strong> ¿Es diario? ¿Hay 3 pagos por semana o 300? Y casi todos esos controles terminaron con pruebas que son pura indagación. No es coincidencia: un campo mal completado en la planificación degrada la evidencia varias columnas después, sin que nadie tome la decisión explícita de bajar el estándar.</p>
+</div>
+
+<h2 id="s4f">Controles relacionados: una muestra, muchos atributos</h2>
+<p>La columna enlaza controles alrededor de un mismo riesgo. Tres funciones: consistencia de conclusiones, referencia cruzada para no duplicar trabajo (una conclusión dice literalmente «este resultado está en el programa de project management»), y sobre todo <strong>eficiencia de muestreo</strong>.</p>
+<div class="no idea">
+  <span class="lb">La mayor palanca de eficiencia del campo</span>
+  <p>El auditor selecciona cinco proyectos una vez, pide el expediente completo una vez, y contra ese mismo expediente verifica doce atributos que pertenecen a siete controles distintos. Además es lo más amable con el auditado: un pedido en lugar de siete a siete personas.</p>
+</div>
+
+<h2 id="s4g">Los tipos de prueba, de más fuerte a más débil</h2>
+<div class="flow">
+  <div class="st tl"><b>1 · Re-ejecución</b><span>El auditor rehace el control él mismo. <em>«Realizar un conteo del efectivo disponible y conciliar el total.»</em></span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>2 · Inspección de documentos</b><span>Evidencia física con fecha y autor. La mayoría de las pruebas de muestra</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st"><b>3 · Observación</b><span>Solo vale para el momento en que mirás. <em>«Recorrido del predio»</em>, <em>«inspeccionar visualmente dónde se guardan los medios de pago»</em></span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st"><b>4 · Confirmación externa</b><span>Viene de un tercero independiente. <em>«Verificar que los volúmenes descartados según el tercero concilien con el sistema.»</em></span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st am"><b>5 · Procedimientos analíticos</b><span>Detecta anomalías, no las explica. <em>«Análisis de tendencia de pagos a agentes»</em></span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>6 · Indagación</b><span><b>Nunca suficiente por sí sola.</b> Todo lo que empieza con «discutir…»</span></div>
+</div>
+
+<h3>La mejor prueba diseñada del archivo</h3>
+<div class="no qt">
+  <p>«Seleccionar un lote de pagos y verificar —<strong>mediante ensayo y error</strong>— si es posible cambiar o manipular algún dato al transferirlo a la aplicación bancaria. Verificar si hay un total de verificación (<em>hash total</em>) al transferir el lote entre el sistema contable y el de pagos, y que ese total no pueda ser alterado.»</p>
+</div>
+<p>El control es <strong>preventivo</strong>. ¿Cómo se prueba un control preventivo? La forma débil es preguntar «¿se puede modificar?» y anotar la respuesta. La forma fuerte es <strong>intentar defeatearlo</strong>. Es conceptualmente lo mismo que hace un pentester con un sistema, y la idea se traslada a muchísimos controles: <em>en vez de verificar que el candado está puesto, tirá de la puerta.</em></p>
+
+<h3>Y una prueba que no se puede ejecutar</h3>
+<div class="no warn">
+  <p><strong>Selección de proveedores.</strong> Diseño esperado: tres cotizaciones de tres proveedores; mínimo 60 días de plazo de pago; uso de uno de los tres acuerdos marco estándar.</p>
+  <p><strong>Prueba completa:</strong> <em>«Verificar que se sigue el Manual Global de Compras.»</em> Una línea. Sin muestra, sin atributos, sin población. Y el control está marcado como <b>riesgo medio/alto con prueba de detalle</b>.</p>
+</div>
+<p>El diseño esperado tenía todo para escribir una prueba excelente: tres atributos binarios. Bastaba con «seleccionar 5 órdenes de compra de proyecto mayores a 50K y verificar los tres atributos». La población incluso estaba pedida en la lista. Buen ejercicio: reescribí esa celda. Es exactamente el trabajo de un senior revisando un programa antes de aprobarlo.</p>
+
+<h2 id="s4h">Puntos de atención: el senior hablándole al junior</h2>
+<p>Esta columna no existe en muchos programas y es de lo mejor del archivo. Contiene lo que no está en ninguna política: contexto, señales de alerta, y cómo interpretar resultados ambiguos.</p>
+
+<div class="no qt">
+  <span class="lb">El mejor consejo del workbook · cierre mensual</span>
+  <p>«<strong>Si no se usa una checklist firmada</strong>, determinar cómo el management valida que los chequeos se realizan. <strong>El control apunta a establecer que los controles se realizan; en ubicaciones pequeñas esto puede hacerlo un equipo chico, lo que puede derivar en una firma menos formal.</strong>»</p>
+</div>
+<p>El senior le está diciendo al junior: <em>no escribas un hallazgo solo porque el formulario no está firmado. El objetivo es que el cierre se haga bien, no que haya una casilla tildada. En una oficina de seis personas, exigir la formalidad de una de doscientas es desproporcionado.</em></p>
+<p>Eso es <strong>proporcionalidad</strong>, y es la diferencia entre un auditor útil y uno que genera resistencia. Un auditor que reporta 40 hallazgos de formalismo consigue que dejen de tomarlo en serio — y entonces los tres que sí importaban tampoco se arreglan.</p>
+
+<div class="no qt">
+  <span class="lb">El segundo mejor · aprobación de pagos</span>
+  <p>«Entender cómo se hace el proceso de aprobación (revisión línea por línea, o aprobación global del lote) <strong>para identificar una potencial falta de foco al revisar lotes de pagos</strong>.»</p>
+</div>
+<p>La política exige doble aprobación. El sistema la exige. Auditás y el 100% de los pagos tiene dos aprobaciones. ¿Control efectivo? <strong>No necesariamente.</strong> Si el segundo aprobador recibe un lote de 400 pagos y hace un clic, el control se <em>ejecuta</em> pero no <em>funciona</em>. La evidencia documental se ve idéntica en ambos casos; solo se detecta preguntando <em>cómo</em>.</p>
+
+<div class="tw">
+<table>
+<tr><th>Control</th><th>Punto de atención</th><th>Qué enseña</th></tr>
+<tr><td>Agentes</td><td>«Los agentes de compras se usan para despacho aduanero, permisos de transporte, visas y <b>otros procesos que requieren interacción con instituciones gubernamentales</b>»</td><td>Dónde está realmente el riesgo de soborno: no en el agente, en el contacto con funcionarios</td></tr>
+<tr><td>Descarte de material</td><td>«Segregación entre proponer y aprobar el descarte, <b>para asegurar que ningún equipo valioso salga disfrazado de chatarra</b>»</td><td>Nombra el esquema de fraude. Un junior que no lo sabe, no lo busca</td></tr>
+<tr><td>Asientos manuales</td><td>«Un número alto puede indicar un cierre mensual ineficiente»</td><td>Leer una métrica como síntoma</td></tr>
+<tr><td>Horas</td><td>«Si un empleado hace mucha sobrehora hay <b>un mayor riesgo de seguridad</b> porque hace jornadas largas»</td><td>Conecta un control financiero con un riesgo de seguridad física</td></tr>
+</table>
+</div>
+<p>Ese último merece un párrafo. El control existe formalmente para controlar <em>costos</em>. Pero el senior anota que el mismo dato es un indicador de riesgo de accidente. <strong>Un auditor con criterio lee el dato para lo que sirve, no solo para lo que el control dice que sirve.</strong> En una empresa de izaje pesado, la fatiga mata.</p>
+
+<h2 id="s4i">La columna vacía que rompe el expediente</h2>
+<p>La columna «¿hallazgo?» está vacía en las 73 filas. Y su vacío explica otro: en la pestaña de hallazgos, la columna «referencia al control» también está vacía. <strong>El vínculo entre los 15 hallazgos y los 73 controles nunca se estableció.</strong></p>
+<div class="cards c2">
+  <div class="cd"><h4>De hallazgo hacia control</h4><p>Un revisor tiene que poder tomar cualquier hallazgo y llegar a la prueba que lo sostiene. Y si el management lo discute en el cierre, el auditor debe abrir el papel en diez segundos.</p></div>
+  <div class="cd"><h4>De control hacia hallazgo</h4><p>Hay que poder verificar que <b>toda prueba fallida produjo un hallazgo, o una decisión documentada de no reportarla</b>. Ésta es la dirección que nadie mira, y la más peligrosa.</p></div>
+</div>
+<p>Caso concreto: una conclusión dice que <em>ninguno</em> de los cinco proyectos muestreados de una línea fue cerrado en el sistema. Una excepción del 100%. <strong>No aparece en la lista de hallazgos</strong>, y no hay rastro de una decisión de no reportarla.</p>
+
+<h2 id="s4j">Resumen de la parte 4</h2>
+<ol>
+<li><strong>El riesgo bien escrito es el que hace posible la prueba.</strong> Si no sabés cómo probar algo, mirá cómo escribiste el riesgo.</li>
+<li><strong>El diseño esperado es el criterio, y se escribe antes.</strong> Con actor, acción, umbral y evidencia. Y con la palabra <em>visiblemente</em>.</li>
+<li><strong>La frecuencia dimensiona la muestra.</strong> «Recurrente» no es una frecuencia.</li>
+<li><strong>Una muestra, muchos atributos, muchos controles.</strong></li>
+<li><strong>La conclusión distingue hecho de opinión</strong>, cuenta las excepciones, explica por qué unas pesan más que otras, y marca lo que quedó abierto.</li>
+</ol>
+
+<div class="pn">
+  <a href="#p3"><span>Anterior</span><b>← Parte 3</b></a>
+  <a class="nx" href="#p5"><span>Sigue</span><b>Parte 5 · Los ciclos →</b></a>
+</div>
+</section>
+
+<section id="p5" class="part" data-t="Los ciclos del negocio">
+<div class="ph">
+  <span class="pk">Parte 5</span>
+  <h1>Los ciclos del negocio</h1>
+  <p class="lead">Los 73 controles agrupados en cuatro bloques, y el razonamiento de por qué cada uno existe.</p>
+</div>
+
+<h2 id="s5a">El ciclo de proyectos</h2>
+<p>Veintiséis de los 73 controles siguen un solo proyecto desde que es una oportunidad comercial hasta que se cierra en el sistema.</p>
+
+<div class="flow">
+  <div class="st gy"><b>1 · Venta y oferta</b><span class="tagl">SAL05</span><span class="tagl">SAL06</span><span class="tagl">SAL07</span><span class="tagl">SAL08</span><span>Sin conclusión documentada</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>2 · Contrato</b><span class="tagl">CM01</span><span>2 de 5 sin contrato firmado en archivo</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>3 · Traspaso a obra</b><span class="tagl">SAL09</span><span class="tagl">OPS01</span><span class="tagl">OPS02</span><span>3 de 5 con formulario de traspaso</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>4 · Monitoreo mensual</b><span class="tagl">OPS03</span><span class="tagl">FIN01</span><span>Formularios correctos pero vacíos de contenido</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>5 · Facturación y cambios</b><span class="tagl">OPS04</span><span class="tagl">OPS05</span><span class="tagl">FIN02</span><span>Trabajo antes de la orden de cambio · sin plan de facturación</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>6 · Cierre y lecciones</b><span class="tagl">OPS06</span><span class="tagl">OPS07</span><span class="tagl">FIN03</span><span>Sin lecciones aprendidas · faltan firmas · un cierre un año tarde</span></div>
+</div>
+
+<div class="tw">
+<table>
+<tr><th>Fase</th><th>Qué teme el auditor</th></tr>
+<tr><td>Venta y oferta</td><td>Que se cotice mal, sin analizar riesgos y sin autorización según matriz</td></tr>
+<tr><td>Contrato</td><td>Firmar condiciones desfavorables sin que Legal, Impuestos y Seguros revisen</td></tr>
+<tr><td>Traspaso a obra</td><td>Que Ventas venda una cosa y Operaciones ejecute otra</td></tr>
+<tr><td>Monitoreo mensual</td><td>Que un proyecto se hunda en silencio hasta el cierre contable</td></tr>
+<tr><td>Facturación</td><td>Trabajar y no cobrar — fuga de ingresos</td></tr>
+<tr><td>Cierre</td><td>No aprender: repetir los mismos errores proyecto tras proyecto</td></tr>
+</table>
+</div>
+
+<div class="no warn">
+  <span class="lb">El patrón, que vale más que el detalle</span>
+  <p>En las cinco fases es el mismo: <strong>el formulario existe y está firmado, pero el contenido es pobre.</strong> Eso es un <em>control cosmético</em> — se ejecuta para cumplir, no para controlar. Y es mucho más difícil de reportar que un control ausente, porque el management te muestra el formulario firmado y técnicamente tiene razón. La única forma de sostenerlo es pedir la evidencia del contenido, no del formulario.</p>
+</div>
+<div class="no warn">
+  <span class="lb">La brecha más importante</span>
+  <p>La fase de venta quedó sin concluir, y es la que fija todo lo demás. El precio, el alcance y los riesgos asumidos se deciden ahí; las cinco fases siguientes solo administran esa decisión. <strong>Un proyecto mal cotizado no se arregla con buen monitoreo.</strong></p>
+</div>
+
+<h2 id="s5b">Compras: el único ciclo con alcance profundo</h2>
+<p>Los cuatro controles de compras son los únicos donde los cuatro se marcaron para prueba de detalle. Y salió el hallazgo más duro.</p>
+
+<div class="cmp">
+  <div class="ok">
+    <div class="hd">Secuencia que exige la política</div>
+    <p style="font-size:16px"><b>Pedido → Servicio → Factura → Pago</b></p>
+    <p>La orden de compra se emite <b>antes</b> de asumir el compromiso, siguiendo el flujo de aprobación de la matriz de autorización.</p>
+  </div>
+  <div class="bad">
+    <div class="hd">Lo observado en 4 de 7 muestras</div>
+    <p style="font-size:16px"><b>Servicio → Factura → Pedido → Pago</b></p>
+    <p>La factura fue recibida y contabilizada <b>antes</b> de que se emitiera la orden de compra.</p>
+  </div>
+</div>
+
+<p>Por qué no es un tema de prolijidad administrativa. El pedido de compra es un <strong>control preventivo</strong>: existe para que alguien con autoridad apruebe el gasto antes de que la empresa quede comprometida. Cuando se emite después de la factura, se convierte en un trámite para que la factura pase por el sistema.</p>
+<div class="flow">
+  <div class="st co"><b>La aprobación deja de existir</b><span>Nadie autorizó el gasto; alguien lo regularizó. Aprobar algo que ya se consumió no es una decisión</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>La conciliación a tres vías se vuelve circular</b><span>El sistema compara pedido contra factura y da coincidencia perfecta — porque el pedido se copió de la factura. <b>El control informa «conforme» precisamente cuando está roto</b></span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>Se pierde la visibilidad de compromisos</b><span>Los proyectos no saben qué deben hasta que llega la factura</span></div>
+</div>
+<p>Y hay un segundo hallazgo que conviene mirar junto: <em>«conflicto de segregación de funciones: el pedido de compra lo genera el propio equipo de Compras»</em>. Quien pide y quien compra son la misma persona. Combinado con lo anterior: <strong>el pedido no se aprueba antes, y lo emite el mismo que compra.</strong> Las dos capas que debían ser independientes colapsaron en una.</p>
+
+<div class="no idea">
+  <span class="lb">El método, no el hallazgo</span>
+  <p><strong>1.</strong> La trazabilidad completa funcionó acá y en ningún otro lado: input del dueño global → riesgo alto → cuatro controles con prueba de detalle → 7 muestras → dos hallazgos.</p>
+  <p><strong>2.</strong> «1 de 7 no pudo verificarse porque la factura no está adjunta en el sistema» — el auditor lo dice explícitamente. No lo contó como cumplido ni como incumplido. Es la forma correcta de tratar un ítem sin evidencia, y de paso <em>eso también es un hallazgo</em>.</p>
+</div>
+
+<h2 id="s5c">Pagos y efectivo: la lógica anti-fraude</h2>
+<p>Este bloque no está diseñado alrededor de un proceso sino alrededor de <strong>un escenario de fraude</strong>: que salga dinero hacia una cuenta que no corresponde. La estructura es de capas — el fraude tiene que vencerlas todas.</p>
+
+<div class="stack">
+  <div class="st co"><b>Riesgo: pago a una cuenta indebida</b></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="ly">Alta y cambio de proveedor validados<small>FIN22</small></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="ly">Segregación de funciones en el ERP<small>GOV01</small></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="ly">Conciliación a tres vías<small>PRO03</small></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="ly">Doble aprobación según matriz<small>FIN04</small></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="ly">Lote de pagos no modificable<small>FIN05</small></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>Si las cinco fallan: salida de fondos</b></div>
+</div>
+
+<p>Esto se llama <strong>defensa en profundidad</strong>, y tiene una consecuencia práctica: no alcanza con verificar que un control existe; hay que entender <em>qué capa cubre cada uno</em>. Si dos controles tapan el mismo agujero y ninguno tapa el siguiente, la organización tiene la sensación de estar protegida sin estarlo.</p>
+
+<div class="no warn">
+  <span class="lb">El remate incómodo</span>
+  <p>Los doce controles de pagos y efectivo se calificaron como <strong>riesgo bajo y no se sometieron a prueba de detalle</strong>. Se probaron por indagación.</p>
+  <p>Y sin embargo, uno de los hallazgos más severos salió justo de acá: «conflictos críticos y altos de segregación de funciones sin controles mitigantes, y usuarios con accesos amplios innecesarios».</p>
+</div>
+<p>¿De dónde salió, si no hubo muestreo? De la columna de trabajo previo: <em>«revisar el portal de gestión de accesos; revisar el tablero de segregación de funciones»</em>. El auditor <strong>miró un tablero que la propia organización genera</strong>.</p>
+<div class="cards c2">
+  <div class="cd"><h4>El hallazgo más severo costó casi nada</h4><p>Un tablero existente, bien leído. La analítica y los reportes que la empresa ya produce son la fuente más barata de hallazgos, y la más subutilizada.</p></div>
+  <div class="cd"><h4>Y contradice la calificación de riesgo</h4><p>Si los conflictos críticos estaban sin mitigar, la premisa de que la capa de segregación funcionaba —que es la que justifica no probar las demás— no se sostenía. Es el problema circular de la parte 2, en concreto.</p></div>
+</div>
+
+<h2 id="s5d">Los ciclos restantes</h2>
+<div class="tw">
+<table>
+<tr><th>Ciclo</th><th>Qué busca el auditor</th><th>Estado</th></tr>
+<tr><td><b>Horas y personal de campo</b></td><td>Que las horas sean reales, aprobadas por el dueño del presupuesto e imputadas al proyecto correcto. <b>Son el costo y la base de facturación</b></td><td>Riesgo alto y <b>sin conclusión</b>. Un control no tiene ni pasos de prueba escritos. En hallazgos hay una fila con la descripción vacía</td></tr>
+<tr><td><b>Ética y cumplimiento</b></td><td>Terceros que abren puertas, regalos y atenciones, caja chica. El riesgo real está en el <b>contacto con funcionarios públicos</b></td><td>Riesgo bajo, sin muestreo. Los dos inputs de compliance de la planificación quedaron sin cubrir</td></tr>
+<tr><td><b>Activos e inventarios</b></td><td>Que el registro concilie con contabilidad, que el equipo caro no se subutilice, y que <b>nada valioso salga disfrazado de chatarra</b></td><td>Dos controles con riesgo alto, sin conclusión. Inventarios: conteos sin planilla → hallazgo</td></tr>
+<tr><td><b>Recursos humanos</b></td><td>Contratación con doble aprobación, cláusulas de confidencialidad y no competencia, evaluación de desempeño, baja ordenada</td><td>Riesgo bajo. Sin política salarial documentada → hallazgo de diseño</td></tr>
+<tr><td><b>Seguridad y calidad</b></td><td>Observación física del predio, gestión de incidentes, liderazgo visible en seguridad</td><td><b>El único bloque probado casi enteramente por observación directa, y produjo 3 de los 15 hallazgos</b></td></tr>
+</table>
+</div>
+
+<h2 id="s5e">Lo que muestra el conjunto</h2>
+<div class="no idea">
+  <p><strong>Los hallazgos no salieron de donde el equipo puso el alcance.</strong> Se marcaron 10 controles para prueba de detalle; de ahí salieron 3 hallazgos, y solo compras entregó lo prometido.</p>
+</div>
+<p>Los otros doce salieron de:</p>
+<ul>
+<li><strong>caminar el predio</strong> dos horas el primer día — 3 hallazgos;</li>
+<li><strong>leer un tablero</strong> que la empresa ya generaba — el de segregación de funciones;</li>
+<li><strong>pedir un documento</strong> que no existía — inventario, política salarial;</li>
+<li>y <strong>cinco proyectos muestreados para un control, reutilizados para siete</strong> — todo el bloque de proyectos.</li>
+</ul>
+<p>No es un fracaso del scoping: es la naturaleza del trabajo. <strong>La evaluación de riesgos te dice dónde mirar con lupa, pero buena parte de lo que vas a encontrar aparece porque estuviste ahí, con los ojos abiertos, haciendo otra cosa.</strong> Por eso importan el recorrido físico temprano, los catch-ups diarios para redirigir esfuerzo, y documentar <em>por qué</em> no se muestreó algo.</p>
+
+<div class="pn">
+  <a href="#p4"><span>Anterior</span><b>← Parte 4</b></a>
+  <a class="nx" href="#p6"><span>Sigue</span><b>Parte 6 · Muestreo →</b></a>
+</div>
+</section>
+
+
+<section id="p6" class="part" data-t="Muestreo y evidencia">
+<div class="ph">
+  <span class="pk">Parte 6</span>
+  <h1>Muestreo y evidencia</h1>
+  <p class="lead">Cómo el programa se convierte en trabajo hecho, y cómo se lee lo que quedó documentado.</p>
+</div>
+
+<h2 id="s6a">Anatomía de un papel de muestreo</h2>
+<div class="flow">
+  <div class="st pu"><b>1 · Población</b><span>De dónde se elige, y cuántos ítems tiene</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st pu"><b>2 · Plan de muestreo</b><span>Cuántos, de qué tipo y con qué criterio</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st pu"><b>3 · Selección</b><span>Los ítems elegidos, identificados uno a uno</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st pu"><b>4 · Matriz de atributos</b><span>Un atributo por columna, un resultado por celda</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>5 · Conclusión</b><span>Qué se probó, qué falló y qué significa</span></div>
+</div>
+
+<div class="tw">
+<table>
+<tr><th>Bloque</th><th>¿Está?</th><th>Detalle</th></tr>
+<tr><td>Población</td><td>Parcial</td><td>Se declara la fuente, pero <b>nunca se dice cuántos ítems tiene</b>. 5 de 12 proyectos y 5 de 600 son coberturas incomparables</td></tr>
+<tr><td>Plan de muestreo</td><td>Sí</td><td>Suelto al final de la hoja, sin conectar con nada</td></tr>
+<tr><td>Selección</td><td>Parcial</td><td>Un bloque identifica bien 5 oportunidades. Otro tiene 10 filas numeradas <b>completamente vacías</b></td></tr>
+<tr><td>Matriz</td><td>Sí</td><td>Muy bien diseñada. A medio llenar</td></tr>
+<tr><td><b>Conclusión</b></td><td><b>No</b></td><td>Vive en otra pestaña, sin referencia cruzada en ninguna dirección</td></tr>
+</table>
+</div>
+<div class="no warn">
+  <p><strong>La evidencia y la conclusión están en pestañas distintas y no se referencian entre sí.</strong> Quien lee la matriz no ve qué se concluyó; quien lee la conclusión no puede llegar a la evidencia.</p>
+</div>
+
+<h2 id="s6b">La matriz de atributos real</h2>
+<div class="tw mx">
+<table>
+<tr><th>Proyecto</th><th class="rf">SAL06</th><th class="rf">SAL06</th><th class="rf">SAL07</th><th class="rf">SAL08</th><th class="rf">SAL09</th><th class="rf">OPS01</th><th class="rf">CM01</th></tr>
+<tr><th></th><th>Plantilla</th><th>Cálculo</th><th>STORM</th><th>Autoriz.</th><th>PKOF</th><th>Forecast</th><th>Contrato</th></tr>
+<tr><td>Proyecto 1</td><td><span class="pill y">Y</span></td><td><span class="pill y">Y</span></td><td><span class="pill y">Y</span></td><td><span class="pill n">s/umbral</span></td><td><span class="pill y">Y</span></td><td><span class="pill q">*</span></td><td><span class="pill q">*</span></td></tr>
+<tr><td>Proyecto 2</td><td><span class="pill y">Y</span></td><td><span class="pill y">Y</span></td><td><span class="pill y">Y</span></td><td><span class="pill q">GTB?</span></td><td><span class="pill y">Y</span></td><td><span class="pill q">*</span></td><td><span class="pill q">*</span></td></tr>
+<tr><td>Proyecto 3</td><td><span class="pill y">Y</span></td><td><span class="pill y">Y</span></td><td><span class="pill y">Y</span></td><td><span class="pill q">RTB?</span></td><td><span class="pill y">Y</span></td><td><span class="pill q">*</span></td><td><span class="pill q">*</span></td></tr>
+<tr><td>Proyecto 4</td><td><span class="pill y">Y</span></td><td><span class="pill y">Y</span></td><td><span class="pill y">Y</span></td><td><span class="pill n">s/umbral</span></td><td><span class="pill y">Y</span></td><td><span class="pill n">N/A</span></td><td><span class="pill n">N/A</span></td></tr>
+<tr><td>Proyecto 5</td><td><span class="pill q">?</span></td><td><span class="pill n">N/A</span></td><td><span class="pill y">Y</span></td><td><span class="pill q">RTB?</span></td><td><span class="pill n">N/A</span></td><td><span class="pill n">N/A</span></td><td><span class="pill n">N/A</span></td></tr>
+</table>
+</div>
+<div class="lg">
+  <span><i style="background:var(--tealbg);border:1px solid var(--teal)"></i>Verificado y cumple</span>
+  <span><i style="background:var(--graybg);border:1px solid var(--line2)"></i>No aplica, con motivo</span>
+  <span><i style="background:var(--coralbg);border:1px solid var(--coral)"></i>Indeterminado</span>
+</div>
+
+<h3>Lo que hace bien</h3>
+<ul>
+<li><strong>Un atributo por columna, con la referencia del control encima.</strong> Se puede ir de cualquier celda al control, y de ahí al riesgo.</li>
+<li><strong>Comentarios en los encabezados</strong> que definen cuándo aplica cada atributo: «obligatorio para proyectos categoría 0», «obligatorio para 0 y 1». Evita que alguien marque «no aplica» por conveniencia.</li>
+<li><strong>Una muestra, siete controles.</strong></li>
+</ul>
+
+<h3>Lo que rompe</h3>
+<div class="no warn">
+  <span class="lb">1 · Marcas sin leyenda</span>
+  <p>El asterisco aparece en unas veinte celdas y <strong>no hay ninguna leyenda que lo defina</strong>. En un papel de trabajo, los símbolos que marcan qué se hizo con cada ítem se llaman <em>marcas de auditoría (tickmarks)</em>, y toda marca necesita una leyenda en el mismo papel. Sin ella, un revisor no puede distinguir «probado sin excepción» de «todavía no lo miré» — que son conclusiones opuestas.</p>
+</div>
+<div class="no warn">
+  <span class="lb">2 · Preguntas del auditor sin cerrar</span>
+  <p>Las celdas que dicen <code>GTB?</code> y <code>RTB?</code> se refieren a los comités que deben aprobar ofertas según el monto. El auditor no determinó cuál correspondía. Dejar preguntas abiertas durante el campo es normal; <strong>lo que no es normal es que no exista una lista de asuntos abiertos</strong> donde se las siga hasta cerrarlas.</p>
+</div>
+<div class="no warn">
+  <span class="lb">3 · Referencias equivocadas y valores ambiguos</span>
+  <p>El encabezado de un bloque cita un código que en el programa corresponde a otro control. Y los tres clientes muestreados tienen «límite de crédito = 0»: ¿cero es un valor —no se asignó límite, posible hallazgo— o una celda sin llenar? <strong>Nunca dejes un valor cuyo significado dependa de la interpretación del lector.</strong></p>
+</div>
+
+<h2 id="s6c">Cómo se elige la muestra</h2>
+<p>El plan del papel dice, en taquigrafía: <em>«Abiertos: 3 categoría 0/1 · 2 suma alzada y 2 tiempo y materiales. Cerrados: formulario de cierre · 2 con orden de cambio y 2 con reclamo · lecciones aprendidas.»</em></p>
+<p>Es un <strong>muestreo estratificado y dirigido</strong>, y está bien pensado: se parte por tipo de contrato <em>porque el control opera distinto en cada uno</em>. En suma alzada verificás el plan de facturación; en tiempo y materiales, los partes diarios firmados por el cliente. Muestrear al azar mezclando ambos te daría una muestra donde la mitad de los atributos no aplican.</p>
+
+<div class="cmp">
+  <div class="ok"><div class="hd">Estadístico</div>
+    <p><b>Cómo se elige:</b> aleatorio, con tamaño calculado.</p>
+    <p><b>Permite decir:</b> «con 90% de confianza, la tasa de error de la población no supera X%».</p>
+    <p><b>Uso típico:</b> auditoría externa, poblaciones grandes.</p></div>
+  <div><div class="hd">Dirigido / por juicio</div>
+    <p><b>Cómo se elige:</b> por criterio de riesgo — mayor valor, inusual, período crítico.</p>
+    <p><b>Permite decir:</b> «encontramos 2 casos». <b>Nunca</b> «el 40% de la población falla».</p>
+    <p><b>Uso típico:</b> <b>auditoría interna, casi siempre.</b></p></div>
+</div>
+<div class="no idea">
+  <p>A favor del equipo: las conclusiones están redactadas correctamente para muestreo dirigido. Dicen <em>«dos de los cinco proyectos seleccionados»</em>, no <em>«el 40% de los proyectos»</em>. Proyectar una muestra dirigida es un error técnico que invalida el hallazgo.</p>
+</div>
+<p><strong>Lo que falta, y es lo primero que preguntaría un revisor:</strong> el criterio de selección (¿al azar? ¿los de mayor valor? ¿los cinco primeros de la lista?) y el tamaño de la población.</p>
+
+<h2 id="s6d">Una prueba que nunca se ejecutó</h2>
+<div class="flow">
+  <div class="st tl"><b>Lista de clientes nuevos</b><span>Pedido en la lista → <b>recibido</b> · etapa 1 completa</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>Selección de 3 clientes</b><span>Hecha</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>Evidencia de cada uno</b><span><b>No recibida</b> · etapa 2 falla</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>Prueba ejecutada</b><span>No</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st gy"><b>Conclusión en el programa</b><span>Celda vacía</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st gy"><b>Hallazgo o limitación reportada</b><span>Ninguna</span></div>
+</div>
+<p>El control cubre el riesgo «hacer negocios con clientes insolventes puede resultar en pérdida de ingresos». <strong>Nunca se probó, y nada en el archivo lo señala.</strong></p>
+<div class="no warn">
+  <p>Éste es el mecanismo por el cual una prueba no ejecutada se convierte silenciosamente en un área aparentemente cubierta. La cadena se corta en un lugar y el silencio se propaga hasta el informe. Por eso el checklist insistía en documentar <em>por qué</em> no se hizo prueba de detalle: <strong>la no-ejecución también es un resultado que hay que reportar.</strong></p>
+</div>
+
+<h2 id="s6e">Las doce conclusiones, leídas</h2>
+<div class="tw">
+<table>
+<tr><th>Control</th><th>Evidencia</th><th>Qué concluyó</th><th>Lectura</th></tr>
+<tr><td>Gestión de contratos</td><td>Inspección de 5 expedientes</td><td>4/5 con autorización firmada; <b>2 sin contrato firmado</b></td><td>Muy buena. Separa la falla formal de la sustantiva y <b>verifica la cronología</b> entre documentos</td></tr>
+<tr><td>Monitoreo mensual (finanzas)</td><td>Inspección + indagación + <b>metadatos</b></td><td>Formularios correctos pero vacíos; la minuta de respaldo creada el día del pedido</td><td><b>La mejor.</b> Escepticismo profesional documentado</td></tr>
+<tr><td>Facturación de proyectos</td><td>Inspección de facturas</td><td>Aprobación previa, doble chequeo, facturación dentro del mes; <b>sin plan de facturación interno</b></td><td>Buena. Reconoce un control adicional no previsto en el diseño esperado</td></tr>
+<tr><td>Cierre de proyecto (finanzas)</td><td>—</td><td>Remite al programa de operaciones</td><td>Correcto: referencia cruzada, no duplica</td></tr>
+<tr><td>Traspaso a operaciones</td><td>Inspección + comprensión del negocio</td><td>La línea de alquiler no usa el formulario global; se identificó el equivalente; 3/5</td><td>Muy buena. Sustancia sobre forma + recomendación implementable</td></tr>
+<tr><td>Análisis de riesgos del proyecto</td><td>Inspección</td><td>5/5 completo; el de nivel 2 con los participantes correctos</td><td>Correcta y breve. <b>También se documenta lo que funciona</b></td></tr>
+<tr><td>Monitoreo mensual (operaciones)</td><td>Inspección + <b>analítica</b></td><td>Herramienta correcta, «parecen bien mantenidos»; <b>5 proyectos con costo y sin ingreso</b> (abierto)</td><td>Mixta. La analítica es lo mejor del archivo; «parecen» no es una conclusión</td></tr>
+<tr><td>Facturación (operaciones)</td><td>Inspección + control compensatorio</td><td>Horas confirmadas, factura emitida y enviada; existe un Excel mensual conjunto entre operaciones y finanzas</td><td>Buena. Identifica un control compensatorio real, no declarado en la política</td></tr>
+<tr><td>Órdenes de cambio</td><td>Inspección</td><td>2/5 con trabajo antes de la orden, <b>calificados distinto con razones</b></td><td><b>La mejor en juicio diferenciado</b></td></tr>
+<tr><td>Cierre de proyecto</td><td>Inspección</td><td>Faltan lecciones y firmas; un cierre un año tarde; <b>ningún proyecto de alquiler cerrado en el sistema</b></td><td>Sólida en hechos. La calificación quedó enterrada en prosa y la excepción del 100% nunca llegó a hallazgos</td></tr>
+<tr><td>Lecciones aprendidas</td><td>—</td><td>«Ver el control anterior»</td><td>Correcto</td></tr>
+<tr><td>Permisos y licencias</td><td>Indagación pura</td><td>Descripción del proceso</td><td>Suficiente <b>solo porque el alcance era limitado</b>. No sostiene una conclusión de efectividad</td></tr>
+</table>
+</div>
+
+<h3>La mejor conclusión del archivo</h3>
+<div class="no qt">
+  <p>«Dos de los cinco proyectos parecen haber tenido trabajo ejecutado <strong>antes</strong> de recibir una orden de cambio.</p>
+  <p>Uno corresponde a una actualización de tarifas que será retroactiva a efectos de facturación. <strong>Esto se considera de bajo riesgo dado que ya el año pasado se recibió una orden de cambio por la actualización equivalente.</strong> No tenerla antes del vencimiento de la anterior <strong>podría demorar el proceso de facturación</strong>.</p>
+  <p>El otro proyecto tuvo un cambio por trabajos adicionales. Se notificó al cliente por correo con una estimación del valor, pero <strong>no hay documentación formal que indique aceptación del cliente</strong>. Fue facturado recientemente y la factura aún no está vencida.»</p>
+</div>
+<ul>
+<li>Dos excepciones del <strong>mismo tipo formal</strong>, y el auditor <strong>las califica distinto con el razonamiento escrito</strong>.</li>
+<li>La primera → bajo riesgo, y da la razón: <strong>hay un precedente</strong>. Pero igual nombra la consecuencia residual.</li>
+<li>La segunda → mayor preocupación, y también da la razón: sin aceptación documentada, es un crédito potencialmente inexigible.</li>
+<li>Y el remate: «la factura aún no está vencida». <strong>Todavía no sabemos si el cliente va a pagar.</strong> No concluye pérdida ni concluye que está bien: deja el riesgo abierto y bien descripto.</li>
+</ul>
+<p>Un junior habría escrito «2 de 5 excepciones» y seguido.</p>
+
+<h3>La otra que vale estudiar</h3>
+<div class="no qt">
+  <p>«El traspaso tradicional de proyectos no necesariamente aplica a la línea de alquiler. Se seleccionaron cinco y se pidió la <em>orden de venta</em>, que ventas envía a operaciones cuando se adjudica un trabajo — es esencialmente el formulario de traspaso. De las cinco, tres fueron provistas; las dos restantes son de una sucursal que envía una cadena de correos. <strong>Se sugiere implementar la orden de venta en todas las sucursales de la región, ya que el documento es bastante detallado y provee la información relevante para operaciones.</strong>»</p>
+</div>
+<div class="cards c2">
+  <div class="cd"><h4>Sustancia sobre forma</h4><p>El control global fue diseñado para proyectos grandes. Exigirlo en una línea transaccional sería absurdo. El auditor <b>no fuerza el criterio</b>: busca el control equivalente que cumple el mismo objetivo.</p></div>
+  <div class="cd"><h4>Una recomendación que se implementa</h4><p>No inventa nada: <b>extiende una práctica que ya existe adentro</b>. Está internamente validada, es barata, y es difícil de resistir. Además responde al input del director sobre «consistencia entre sucursales».</p></div>
+</div>
+<div class="no idea">
+  <p><strong>La mejor recomendación casi nunca es un control nuevo. Es la extensión de un control que ya funciona en algún rincón de la organización.</strong></p>
+</div>
+
+<h3>Los dos patrones</h3>
+<div class="cmp">
+  <div class="ok"><div class="hd">Las mejores conclusiones</div><p>Tienen todas la misma forma: <b>no se conforman con el primer documento.</b> Una revisa fechas entre documentos. Otra revisa la fecha del archivo. Otra pregunta si el cliente aceptó. Otra cruza costos contra ingresos. En los cuatro casos el auditor recibió algo que parecía correcto y <b>dio un paso más</b>.</p></div>
+  <div class="bad"><div class="hd">Las débiles</div><p>No son las que encuentran menos: son las que usan verbos vagos. «Parecen bien mantenidos», «no es una preocupación mayor», «se discutió el proceso». Ninguna de esas frases se puede auditar hacia atrás.</p></div>
+</div>
+
+<h2 id="s6f">Cómo se escribe una conclusión: la lista de siete</h2>
+<ol>
+<li><strong>Población e ítems seleccionados</strong> — «de los 34 proyectos abiertos, se seleccionaron 5 por mayor valor».</li>
+<li><strong>Atributos verificados</strong> — qué se miró exactamente.</li>
+<li><strong>Resultado con números</strong> — «3 de 5», no «en general».</li>
+<li><strong>Las excepciones descriptas</strong> — qué le faltaba a cada una.</li>
+<li><strong>La explicación de la excepción</strong> — pedida al auditado antes de reportarla.</li>
+<li><strong>Hecho separado de opinión</strong> — «el archivo estaba fechado el día del pedido» (hecho) vs. «la minuta no respalda una reunión previa» (conclusión sobre ese hecho).</li>
+<li><strong>Los asuntos abiertos</strong>, con quién quedó pendiente y qué falta.</li>
+</ol>
+<div class="no idea">
+  <span class="lb">La regla que resume las seis partes</span>
+  <p><strong>Todo lo que el auditor no pudo hacer tiene que ser tan visible como lo que hizo.</strong> Una prueba no ejecutada, una evidencia que no llegó, una duda sin cerrar: si no aparecen en el informe, el lector va a asumir cobertura donde no la hubo. Es el único error de auditoría que no se puede corregir después, porque nadie sabe que existe.</p>
+</div>
+
+<div class="pn">
+  <a href="#p5"><span>Anterior</span><b>← Parte 5</b></a>
+  <a class="nx" href="#p7"><span>Sigue</span><b>Parte 7 · Hallazgos →</b></a>
+</div>
+</section>
+
+<section id="p7" class="part" data-t="Hallazgos y causa raíz">
+<div class="ph">
+  <span class="pk">Parte 7</span>
+  <h1>Hallazgos, causa raíz y recomendaciones</h1>
+  <p class="lead">La parte que convierte el trabajo en valor. Y donde este archivo está más incompleto — lo cual la vuelve ideal para aprender.</p>
+</div>
+
+<h2 id="s7a">La pestaña, como está</h2>
+<div class="tw nrw">
+<table>
+<tr><th>Columna</th><th>Estado</th></tr>
+<tr><td>Proceso de negocio</td><td>Llena</td></tr>
+<tr><td>Descripción del problema</td><td>Llena (14 de 15)</td></tr>
+<tr><td>Auditor</td><td>Llena</td></tr>
+<tr><td><b>Calificación</b></td><td><b>Vacía</b></td></tr>
+<tr><td><b>Causa raíz</b></td><td><b>Vacía</b></td></tr>
+<tr><td><b>Referencia al control</b></td><td><b>Vacía</b></td></tr>
+<tr><td><b>Referencia a la documentación</b></td><td><b>Vacía</b></td></tr>
+</table>
+</div>
+<p>Y una fila tiene el proceso cargado y la descripción en blanco: alguien anotó que había algo y no volvió.</p>
+<div class="no warn">
+  <p>Las cuatro columnas vacías son exactamente las cuatro cosas que convierten una observación en un hallazgo utilizable. <strong>Sin calificación no sabés a quién se reporta; sin causa raíz la solución va a fallar; sin referencia al control no se puede verificar; sin referencia a la documentación no se puede defender.</strong></p>
+</div>
+
+<h2 id="s7b">Los cuatro elementos de un hallazgo</h2>
+<p>Estructura fija y universal — igual en auditoría interna, externa y gubernamental.</p>
+
+<div class="cards c2">
+  <div class="cd"><h4>Condición</h4><p>Qué se encontró. El hecho, con números.</p></div>
+  <div class="cd"><h4>Criterio</h4><p>Qué debería ser. La política, la norma, el control esperado.</p></div>
+  <div class="cd"><h4>Causa</h4><p>Por qué ocurrió. No «no se siguió el procedimiento» — eso es reformular la condición.</p></div>
+  <div class="cd"><h4>Efecto</h4><p>Qué consecuencia tiene. Es lo que hace que alguien actúe.</p></div>
+</div>
+<div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+<div class="st tl"><b>Hallazgo</b><span>Los cuatro elementos juntos</span></div>
+<div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+<div class="st tl" style="margin-bottom:24px"><b>Recomendación</b><span>Ataca la causa, no el síntoma</span></div>
+
+<h3>El error más común, y está en esta pestaña</h3>
+<div class="no warn">
+  <p>«Implementar una metodología formal de conteo de stock.»<br>
+  «Realizar las lecciones aprendidas dentro de los dos meses.»<br>
+  «Obtener órdenes de cambio aprobadas antes de ejecutar el trabajo.»<br>
+  «Mantener un plan de facturación para los proyectos.»</p>
+  <p>Eso <strong>no son hallazgos: son recomendaciones.</strong> Están en imperativo, describen la solución, no el problema. Siete de los quince están escritos así.</p>
+</div>
+<ol>
+<li><strong>Te saltás el análisis.</strong> Nunca estableciste la condición, el criterio ni el efecto — o sea, nunca demostraste que hay un problema. Estás pidiendo un cambio sobre la base de tu preferencia.</li>
+<li><strong>El management no puede evaluarlo.</strong> No puede juzgar si la solución es correcta si no le dijiste qué salió mal sin ella.</li>
+<li><strong>Te apropiás del trabajo ajeno.</strong> Si vos escribís la solución y ellos la ejecutan, después no podés auditarla con independencia — y si era mala, el problema sigue vivo y ahora es tuyo.</li>
+</ol>
+<p>Además, <strong>no se puede calificar la severidad de una solución.</strong> Podés calificar «los conteos se realizan sin documentación, por lo que las existencias no pueden verificarse». No podés calificar «implementar una metodología formal».</p>
+
+<h2 id="s7c">Un hallazgo completo, reconstruido</h2>
+<p>Tomemos el mejor material del archivo y armémoslo entero. Esto es lo que debería estar en el informe:</p>
+
+<div class="flow">
+  <div class="st pu"><b>Condición</b><span>En 4 de 7 órdenes de compra muestreadas del período, la factura del proveedor fue recibida y contabilizada <b>antes</b> de que se emitiera la orden de compra. En 1 caso adicional no pudo verificarse la secuencia porque la factura no está adjunta en el sistema.</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st pu"><b>Criterio</b><span>El Manual Global de Compras establece que toda compra se basa en una orden con suficiente detalle, y que <b>la orden debe emitirse antes de asumir el compromiso</b>, siguiendo el flujo de la matriz de autorización. Control clave del grupo n.º 56. Además, un indicador del tablero de compras monitorea exactamente esta condición.</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st co"><b>Causa</b><span>— a determinar con el auditado —</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st pu"><b>Efecto</b><span>La orden deja de ser un control preventivo y pasa a ser un trámite de regularización. En consecuencia: el compromiso se asume sin aprobación previa; <b>la conciliación a tres vías se vuelve circular</b> —el sistema informa «conforme» precisamente cuando el control falló—; y los proyectos no tienen visibilidad de sus compromisos. Agravante: el hallazgo de segregación de funciones indica que la orden la emite el mismo equipo que compra.</span></div>
+</div>
+
+<div class="no idea">
+  <span class="lb">Lo que hace el elemento «efecto»</span>
+  <p>Transforma «un tema de secuencia de documentos» en «el control de aprobación de gastos no existe y el control automático que debería detectarlo está anulado». Sin ese párrafo, el management lee un problema administrativo y lo delega a un analista.</p>
+  <p><strong>Regla:</strong> si al escribir el efecto no lográs conectar el hecho con una pérdida, una exposición o una decisión mal tomada, probablemente no tengas un hallazgo — tengas una observación de mejora.</p>
+</div>
+
+<h2 id="s7d">La causa raíz: lo mejor del workbook, sin usar</h2>
+<p>En una hoja oculta hay una lista de ocho opciones que alimenta el desplegable de causa raíz. Es una taxonomía estructurada, en cuatro familias:</p>
+
+<div class="cards c2">
+  <div class="cd"><h4>Claridad</h4><p>· Roles y responsabilidades poco claras<br>· Política que no bajó a la práctica</p></div>
+  <div class="cd"><h4>Cultura</h4><p>· Tono y estilo del liderazgo<br>· Percepción del riesgo desalineada entre niveles</p></div>
+  <div class="cd"><h4>Competencia</h4><p>· Falta de conocimiento o habilidad<br>· No se sabe cómo ejecutar el control</p></div>
+  <div class="cd"><h4>Operación</h4><p>· Recursos o presupuesto insuficientes<br>· El control no es practicable</p></div>
+</div>
+
+<h3>Por qué una taxonomía cerrada le gana al texto libre</h3>
+<ol>
+<li><strong>Te obliga a pasar del síntoma.</strong> La causa que escribe todo auditor novato es «no se siguió el procedimiento». Eso no es una causa: es una reformulación de la condición. Ninguna de las ocho opciones te deja escribir eso.</li>
+<li><strong>Permite agregar.</strong> Si veinte hallazgos de siete auditorías usan la misma taxonomía, aparecen patrones: «el 60% de nuestros hallazgos del año son política que no bajó a la práctica» — eso no es un problema de las filiales, es de cómo el grupo despliega sus políticas.</li>
+<li><strong>La remediación tiene que coincidir con la familia de la causa.</strong></li>
+</ol>
+
+<div class="tw">
+<table>
+<tr><th>Si la causa es…</th><th>La solución que funciona</th><th>La que <b>no</b> funciona</th></tr>
+<tr><td>Roles poco claros</td><td>Definir y comunicar quién hace qué, con nombre y apellido</td><td>Capacitación</td></tr>
+<tr><td>Política que no bajó</td><td>Comunicación dirigida, ejemplos concretos, adaptación local</td><td>Reenviar la política por mail</td></tr>
+<tr><td>Tono del liderazgo</td><td>Cambio de comportamiento visible, indicadores en su evaluación</td><td>Cualquier control nuevo</td></tr>
+<tr><td>Percepción desalineada</td><td>Mostrar el impacto con datos propios, casos concretos</td><td>Insistir con la regla</td></tr>
+<tr><td>Falta de conocimiento</td><td>Capacitación, incorporar el perfil que falta</td><td>Un procedimiento más detallado</td></tr>
+<tr><td>No sabe cómo ejecutar</td><td>Instructivo paso a paso, acompañamiento inicial</td><td>Más política</td></tr>
+<tr><td>Recursos insuficientes</td><td>Presupuesto, dotación, o <b>controles compensatorios</b></td><td>Exigir cumplimiento</td></tr>
+<tr><td>Control no practicable</td><td><b>Rediseñar el control</b></td><td>Capacitar, insistir, escalar</td></tr>
+</table>
+</div>
+
+<div class="no warn">
+  <span class="lb">El error que hace fracasar las remediaciones</span>
+  <p>El caso clásico: el control no es practicable en la operación real, y la respuesta del management es «vamos a capacitar al equipo». Se capacita, se cierra el hallazgo, y al año siguiente reaparece idéntico — porque nunca fue un problema de conocimiento.</p>
+  <p>Por eso <strong>un hallazgo repetido es evidencia de causa raíz mal diagnosticada</strong>, y por eso «auditorías previas» es el primer factor de la evaluación de riesgos.</p>
+</div>
+
+<h3>La causa se pregunta, no se deduce</h3>
+<p>Un punto de método que casi nadie le dice a un auditor nuevo: <strong>la causa raíz no se infiere en el escritorio.</strong> Se obtiene preguntando, en el campo, a quien ejecuta el control. Y normalmente lo sabe perfectamente.</p>
+<div class="cards c2">
+  <div class="cd"><h4>Preguntas que funcionan</h4><p>«¿Cómo lo hacés en la práctica?» — no «¿seguís el procedimiento?», cuya respuesta siempre es sí.<br>«¿Qué te impide hacerlo como dice la política?»<br>«¿Cuándo funciona bien y cuándo no?»<br>«Si tuvieras que arreglarlo, ¿qué cambiarías?»</p></div>
+  <div class="cd"><h4>Cuándo preguntarlo</h4><p>El mejor momento es la discusión previa a la reunión de cierre: ya tenés el hecho documentado y el management tiene incentivo de explicar el porqué. Esa conversación es, en gran medida, el trabajo.</p></div>
+</div>
+
+<h2 id="s7e">Los quince hallazgos, clasificados</h2>
+<p class="pmeta">Las causas son hipótesis: el auditor debía confirmarlas preguntando.</p>
+<div class="tw">
+<table>
+<tr><th>Hallazgo, reformulado como condición</th><th>Control</th><th>Causa probable</th></tr>
+<tr><td>Riesgos en duchas de emergencia y lavaojos; orden y limpieza en talleres; protección personal distinta al estándar global</td><td>Seguridad</td><td>Operación: recursos · Claridad: política no bajada</td></tr>
+<tr><td>Baja tasa de cumplimiento de capacitaciones obligatorias</td><td>RRHH</td><td>Operación: recursos — personal de campo sin acceso</td></tr>
+<tr><td>Los conteos de inventario se realizan sin documentación formal</td><td>Inventarios</td><td>Competencia: no sabe cómo · Claridad</td></tr>
+<tr><td><i>(descripción en blanco)</i></td><td>Horas</td><td>—</td></tr>
+<tr><td>Contratos firmados no archivados o no disponibles</td><td>Contratos</td><td>Claridad: roles — ¿quién custodia el contrato?</td></tr>
+<tr><td>El formulario de traspaso no se usa en todas las sucursales</td><td>Traspaso</td><td>Claridad: política no bajada</td></tr>
+<tr><td>Los formularios de seguimiento mensual carecen de contenido sustantivo</td><td>Monitoreo</td><td><b>Cultura: percepción del riesgo</b> — se ve como reporte, no como herramienta</td></tr>
+<tr><td>Las lecciones aprendidas no se realizan ni se archivan</td><td>Cierre</td><td>Operación: recursos · Cultura</td></tr>
+<tr><td>Se ejecuta trabajo antes de obtener la orden de cambio firmada</td><td>Cambios</td><td><b>Operación: control no practicable</b> — el cliente pide urgencia</td></tr>
+<tr><td>No existe plan de facturación interno</td><td>Facturación</td><td>Claridad: política no bajada</td></tr>
+<tr><td>Conflictos críticos y altos de segregación sin controles mitigantes</td><td>Gobernanza</td><td><b>Operación: recursos</b> — equipo chico, no se puede segregar</td></tr>
+<tr><td>Facturas contabilizadas antes de emitirse la orden de compra (4 de 7)</td><td>Compras</td><td><b>Operación: control no practicable</b></td></tr>
+<tr><td>El pedido de compra lo genera el propio equipo de Compras</td><td>Compras</td><td>Operación: recursos</td></tr>
+</table>
+</div>
+
+<div class="no idea">
+  <span class="lb">Lo que dice la tabla completa</span>
+  <p>Ninguno de los quince es «competencia» en el sentido de gente que no sabe hacer su trabajo. Predominan <strong>«control no practicable» y «recursos»</strong>. Si eso se confirmara, la conclusión de la auditoría a nivel entidad no sería «la gente no cumple» sino <strong>«el marco de control global está diseñado para una operación más grande que ésta»</strong>. Ese es un mensaje muy distinto, dirigido al grupo y no a la filial — y es exactamente el tipo de insight que justifica la existencia de la auditoría interna.</p>
+</div>
+
+<div class="no ex">
+  <span class="lb">El ejemplo perfecto de desajuste causa-remedio</span>
+  <p>Si la causa de los conflictos de segregación es que el equipo es demasiado chico, la recomendación «resolver los conflictos» es inejecutable: no hay gente. La recomendación correcta es la que la propia política del grupo prevé: <strong>controles mitigantes documentados y aprobación formal de la excepción</strong>. El diseño esperado lo dice textualmente — los conflictos críticos solo se admiten «con controles mitigantes embebidos y aprobación del CFO por un máximo de 6 meses». La solución ya está escrita en la política; el hallazgo es que no se usó esa vía.</p>
+</div>
+
+<h2 id="s7f">Calificación de severidad</h2>
+<p>La severidad <strong>no</strong> es el monto involucrado. Se compone de:</p>
+<div class="cards c2">
+  <div class="cd"><h4>Impacto potencial</h4><p>Financiero, regulatorio, reputacional — y en este negocio también <b>de seguridad física</b>.</p></div>
+  <div class="cd"><h4>Probabilidad</h4><p>De que el riesgo se materialice.</p></div>
+  <div class="cd"><h4>Extensión</h4><p>¿Un caso aislado o sistémico? <b>4 de 7 es sistémico</b>; 1 de 20 puede ser un error humano.</p></div>
+  <div class="cd"><h4>Controles compensatorios</h4><p>¿Hay otra capa que atrape el error?</p></div>
+  <div class="cd"><h4>Recurrencia</h4><p>Si ya se reportó en una auditoría anterior, sube automáticamente.</p></div>
+  <div class="cd"><h4>Y tiene consecuencias</h4><p>Determina <b>a quién se distribuye el informe</b> —los altos llegan al comité de auditoría—, cuán rápido debe remediarse, y con qué intensidad se hace el seguimiento.</p></div>
+</div>
+
+<h2 id="s7g">La recomendación</h2>
+<ol>
+<li><strong>Ataca la causa, no el síntoma.</strong></li>
+<li><strong>Es específica y verificable</strong> — se puede saber si se hizo o no.</li>
+<li><strong>Es proporcionada</strong> — el costo del control no supera el del riesgo.</li>
+<li><strong>Deja la decisión de <em>cómo</em> al management</strong> — la recomendación dice qué debe lograrse; el plan de acción dice cómo.</li>
+<li><strong>Aprovecha lo que ya existe</strong> antes de crear algo nuevo.</li>
+</ol>
+
+<div class="cmp">
+  <div class="bad"><div class="hd">Mal escrita</div><p>«Mantener un plan de facturación para los proyectos.»</p><p>Se puede cerrar poniendo un Excel en una carpeta.</p></div>
+  <div class="ok"><div class="hd">Bien escrita</div><p>«Establecer, para los contratos a suma alzada, un plan de facturación acordado en la reunión de inicio de proyecto y conservado en el expediente, contra el cual el controlador pueda verificar mensualmente si se facturó todo lo devengado.»</p><p>Dice <b>quién</b>, <b>cuándo</b>, <b>dónde queda</b> y <b>para qué sirve</b>.</p></div>
+</div>
+
+<h2 id="s7h">Lo que viene después del hallazgo</h2>
+<div class="flow">
+  <div class="st am"><b>Comentario del management</b><span>Tres cosas obligatorias: <b>acción concreta, responsable con nombre, y fecha compromiso</b>. Sin las tres, el hallazgo no está cerrado — está anotado</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st am"><b>O aceptación de riesgo</b><span>El management puede no estar de acuerdo y decidir aceptar el riesgo. Es legítimo — es su negocio — pero se documenta con <b>quién lo aceptó y con qué nivel de autoridad</b>. Un hallazgo alto aceptado por un gerente medio no es una aceptación válida</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>Seguimiento</b><span>Se registra en el sistema y se sigue hasta el cierre. Y el cierre requiere <b>verificación</b>, no la palabra del management de que ya lo arregló</span></div>
+</div>
+<div class="no idea">
+  <p>Un hallazgo sin seguimiento verificado es una queja documentada. <strong>La auditoría interna no genera valor cuando encuentra el problema; lo genera cuando el problema deja de existir.</strong></p>
+</div>
+
+<h2 id="s7i">Resumen de la parte 7</h2>
+<ul>
+<li>Un hallazgo son cuatro elementos: <strong>condición, criterio, causa, efecto.</strong> Si falta el efecto, nadie actúa. Si falta la causa, la solución falla.</li>
+<li><strong>Escribí el problema, no la solución.</strong></li>
+<li>La <strong>causa raíz se pregunta en el campo</strong>, y una taxonomía cerrada te obliga a llegar hasta ella.</li>
+<li><strong>El remedio tiene que coincidir con la familia de la causa.</strong></li>
+<li>La severidad depende de impacto, probabilidad, <strong>extensión</strong> y controles compensatorios — no del monto.</li>
+<li>La mejor recomendación suele ser <strong>extender algo que ya funciona</strong> adentro de la organización.</li>
+</ul>
+
+<div class="pn">
+  <a href="#p6"><span>Anterior</span><b>← Parte 6</b></a>
+  <a class="nx" href="#p8"><span>Sigue</span><b>Parte 8 · Preguntas →</b></a>
+</div>
+</section>
+
+
+<section id="p8" class="part" data-t="Preguntas para un experto">
+<div class="ph">
+  <span class="pk">Parte 8</span>
+  <h1>Preguntas para un auditor experimentado</h1>
+  <p class="lead">Catorce. Todas nacen de algo concreto del workbook y ninguna se puede responder leyéndolo. Las marcadas con ★ son las cuatro que haría primero.</p>
+</div>
+
+<h2 id="s8a">Sobre el alcance y la evaluación de riesgos</h2>
+
+<div class="no ex">
+  <span class="lb">★ 1</span>
+  <p>La hoja de evaluación de riesgos está en blanco, pero 57 controles dicen «riesgo bajo según la evaluación de riesgos». <strong>¿Dónde vive realmente esa evaluación cuando trabajás?</strong> ¿Es un documento aparte, una conversación con el jefe de auditoría, una lámina del kick-off — o el papel se completa recién cuando se arma el informe?</p>
+</div>
+<p class="pmeta">Es la brecha entre la metodología escrita y la práctica real. La respuesta te dice si el formulario es una herramienta de pensamiento o un requisito que se completa después. Ninguna de las dos respuestas es vergonzosa, y las dos se dan.</p>
+
+<div class="no ex">
+  <span class="lb">2</span>
+  <p>La segregación de funciones se calificó riesgo bajo y no se muestreó, pero mirar el tablero produjo uno de los hallazgos más severos. <strong>¿Cómo evitás la circularidad de calificar un área como bajo riesgo porque asumís que el control funciona, y por eso mismo no probarla?</strong> ¿Hay alguna regla de rotación — «todo control clave se prueba al menos cada tres años aunque venga saliendo bajo»?</p>
+</div>
+<p class="pmeta">Es el problema estructural del scoping basado en riesgo. La existencia o no de una regla de rotación te dice mucho sobre la madurez de la función.</p>
+
+<div class="no ex">
+  <span class="lb">3</span>
+  <p>Dos consultas escritas de dueños globales no tienen ningún control asociado en el programa. <strong>Cuando descartás un input, ¿le volvés a escribir al que lo mandó para decírselo? ¿Qué le decís?</strong></p>
+</div>
+<p class="pmeta">Toca disciplina documental y política interna a la vez. Si nunca se responde, la próxima vez el dueño global no contesta — y ahí perdés la mejor fuente de riesgo que tenés.</p>
+
+<div class="no ex">
+  <span class="lb">4</span>
+  <p>Seis de diecisiete contestaron «no tengo preocupaciones». <strong>¿Cómo distinguís al que está tranquilo porque monitorea del que no tiene preocupaciones porque no está mirando?</strong> ¿Repreguntás?</p>
+</div>
+<p class="pmeta">Un dueño de proceso global que no puede nombrar un solo riesgo de una región descentralizada podría ser, en sí mismo, un hallazgo.</p>
+
+<h2 id="s8b">Sobre el campo y la evidencia</h2>
+
+<div class="no ex">
+  <span class="lb">★ 5</span>
+  <p>El auditor notó que unas minutas ofrecidas como respaldo estaban fechadas el mismo día del pedido. <strong>¿Cómo se maneja eso en la sala?</strong> ¿Se lo decís al entrevistado en el momento, lo guardás para el cierre, lo escalás? ¿Y cómo lo escribís en el informe sin acusar a nadie de fabricar evidencia?</p>
+</div>
+<p class="pmeta">Es la situación más incómoda del oficio y no hay manual. La respuesta enseña más sobre criterio, tono y manejo de la relación que cualquier norma.</p>
+
+<div class="no ex">
+  <span class="lb">6</span>
+  <p>Un punto de atención dice que en ubicaciones chicas la firma puede ser menos formal, y que el objetivo es que el control ocurra. <strong>¿Dónde ponés vos esa línea?</strong> Contame dos casos concretos: uno donde decidiste no reportar un formalismo, y uno donde la falta de firma sí te pareció un hallazgo.</p>
+</div>
+<p class="pmeta">La proporcionalidad es lo más difícil de enseñar y lo que más rápido te hace perder credibilidad si la calibrás mal. Pedir dos casos opuestos evita la respuesta de manual.</p>
+
+<div class="no ex">
+  <span class="lb">★ 7</span>
+  <p>En una línea de negocio el formulario global no aplicaba y el auditor aceptó un documento local equivalente. <strong>¿Cuándo aceptar un control equivalente es buen criterio y cuándo es dejarse convencer?</strong> ¿Qué tenés que ver antes de aceptarlo?</p>
+</div>
+<p class="pmeta">Es la frontera exacta entre «sustancia sobre forma» —virtud— y «me vendieron un buzón» —negligencia—. Una de las decisiones más frecuentes en una auditoría de filial.</p>
+
+<div class="no ex">
+  <span class="lb">8</span>
+  <p>Se detectaron cinco proyectos con costos pero sin ingreso, se pidió explicación y quedó como asunto abierto. <strong>¿Qué pasa con un asunto abierto cuando termina la semana de campo?</strong> ¿Se reporta igual, se cae, se sigue por correo? ¿Cuántos suelen sobrevivir al informe?</p>
+</div>
+<p class="pmeta">Los asuntos abiertos son donde se pierden los mejores hallazgos, y no hay un proceso obvio para ellos.</p>
+
+<div class="no ex">
+  <span class="lb">9</span>
+  <p>La evidencia de respaldo de un control nunca llegó y quedó sin probar y sin conclusión. <strong>¿Cuál es tu palanca cuando la evidencia de la segunda etapa no aparece?</strong> ¿Escalás al director, lo reportás como limitación de alcance, o se deja pasar?</p>
+</div>
+<p class="pmeta">Es la falla silenciosa que convierte «no probado» en «aparentemente bien».</p>
+
+<div class="no ex">
+  <span class="lb">10</span>
+  <p>Las muestras son de cinco proyectos, tres clientes, dos empleados, y no dice cómo se eligieron ni de qué tamaño era la población. <strong>¿Cómo elegís vos los cinco? ¿Y qué contestás cuando el management dice «justo agarraste los peores»?</strong></p>
+</div>
+<p class="pmeta">El criterio de selección es lo primero que ataca un auditado que quiere desactivar un hallazgo.</p>
+
+<h2 id="s8c">Sobre hallazgos y reporte</h2>
+
+<div class="no ex">
+  <span class="lb">★ 11</span>
+  <p>Una conclusión registra una excepción del 100% que nunca llegó a la lista de hallazgos. <strong>¿Qué criterio usás para decidir que una excepción no se reporta? ¿Esa decisión se documenta en algún lado?</strong></p>
+</div>
+<p class="pmeta">La decisión de <b>no</b> reportar es tan profesional como la de reportar, y casi nunca deja rastro. Ahí es donde se cuela el sesgo, la fatiga de fin de semana y la presión del auditado.</p>
+
+<div class="no ex">
+  <span class="lb">12</span>
+  <p>La columna de causa raíz quedó vacía en los quince hallazgos. <strong>¿Cómo hacés para que el management te dé la causa real y no «falta de capacitación»?</strong> ¿En qué momento de la semana lo preguntás?</p>
+</div>
+<p class="pmeta">«Falta de capacitación» es la causa por defecto de toda organización, y casi siempre es falsa.</p>
+
+<div class="no ex">
+  <span class="lb">13</span>
+  <p>En una entidad chica la remediación real de un conflicto de segregación puede ser «contratar más gente». <strong>¿Cómo se reporta un hallazgo cuya solución honesta es estructuralmente inviable?</strong> ¿Cuántas veces viste una liberación formal firmada por el CFO, que es lo que la política prevé?</p>
+</div>
+<p class="pmeta">La respuesta te dice si el mecanismo de excepción funciona de verdad o es letra muerta.</p>
+
+<div class="no ex">
+  <span class="lb">14</span>
+  <p>El director pidió revisar si la gente se siente cómoda hablando, y se entrevistó a una sola persona por debajo del nivel gerencial. <strong>¿Cómo se audita cultura en cinco días? ¿A quién entrevistás fuera del management, y cómo conseguís que te hablen con franqueza sabiendo que su jefe está a dos oficinas?</strong></p>
+</div>
+<p class="pmeta">La cultura es el mejor predictor blando de fraudes y accidentes, y es lo que peor cubre el formato de una semana.</p>
+
+<h2 id="s8d">Una extra, si hay confianza</h2>
+<div class="no ex">
+  <span class="lb">15</span>
+  <p><strong>¿Cuál fue el hallazgo que más te costó defender, y cómo lo sostuviste?</strong></p>
+</div>
+<p class="pmeta">No es sobre este archivo, pero es la pregunta que más rápido muestra dónde está el músculo. Las historias de hallazgos peleados enseñan más sobre independencia y evidencia que cualquier norma.</p>
+
+<hr>
+
+<h2 id="s8e">Las tres ideas que valen más que todo el resto</h2>
+<div class="flow">
+  <div class="st tl"><b>1 · Todo lo que no pudiste hacer tiene que ser tan visible como lo que hiciste</b><span>Es el único error que no se corrige después, porque nadie sabe que existe</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>2 · La calidad de la prueba es hija de la calidad del riesgo</b><span>Si no sabés cómo probar algo, el problema está en cómo lo escribiste</span></div>
+  <div class="ar"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></div>
+  <div class="st tl"><b>3 · El remedio tiene que coincidir con la causa</b><span>Capacitar cuando el control no es practicable es la forma más elegante de cerrar un hallazgo sin resolverlo</span></div>
+</div>
+
+<div class="pn">
+  <a href="#p7"><span>Anterior</span><b>← Parte 7</b></a>
+  <a href="#top"><span>Volver</span><b>Inicio ↑</b></a>
+</div>
+</section>
+
+</main>
+
+<div class="toast" id="ts"></div>
+<button class="fab" id="fb" aria-label="Volver arriba"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+
+<script>
+(function(){
+var K='aud-caso-v1';
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(K+k);localStorage.setItem(K+k,v)}catch(e){return null}}
+
+/* ---- theme ---- */
+var root=document.documentElement;
+function applyTheme(t){
+  if(t==='auto'){root.removeAttribute('data-theme');
+    var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;
+    root.setAttribute('data-theme',d?'dark':'light');
+  } else root.setAttribute('data-theme',t);
+}
+var th=ls('theme')||'auto';applyTheme(th);
+document.getElementById('th').onclick=function(){
+  var cur=root.getAttribute('data-theme')==='dark'?'light':'dark';
+  ls('theme',cur);applyTheme(cur);toast(cur==='dark'?'Modo oscuro':'Modo claro');
+};
+
+/* ---- font size ---- */
+var fs=parseInt(ls('fs')||'17',10);
+function setFs(n){fs=Math.max(14,Math.min(22,n));root.style.setProperty('--fs',fs+'px');ls('fs',fs)}
+setFs(fs);
+document.getElementById('fp').onclick=function(){setFs(fs+1);toast('Texto '+fs+'px')};
+document.getElementById('fm').onclick=function(){setFs(fs-1);toast('Texto '+fs+'px')};
+
+/* ---- build TOC ---- */
+var parts=[].slice.call(document.querySelectorAll('section.part'));
+var toc=document.getElementById('toc');
+parts.forEach(function(p,i){
+  var wrap=document.createElement('div');wrap.className='dwp';wrap.dataset.p=p.id;
+  var a=document.createElement('a');a.href='#'+p.id;
+  a.innerHTML='<span class="dwn">'+(i+1)+'</span><span>'+p.dataset.t+'</span>';
+  wrap.appendChild(a);
+  var subs=[].slice.call(p.querySelectorAll('h2[id]'));
+  if(subs.length){
+    var sd=document.createElement('div');sd.className='dws';
+    subs.forEach(function(h){
+      var sa=document.createElement('a');sa.href='#'+h.id;sa.textContent=h.textContent;
+      sa.dataset.h=h.id;sd.appendChild(sa);
+    });
+    wrap.appendChild(sd);
+  }
+  toc.appendChild(wrap);
+});
+
+/* ---- drawer ---- */
+var dw=document.getElementById('dw'),sc=document.getElementById('sc');
+function openD(){dw.classList.add('on');sc.classList.add('on')}
+function closeD(){dw.classList.remove('on');sc.classList.remove('on')}
+document.getElementById('mb').onclick=function(){dw.classList.contains('on')?closeD():openD()};
+sc.onclick=closeD;
+toc.addEventListener('click',function(e){if(e.target.closest('a'))setTimeout(closeD,120)});
+
+/* ---- scroll spy + progress + persistence ---- */
+var pg=document.getElementById('pg'),tt=document.getElementById('tt'),fb=document.getElementById('fb');
+var heads=[].slice.call(document.querySelectorAll('section.part h2[id]'));
+var maxSeen=parseInt(ls('max')||'0',10);
+var tick=false;
+function onScroll(){
+  if(tick)return;tick=true;
+  requestAnimationFrame(function(){
+    tick=false;
+    var y=window.scrollY||document.documentElement.scrollTop;
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    var r=h>0?y/h:0;
+    pg.style.width=(r*100)+'%';
+    fb.classList.toggle('on',y>600);
+    ls('pos',Math.round(y));
+    if(y>maxSeen){maxSeen=y;ls('max',maxSeen)}
+    /* current part */
+    var cur=null;
+    for(var i=0;i<parts.length;i++){
+      var b=parts[i].getBoundingClientRect();
+      if(b.top<=140)cur=parts[i];
+    }
+    var curH=null;
+    for(var j=0;j<heads.length;j++){
+      if(heads[j].getBoundingClientRect().top<=150)curH=heads[j];
+    }
+    [].forEach.call(toc.children,function(w,k){
+      var on=cur&&w.dataset.p===cur.id;
+      w.classList.toggle('cur',!!on);
+      var pb=parts[k].getBoundingClientRect();
+      w.classList.toggle('done',pb.bottom<200);
+      if(on){
+        [].forEach.call(w.querySelectorAll('.dws a'),function(a){
+          a.classList.toggle('on',!!curH&&a.dataset.h===curH.id);
+        });
+      }
+    });
+    tt.textContent=cur?cur.dataset.t:'Auditoría interna · caso práctico';
+  });
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('resize',onScroll);
+
+fb.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+
+/* ---- toast ---- */
+var tsEl=document.getElementById('ts'),tsT;
+function toast(m){tsEl.textContent=m;tsEl.classList.add('on');clearTimeout(tsT);
+  tsT=setTimeout(function(){tsEl.classList.remove('on')},2200)}
+
+/* ---- restore position ---- */
+var saved=parseInt(ls('pos')||'0',10);
+if(!location.hash && saved>300){
+  window.scrollTo(0,saved);
+  setTimeout(function(){toast('Retomando donde quedaste')},420);
+}
+onScroll();
+
+/* persist before unload / when hidden (Android tab discard) */
+function save(){var y=window.scrollY||document.documentElement.scrollTop;ls('pos',Math.round(y))}
+document.addEventListener('visibilitychange',function(){if(document.hidden)save()});
+window.addEventListener('pagehide',save);
+window.addEventListener('beforeunload',save);
+})();
+</script>
+</body>
+</html>
