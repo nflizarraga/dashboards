@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mile — la oportunidad en Rabobank</title>
+<style>
+  :root{
+    --navy:#12284C;
+    --navy-soft:#2A4A7C;
+    --amber:#C8781E;
+    --amber-light:#F0A94C;
+    --cream:#FBF8F3;
+    --card:#FFFFFF;
+    --ink:#22303F;
+    --muted:#6B7A8C;
+    --line:#E4DDD2;
+    --green:#2E7D5B;
+    --green-light:#E3F1EA;
+    --rose:#B4443C;
+    --rose-light:#FBEAE8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:17px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:780px;margin:0 auto;padding:0 24px 100px;}
+
+  /* HERO */
+  .hero{
+    background:linear-gradient(160deg,var(--navy) 0%,#1B3A66 60%,#264F80 100%);
+    color:#fff;padding:72px 24px 64px;margin-bottom:56px;
+    position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-90px;top:-90px;
+    width:320px;height:320px;border-radius:50%;
+    background:rgba(240,169,76,.13);
+  }
+  .hero-inner{max-width:780px;margin:0 auto;position:relative;z-index:1;}
+  .kicker{
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--amber-light);font-weight:700;margin-bottom:20px;
+  }
+  .hero h1{
+    font-size:44px;line-height:1.12;font-weight:800;letter-spacing:-.02em;margin-bottom:22px;
+  }
+  .hero p{font-size:19px;line-height:1.6;color:#D3E0F0;max-width:600px;}
+  .hero p + p{margin-top:14px;}
+  .hero strong{color:#fff;}
+
+  /* SECTIONS */
+  section{margin-bottom:56px;}
+  .eyebrow{
+    display:inline-block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    font-weight:700;color:var(--amber);margin-bottom:10px;
+  }
+  h2{
+    font-size:30px;line-height:1.2;font-weight:800;letter-spacing:-.02em;
+    color:var(--navy);margin-bottom:18px;
+  }
+  h3{font-size:19px;font-weight:700;color:var(--navy);margin:28px 0 10px;}
+  p{margin-bottom:15px;}
+  .lead{font-size:19px;color:var(--navy-soft);}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:26px 28px;margin:22px 0;
+  }
+  .card-accent{border-left:4px solid var(--amber);}
+  .card-green{background:var(--green-light);border-color:#C4E0D3;}
+  .card-rose{background:var(--rose-light);border-color:#F0CFCB;}
+  .card h3:first-child{margin-top:0;}
+
+  /* CHART */
+  .chart{margin:28px 0 8px;}
+  .bar-row{margin-bottom:20px;}
+  .bar-label{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-size:14px;margin-bottom:7px;
+  }
+  .bar-label .n{font-weight:700;color:var(--navy);}
+  .bar-label .v{font-weight:800;font-size:17px;color:var(--navy);}
+  .bar-track{height:34px;background:#EFE9DF;border-radius:7px;overflow:hidden;}
+  .bar-fill{
+    height:100%;border-radius:7px;display:flex;align-items:center;justify-content:flex-end;
+    padding-right:12px;color:#fff;font-size:12px;font-weight:700;letter-spacing:.03em;
+  }
+  .f-now{background:#93A1B0;}
+  .f-min{background:var(--amber);}
+  .f-mid{background:#B0651A;}
+  .f-max{background:var(--navy);}
+  .chart-note{font-size:14px;color:var(--muted);margin-top:14px;line-height:1.55;}
+
+  /* FIT TABLE */
+  .fit{width:100%;border-collapse:collapse;margin:20px 0;font-size:15.5px;}
+  .fit td{padding:13px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .fit tr:last-child td{border-bottom:none;}
+  .fit td:first-child{width:38px;font-size:19px;text-align:center;padding-top:11px;}
+  .fit .req{font-weight:700;color:var(--navy);display:block;margin-bottom:2px;}
+  .fit .com{color:var(--muted);font-size:14.5px;line-height:1.5;}
+
+  /* STEPS */
+  .step{display:flex;gap:18px;margin-bottom:24px;align-items:flex-start;}
+  .step-num{
+    flex:0 0 34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;
+  }
+  .step-num.amber{background:var(--amber);}
+  .step-body h4{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:4px;}
+  .step-body p{font-size:15.5px;color:var(--ink);margin-bottom:0;line-height:1.6;}
+
+  /* MESSAGE BOX */
+  .msg{
+    background:#FDFCFA;border:1px solid var(--line);border-radius:12px;
+    padding:24px 26px;margin:20px 0;
+    font-family:Georgia,"Times New Roman",serif;font-size:16px;line-height:1.75;color:#3A4756;
+  }
+  .msg p{margin-bottom:13px;}
+  .msg p:last-child{margin-bottom:0;}
+  .msg-tag{
+    font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;font-weight:700;color:var(--amber);margin-bottom:14px;
+  }
+
+  ul{margin:0 0 15px 0;padding-left:22px;}
+  li{margin-bottom:9px;line-height:1.6;}
+  li::marker{color:var(--amber);}
+
+  .pull{
+    border-left:4px solid var(--amber);padding:6px 0 6px 22px;margin:26px 0;
+    font-size:20px;line-height:1.5;font-weight:600;color:var(--navy);
+  }
+
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0;}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 16px;text-align:center;}
+  .stat .big{font-size:30px;font-weight:800;color:var(--amber);line-height:1.1;letter-spacing:-.02em;}
+  .stat .lbl{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.4;}
+
+  .divider{height:1px;background:var(--line);margin:52px 0;border:none;}
+
+  .closing{
+    background:linear-gradient(160deg,var(--navy) 0%,#1B3A66 100%);
+    color:#fff;border-radius:16px;padding:42px 36px;margin-top:48px;
+  }
+  .closing h2{color:#fff;font-size:27px;}
+  .closing p{color:#D3E0F0;font-size:17.5px;}
+  .closing p:last-child{margin-bottom:0;}
+  .closing strong{color:var(--amber-light);}
+
+  @media(max-width:600px){
+    body{font-size:16px;}
+    .hero{padding:52px 20px 46px;}
+    .hero h1{font-size:31px;}
+    .hero p{font-size:17px;}
+    h2{font-size:24px;}
+    .wrap{padding:0 18px 70px;}
+    .card{padding:20px;}
+    .stat-grid{grid-template-columns:1fr;}
+    .stat{display:flex;align-items:center;gap:14px;text-align:left;}
+    .stat .big{font-size:26px;}
+    .stat .lbl{margin-top:0;}
+    .pull{font-size:17.5px;}
+    .closing{padding:30px 24px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="kicker">Para Mile · Agosto 2026</div>
+    <h1>Apareció algo que vale mucho la pena.</h1>
+    <p>Hay una vacante abierta en Rabobank, en Utrecht, que paga <strong>entre 57% y 124% más</strong> de lo que cobrás hoy — y resulta que está en el área que dirige <strong>Philippe Vollot</strong>, el mismo que te escribió ofreciéndote una recomendación cuando quisieras.</p>
+    <p>Esta página te cuenta qué es el puesto, por qué encajás mejor de lo que creés, qué te falta de verdad, y cuáles son los pasos. Sin exagerar nada.</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- 1. QUÉ ES ESTO -->
+<section>
+  <div class="eyebrow">Primero lo primero</div>
+  <h2>No te asustes con el nombre</h2>
+
+  <p class="lead">El puesto se llama <em>FEC W&amp;R Transaction Monitoring Analyst</em>. Suena a jerga inaccesible. No lo es.</p>
+
+  <p><strong>FEC</strong> significa <em>Financial Economic Crime</em>. Es el área del banco que se asegura de que la plata que pasa por ahí no venga del narcotráfico, de fraude, de trata o del financiamiento del terrorismo. Todos los bancos europeos están obligados por ley a hacerlo — en Países Bajos la ley se llama <strong>Wwft</strong>.</p>
+
+  <p><strong>Transaction Monitoring</strong> es una de las ramas de FEC. Y lo que hace, en criollo, es esto:</p>
+
+  <div class="card card-accent">
+    <h3>Un día del trabajo, en concreto</h3>
+    <p>Un sistema automático marca transacciones que se salen del patrón normal de un cliente. A vos te llega esa alerta y tenés que responder una pregunta: <strong>¿esto tiene explicación o no la tiene?</strong></p>
+    <p>Entonces mirás la cuenta, mirás el historial, mirás qué tipo de cliente es, hablás con otras áreas si hace falta. Y decidís: esto se explica solo, o esto es raro y hay que reportarlo.</p>
+    <p style="margin-bottom:0">Si decidís que es inusual, se eleva y llega a la <strong>FIU</strong> (la unidad de inteligencia financiera de Países Bajos), que a su vez decide si lo pasa a la Fiscalía. Vos no acusás a nadie. Vos detectás, documentás y explicás por qué te llamó la atención.</p>
+  </div>
+
+  <p>Los clientes que mira este equipo en particular son <em>Financial Institutions</em>: procesadoras de pago (PSP), plataformas de cripto (CASP) y casas de cambio y remesas (MSB). Son los de mayor riesgo, y por eso el equipo es chico y especializado — <strong>8 personas</strong>.</p>
+
+  <div class="pull">Es trabajo de detective con números. Mirás plata que se mueve y buscás lo que no cierra. Vos ya hacés eso todos los días — solo que con facturas.</div>
+
+  <p>Y una cosa más, porque cuenta: este trabajo importa. No es mover un número de una celda a otra. Se estima que <strong>16 mil millones de euros de dinero criminal</strong> circulan por la sociedad neerlandesa cada año. El banco es el portero. Vos serías parte de eso.</p>
+</section>
+
+<hr class="divider">
+
+<!-- 2. LOS NÚMEROS -->
+<section>
+  <div class="eyebrow">La parte que importa</div>
+  <h2>Cuánto se paga</h2>
+
+  <p>La vacante publica la escala abiertamente: <strong>schaal 07, €3.516 – €5.021 brutos por mes</strong>. Pero en un banco neerlandés ese número no es lo que cobrás. Encima de eso va:</p>
+
+  <ul>
+    <li><strong>13º mes completo</strong> — una mensualidad extra al año</li>
+    <li><strong>8% de vakantiegeld</strong></li>
+    <li><strong>10% de Employee Benefit Budget</strong></li>
+    <li><strong>€1.400 al año</strong> de presupuesto propio de formación</li>
+    <li>Pensión con aporte del banco, e híbrido casa/oficina</li>
+  </ul>
+
+  <p>Sumando todo, el paquete anual real queda así:</p>
+
+  <div class="chart">
+    <div class="bar-row">
+      <div class="bar-label"><span class="n">Lo que cobrás hoy</span><span class="v">€34.000</span></div>
+      <div class="bar-track"><div class="bar-fill f-now" style="width:45%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span class="n">Piso absoluto de la escala 07</span><span class="v">€53.300</span></div>
+      <div class="bar-track"><div class="bar-fill f-min" style="width:70%">+57%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span class="n">Entrada realista (~€3.800/mes)</span><span class="v">€57.600</span></div>
+      <div class="bar-track"><div class="bar-fill f-mid" style="width:76%">+69%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span class="n">Techo de la misma escala</span><span class="v">€76.100</span></div>
+      <div class="bar-track"><div class="bar-fill f-max" style="width:100%">+124%</div></div>
+    </div>
+    <p class="chart-note">Paquete anual completo: base + 13º mes + 8% vakantiegeld + 10% EBB. La escala está publicada en el propio anuncio, así que no hay margen para que te ofrezcan cualquier cosa.</p>
+  </div>
+
+  <div class="card card-green">
+    <p style="margin-bottom:0"><strong>Leelo despacio:</strong> incluso si entrás en el <em>mínimo absoluto</em> de la escala, el peor escenario posible, son <strong>€53.300</strong>. Y el techo de esa misma escala —sin cambiar de puesto, solo creciendo adentro— es <strong>€76.100</strong>. Es literalmente otra vida financiera.</p>
+  </div>
+
+  <p>Y no termina ahí: en la misma página de vacantes hay un puesto de <em>TM Scenario Expert</em> en escala 09-10, de €5.030 a €8.563 por mes. Esa es la escalera que se abre después.</p>
+</section>
+
+<hr class="divider">
+
+<!-- 3. POR QUÉ VOS -->
+<section>
+  <div class="eyebrow">La pregunta honesta</div>
+  <h2>¿Por qué te tomarían a vos?</h2>
+
+  <p class="lead">Te fui a buscar requisito por requisito. Esto es lo que dice el anuncio y esto es lo que tenés.</p>
+
+  <table class="fit">
+    <tr>
+      <td>✅</td>
+      <td><span class="req">Formación superior en Finanzas, Economía, Derecho o Administración</span>
+      <span class="com">Sos <strong>Contadora Pública</strong>, carrera de 5 años. Pedían formación terciaria; vos tenés más de lo que piden.</span></td>
+    </tr>
+    <tr>
+      <td>✅</td>
+      <td><span class="req">Mínimo 1-2 años en una institución financiera o empresa internacional</span>
+      <span class="com">Trabajaste <strong>casi dos años adentro de Rabobank</strong> (nov 2023 – sep 2025). No es "una institución financiera": es <em>esta</em> institución financiera.</span></td>
+    </tr>
+    <tr>
+      <td>✅</td>
+      <td><span class="req">Criterio profesional, tacto, comunicación clara, sensibilidad organizacional</span>
+      <span class="com">Es textual del anuncio. Vos atendiste al <strong>Managing Board del banco</strong>. Nadie más en esa pila de CVs puede decir eso.</span></td>
+    </tr>
+    <tr>
+      <td>✅</td>
+      <td><span class="req">Multitarea, flexibilidad, aguante, trato personal, pragmatismo</span>
+      <span class="com">Hotelería de alto nivel y atención a ejecutivos, en un idioma que no es el tuyo, sin margen de error. Esto lo tenés de sobra.</span></td>
+    </tr>
+    <tr>
+      <td>✅</td>
+      <td><span class="req">Idioma</span>
+      <span class="com">La vacante está publicada en inglés y <strong>no pide neerlandés</strong>. Tu A1 suma como señal, no como requisito.</span></td>
+    </tr>
+    <tr>
+      <td>⚠️</td>
+      <td><span class="req">Afinidad con normativa financiera, compliance y riesgo</span>
+      <span class="com">Parcial. Manejás VAT, controles internos, normativa contable. Es base transferible, pero no es lo mismo.</span></td>
+    </tr>
+    <tr>
+      <td>❌</td>
+      <td><span class="req">Entender AML, CTF y conocer PSPs, CASPs y MSBs</span>
+      <span class="com">Acá es donde no llegás hoy. Es el único hueco real. Sigue abajo.</span></td>
+    </tr>
+  </table>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="big">~2 años</div><div class="lbl">adentro de Rabobank</div></div>
+    <div class="stat"><div class="big">5 años</div><div class="lbl">de carrera de grado en contabilidad</div></div>
+    <div class="stat"><div class="big">1 de 7</div><div class="lbl">requisitos donde estás realmente floja</div></div>
+  </div>
+
+  <h3>Dos cosas que probablemente no estás viendo</h3>
+
+  <p><strong>Uno: tu paso por Rabobank no es "un trabajo de hotelería". Para esta vacante es un activo enorme.</strong> Conocés la casa, conocés la cultura, conocés Croeselaan. Y ya pasaste el screening legal del banco una vez — para un puesto de integridad, un candidato ya screeneado es riesgo menos. Un jefe que contrata no compra talento, compra <em>certeza</em>. Vos ofrecés más certeza que cualquier desconocido con el CV perfecto.</p>
+
+  <p><strong>Dos: la vacante está abierta desde antes de julio y todavía no la llenaron.</strong> El anuncio decía que cerraba el 22 de julio y sigue publicada en el listado activo. Cuando un puesto queda abierto semanas después de su cierre, significa que les está costando encontrar a la persona. <em>Eso juega a favor de un perfil como el tuyo</em>, que no es el molde estándar. Pero también significa que puede cerrarse cualquier día — por eso conviene moverse esta semana.</p>
+</section>
+
+<hr class="divider">
+
+<!-- 4. LOS GAPS -->
+<section>
+  <div class="eyebrow">Sin vueltas</div>
+  <h2>Lo que te falta, dicho de frente</h2>
+
+  <p class="lead">No te voy a vender que estás lista. No lo estás del todo. Pero el hueco es uno solo y se cierra en tres semanas.</p>
+
+  <div class="card card-rose">
+    <h3>El gap</h3>
+    <p style="margin-bottom:0">No tenés experiencia en antilavado. No sabés qué es un PSP ni un CASP. No conocés el marco regulatorio. Eso es real y no hay que disimularlo — de hecho, disimularlo sería lo peor que podrías hacer en una entrevista de un área de integridad.</p>
+  </div>
+
+  <p>Ahora la buena noticia: <strong>lo que te falta es vocabulario y marco teórico, no criterio.</strong> El criterio —mirar un movimiento de plata y darte cuenta de que algo no cuadra— lo ejercés todos los días. Lo otro se estudia.</p>
+
+  <h3>Con unas 15 horas de lectura ya podés conversar de esto</h3>
+  <ul>
+    <li><strong>Wwft</strong>: la ley neerlandesa antilavado. Qué obliga al banco a hacer.</li>
+    <li><strong>La cadena del reporte</strong>: analista detecta → evalúa como inusual → se eleva → llega a la <strong>FIU-Nederland</strong> → la FIU decide si va a Fiscalía, policía o FIOD. <em>Esto está explicado en la propia web de carreras de Rabobank y es exactamente lo que te van a preguntar.</em></li>
+    <li><strong>Las tres etapas del lavado</strong>: placement, layering, integration.</li>
+    <li><strong>Las 40 Recomendaciones del FATF</strong> y el enfoque basado en riesgo.</li>
+    <li><strong>Los clientes del rol</strong>: PSP (procesadoras de pago), CASP (cripto), MSB/MTO (remesas y cambio). Por qué son riesgosos: operan por cuenta de terceros y el beneficiario final se vuelve opaco.</li>
+    <li><strong>Red flags típicas</strong>: structuring, montos redondos, países de alto riesgo, actividad que no cuadra con el perfil declarado.</li>
+  </ul>
+
+  <p>Si además querés el sello formal, el <strong>ICA Certificate in Anti Money Laundering</strong> (~€860) no pide experiencia previa y es la opción correcta para tu nivel. No lo necesitás para la entrevista — pero <em>estar inscripta</em> convierte "cambio de carrera" en "carrera dirigida".</p>
+
+  <h3>Y cómo se dice esto en la entrevista</h3>
+  <div class="msg">
+    <div class="msg-tag">Tu respuesta cuando te pregunten por el gap</div>
+    <p>"I do not have AML experience yet, and I am not going to pretend otherwise. What I have is the analytical foundation: I spend my days following money through ledgers, matching what was claimed against what actually moved, and investigating why something does not reconcile. That is the same instinct, pointed at a different question. The regulatory framework is what I am learning now."</p>
+  </div>
+
+  <p>Decir "no lo tengo, y lo estoy cerrando así" en un área de integridad <strong>es una credencial</strong>, no una debilidad. Los que inflan el CV son los que no pasan.</p>
+</section>
+
+<hr class="divider">
+
+<!-- 5. PHILIPPE -->
+<section>
+  <div class="eyebrow">Tu mejor carta</div>
+  <h2>Philippe</h2>
+
+  <p class="lead">Philippe Vollot es <strong>miembro del Managing Board de Rabobank y Chief Financial Economic Crime Officer</strong> desde octubre de 2022. Antes fue Chief Compliance Officer de Danske Bank y Global Head of Anti-Financial Crime de Deutsche Bank.</p>
+
+  <p>Traducción: <strong>el área de esta vacante es la que él dirige.</strong> No es "alguien importante del banco que conocés". Es el jefe de toda la organización FEC.</p>
+
+  <p>Y te escribió, por tu nombre, diciéndote que contaras con él si alguna vez necesitabas una referencia o algo para tu carrera. Eso no se lo escribe a cualquiera.</p>
+
+  <div class="card card-accent">
+    <h3>El pedido correcto: la carta que él ya te ofreció</h3>
+    <p>No hace falta que le pidas una reunión ni que le pidas el puesto. <strong>Pedile exactamente lo que él ofreció: una breve carta de recomendación, o simplemente poder nombrarlo como referencia.</strong></p>
+    <p style="margin-bottom:0">Es el pedido más fácil de hacer y el más fácil de conceder. Le lleva diez minutos, no lo compromete con el proceso de selección, y para vos vale muchísimo: una referencia firmada por el CFECO del banco, en una postulación a su propia área, es algo que casi ningún candidato puede poner sobre la mesa.</p>
+  </div>
+
+  <p><strong>Un solo cuidado, y es simple:</strong> pedile la recomendación, no que te consiga el puesto. La diferencia importa — la primera es lo que él ofreció y puede dar sin pensarlo; la segunda lo pondría en un lugar incómodo dentro de su propia estructura. Y encima, la carta es más fuerte de lo que parece.</p>
+
+  <h3>El mensaje, listo para mandar</h3>
+  <p>Corto, sin adjuntos, por el mismo hilo de LinkedIn donde hablaron. Mandalo <em>después</em> de haber aplicado.</p>
+
+  <div class="msg">
+    <div class="msg-tag">Mensaje a Philippe</div>
+    <p>Dear Philippe,</p>
+    <p>I hope you are doing well. I still look back very fondly on my time at Rabobank in Utrecht, and on how kind you always were to me there.</p>
+    <p>When we last spoke you generously said that if I ever needed a reference or support for my career, I could count on you. I am writing to take you up on that.</p>
+    <p>Since leaving the bank I have been working in finance — I am a qualified public accountant, and I currently handle accounts payable and month-end accounting for a hotel group here in Utrecht. I have just applied for the W&amp;R Transaction Monitoring Analyst role for Financial Institutions, and I would be honoured if you would be willing to write me a short recommendation, or simply to let me name you as a reference.</p>
+    <p>Whatever you feel comfortable with would mean a great deal to me. And either way, thank you for the encouragement you gave me back then — it stayed with me.</p>
+    <p>Warm regards,<br>Milena</p>
+  </div>
+
+  <p style="font-size:15.5px;color:var(--muted)">Si no contesta en dos semanas, no insistas y no lo tomes como un no. Es miembro del board de un banco de 48.000 personas; su agenda es la que es.</p>
+</section>
+
+<hr class="divider">
+
+<!-- 6. PASOS -->
+<section>
+  <div class="eyebrow">Manos a la obra</div>
+  <h2>Los pasos, en orden</h2>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h4>Pasale a Nico los datos de Odyssey</h4>
+      <p>Cuántas sociedades y cuántos hoteles manejás, cuántas facturas por mes, de cuánto son los payment runs, qué ERP usan. El CV nuevo ya está armado y esperando esos números — son los que lo vuelven fuerte en vez de correcto.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h4>Actualizá LinkedIn</h4>
+      <p>Agregá Odyssey, que todavía no está. Y sacá la palabra "Junior" del título: sos Contadora Pública con casi dos años en un banco. No te descuentes vos misma antes de que lo haga otro.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <h4>Estudiá el bloque de AML</h4>
+      <p>Lo de la sección de arriba. Dos tardes. Enfocate especialmente en la cadena de reporte hacia la FIU y en por qué las PSP, CASP y MSB son de alto riesgo.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num amber">4</div>
+    <div class="step-body">
+      <h4>Aplicá — y el mismo día escribile al jefe del equipo</h4>
+      <p>Los mails están publicados en el propio anuncio: <strong>Thomas Heijstek</strong> (Team Manager del equipo), Thomas.Heijstek@rabobank.nl, y <strong>Marloes Tomà</strong> (recruiter de FEC), marloes.toma@rabobank.nl. Un mail corto presentándote te pone por encima de casi todos los que solo aprietan "enviar".</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num amber">5</div>
+    <div class="step-body">
+      <h4>Recién ahí, el mensaje a Philippe</h4>
+      <p>Con el de arriba. Después de aplicar, no antes — así el pedido es limpio y concreto.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-body">
+      <h4>Preparate las respuestas en voz alta</h4>
+      <p>Por qué querés pasar de contabilidad a financial crime. Qué sabés de AML. Por qué Rabobank. Grabate y escuchate. Se nota muchísimo la diferencia entre alguien que lo pensó y alguien que improvisa.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Sobre la pregunta difícil: "¿por qué querés dejar contabilidad?"</h3>
+    <p style="margin-bottom:0">La respuesta que funciona no es "quiero crecer". Es esta: <em>"In accounting I follow money that is supposed to move. Here I would follow money that is not supposed to. Same discipline, better question."</em></p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- 7. LA DUDA -->
+<section>
+  <div class="eyebrow">Por si te lo estás preguntando</div>
+  <h2>"¿No estoy tirando por la borda mi carrera de contadora?"</h2>
+
+  <p>Es una duda legítima y merece una respuesta honesta, no una palmada en la espalda.</p>
+
+  <p>Sí, Transaction Monitoring no es contabilidad. Y sí, es un trabajo que en algunos días es repetitivo — alertas que revisar, casos que documentar.</p>
+
+  <p>Pero mirá esto de otra manera:</p>
+
+  <div class="pull">El objetivo real no es "ser analista de TM". El objetivo es <em>entrar a Rabobank</em>.</div>
+
+  <p>Una vez adentro, con el convenio bancario y la escala ya ganados, moverte internamente hacia Finance, Control, Risk o Auditoría Interna es <strong>infinitamente más fácil</strong> que entrar desde afuera. Los bancos promueven de adentro. En dos o tres años podés estar en un rol contable, dentro del banco, con el sueldo ya reseteado hacia arriba.</p>
+
+  <p>FEC es la puerta que está abierta, es donde hay demanda estructural de gente, y es donde tenés a alguien que te aprecia. <strong>No estás abandonando la contabilidad. Estás comprando la entrada al edificio.</strong></p>
+
+  <p>Y mientras tanto, la búsqueda de puestos de AP y contabilidad general en Utrecht y Ámsterdam sigue corriendo en paralelo. Esto no es apostar todo a una carta. Es jugar la mejor carta <em>además</em> de las otras.</p>
+</section>
+
+<!-- CIERRE -->
+<div class="closing">
+  <h2>Mile, leé esto último</h2>
+  <p>Hoy estás cobrando <strong>por debajo del percentil 25</strong> del mercado para el trabajo que ya hacés. No es que estés mal paga: estás <em>sub</em>-paga. Eso no habla de tu valor, habla del lugar donde está tu valor puesto hoy.</p>
+  <p>Tenés una carrera de grado de cinco años, casi dos años adentro de un banco europeo, experiencia real en cuentas por pagar y cierre contable, dos idiomas profesionales, y una persona en el Managing Board que se acordó de tu nombre y te ofreció ayudarte.</p>
+  <p>Falta una cosa sola: <strong>que apliques</strong>.</p>
+  <p>Lo peor que puede pasar es que te digan que no, y ahí seguís exactamente donde estás hoy, sin haber perdido nada más que dos tardes de estudio. Lo mejor que puede pasar es que en tres meses estés cobrando <strong>+57%</strong>, en Utrecht, aprendiendo algo que importa de verdad.</p>
+  <p>La asimetría es tan grande que ni siquiera es una decisión difícil. Es una semana de trabajo bien hecho.</p>
+</div>
+
+</div>
+</body>
+</html>
