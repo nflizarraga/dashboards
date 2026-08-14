@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mile — cuánto valés y cómo lo cobramos</title>
+<style>
+:root{
+  --navy:#12284C;--navy2:#2A4A7C;--amber:#C8781E;--amber2:#F0A94C;
+  --cream:#FBF8F3;--ink:#22303F;--muted:#6B7A8C;--line:#E4DDD2;
+  --green:#2E7D5B;--greenbg:#E3F1EA;--red:#B4443C;--redbg:#FBEAE8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-size:17px;line-height:1.62;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:740px;margin:0 auto;padding:0 24px 80px}
+.hero{background:linear-gradient(160deg,var(--navy),#1B3A66 60%,#264F80);color:#fff;
+  padding:64px 24px 56px;margin-bottom:48px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-90px;top:-90px;width:300px;height:300px;
+  border-radius:50%;background:rgba(240,169,76,.13)}
+.hi{max-width:740px;margin:0 auto;position:relative;z-index:1}
+.kick{font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber2);font-weight:700;margin-bottom:18px}
+.hero h1{font-size:40px;line-height:1.13;font-weight:800;letter-spacing:-.02em;margin-bottom:18px}
+.hero p{font-size:18.5px;color:#D3E0F0;max-width:580px}
+.hero strong{color:#fff}
+section{margin-bottom:48px}
+.eyebrow{display:inline-block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:700;color:var(--amber);margin-bottom:9px}
+h2{font-size:28px;line-height:1.2;font-weight:800;letter-spacing:-.02em;color:var(--navy);margin-bottom:16px}
+h3{font-size:18px;font-weight:700;color:var(--navy);margin:24px 0 9px}
+p{margin-bottom:14px}
+.lead{font-size:18.5px;color:var(--navy2)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin:20px 0}
+.acc{border-left:4px solid var(--amber)}
+.gr{background:var(--greenbg);border-color:#C4E0D3}
+.rd{background:var(--redbg);border-color:#F0CFCB}
+.card h3:first-child{margin-top:0}
+.bar-row{margin-bottom:17px}
+.bl{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;margin-bottom:6px}
+.bl .n{font-weight:700;color:var(--navy)}
+.bl .v{font-weight:800;font-size:16px;color:var(--navy)}
+.bt{height:30px;background:#EFE9DF;border-radius:7px;overflow:hidden}
+.bf{height:100%;border-radius:7px;display:flex;align-items:center;justify-content:flex-end;
+  padding-right:11px;color:#fff;font-size:11.5px;font-weight:700}
+.f1{background:#A8B3C0}.f2{background:#93A1B0}.f3{background:var(--amber)}
+.f4{background:#B0651A}.f5{background:var(--navy)}
+.note{font-size:13.5px;color:var(--muted);margin-top:12px;line-height:1.5}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:15px}
+th{text-align:left;padding:10px 8px;border-bottom:2px solid var(--navy);color:var(--navy);
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.role{font-weight:700;color:var(--navy);display:block}
+.why{color:var(--muted);font-size:13.5px;line-height:1.45;display:block;margin-top:2px}
+.fit{font-weight:800;white-space:nowrap}
+.hi-f{color:var(--green)}.md-f{color:var(--amber)}.lo-f{color:var(--muted)}
+.sal{font-weight:700;color:var(--navy);white-space:nowrap;font-size:14px}
+.funnel{display:flex;align-items:center;gap:10px;margin:22px 0;flex-wrap:wrap}
+.fn{flex:1;min-width:120px;background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:16px 12px;text-align:center}
+.fn .big{font-size:32px;font-weight:800;color:var(--amber);line-height:1}
+.fn .lbl{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+.arrow{color:var(--line);font-size:22px;font-weight:800}
+ul{margin:0 0 14px 20px}li{margin-bottom:8px;line-height:1.55}
+li::marker{color:var(--amber)}
+.pull{border-left:4px solid var(--amber);padding:5px 0 5px 20px;margin:24px 0;
+  font-size:19.5px;line-height:1.48;font-weight:600;color:var(--navy)}
+.step{display:flex;gap:15px;margin-bottom:18px;align-items:flex-start}
+.sn{flex:0 0 30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.sn.a{background:var(--amber)}
+.step h4{font-size:16.5px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.step p{font-size:15px;margin-bottom:0;line-height:1.55}
+.quote{background:#FDFCFA;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:16px 0;
+  font-family:Georgia,serif;font-size:15.5px;line-height:1.7;color:#3A4756}
+.qt{font-family:-apple-system,sans-serif;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:700;color:var(--amber);margin-bottom:10px}
+hr{border:none;height:1px;background:var(--line);margin:44px 0}
+.close{background:linear-gradient(160deg,var(--navy),#1B3A66);color:#fff;border-radius:16px;padding:38px 32px;margin-top:44px}
+.close h2{color:#fff;font-size:25px}
+.close p{color:#D3E0F0;font-size:17px}
+.close p:last-child{margin-bottom:0}
+.close strong{color:var(--amber2)}
+@media(max-width:600px){
+  body{font-size:16px}.hero{padding:46px 20px 40px}.hero h1{font-size:29px}.hero p{font-size:16.5px}
+  h2{font-size:23px}.wrap{padding:0 18px 60px}.card{padding:19px}
+  table{font-size:13.5px}td,th{padding:9px 5px}
+  .funnel{flex-direction:column}.arrow{transform:rotate(90deg)}.fn{width:100%}
+  .pull{font-size:17px}.close{padding:28px 22px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero"><div class="hi">
+  <div class="kick">Para Mile · Agosto 2026</div>
+  <h1>Estás cobrando casi el salario mínimo legal.</h1>
+  <p>Y no lo digo para bajonearte. Lo digo porque es un dato verificable, porque explica todo, y porque <strong>se arregla</strong>. Acá está la prueba, cuánto deberías estar ganando, y un plan donde vos hacés casi nada.</p>
+</div></div>
+
+<div class="wrap">
+
+<!-- 1 -->
+<section>
+  <div class="eyebrow">El dato duro</div>
+  <h2>Tu contrato, contra la ley</h2>
+
+  <p>Tu contrato dice <strong>€2.698,38 brutos por mes</strong>, más 8% de vakantiegeld. Y te clasifica en la categoría <em>"basic wage or youth wage"</em>.</p>
+
+  <p>Desde el 1 de julio de 2026, el salario mínimo legal en Países Bajos es de <strong>€14,99 por hora</strong>. A jornada completa de 40 horas, eso da <strong>€2.598,27 por mes</strong>.</p>
+
+  <div class="card rd">
+    <p style="margin-bottom:0;font-size:18px"><strong>Estás cobrando €100 por mes por encima del mínimo legal.</strong> Un 3,9% más que lo que la ley obliga a pagarle a cualquier persona sin ninguna calificación.</p>
+  </div>
+
+  <p>Y esto es lo que hacés a cambio: conciliaciones bancarias y de tarjetas, asientos contables manuales, propuestas de pago, batch payments en Dynamics, pagos manuales urgentes, cierre de mes, gestión de contracargos con Elavon, soporte presencial a una auditoría externa. Para <strong>dos hoteles en España, desde Países Bajos, en inglés</strong>. Con un título de Contadora Pública de cinco años.</p>
+
+  <div class="pull">No es que estés mal paga. Es que te están pagando como si no tuvieras el título ni supieras hacer nada de esto.</div>
+</section>
+
+<hr>
+
+<!-- 2 -->
+<section>
+  <div class="eyebrow">Lo que dice el mercado</div>
+  <h2>Cuánto deberías estar ganando</h2>
+
+  <p>Estos son los rangos de la <strong>guía salarial 2026 de Robert Half para Países Bajos</strong>, construida sobre colocaciones reales. Son salarios base anuales, sin contar vakantiegeld.</p>
+
+  <div style="margin:24px 0 8px">
+    <div class="bar-row">
+      <div class="bl"><span class="n">Mínimo legal (40h)</span><span class="v">€31.179</span></div>
+      <div class="bt"><div class="bf f1" style="width:35%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">Vos hoy (base, sin vakantiegeld)</span><span class="v">€32.381</span></div>
+      <div class="bt"><div class="bf f2" style="width:36%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">AP/AR Accountant — percentil 25</span><span class="v">€38.733</span></div>
+      <div class="bt"><div class="bf f3" style="width:43%">+20%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">AP/AR Accountant — mediana</span><span class="v">€45.112</span></div>
+      <div class="bt"><div class="bf f3" style="width:50%">+39%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">Accounting Clerk — mediana</span><span class="v">€47.835</span></div>
+      <div class="bt"><div class="bf f4" style="width:53%">+48%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">AP/AR Accountant — percentil 75</span><span class="v">€52.223</span></div>
+      <div class="bt"><div class="bf f4" style="width:58%">+61%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">Assistant Controller — mediana</span><span class="v">€60.890</span></div>
+      <div class="bt"><div class="bf f5" style="width:68%">+88%</div></div>
+    </div>
+    <p class="note">Todos son salarios base anuales. La barra tuya no llega ni al percentil 25 del puesto que ya ejercés todos los días.</p>
+  </div>
+
+  <div class="card gr">
+    <h3>El objetivo, en números concretos</h3>
+    <p><strong>Realista ahora: €42.000 – €52.000.</strong> Es un salto de entre 30% y 60% sobre tu base actual, y es simplemente cobrar lo que el mercado paga por lo que ya sabés hacer.</p>
+    <p style="margin-bottom:0"><strong>En 18-24 meses: €55.000 – €65.000</strong>, cuando sumes antigüedad en cierre contable y puedas apuntar a Assistant Controller.</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- 3 -->
+<section>
+  <div class="eyebrow">Y ahora la buena noticia</div>
+  <h2>Ya demostraste que sos buenísima en esto</h2>
+
+  <p>Entre septiembre de 2025 y marzo de 2026 estuviste buscando trabajo. Y mientras buscabas, te sostuviste haciendo y vendiendo tortas y alfajores. Eso, dicho de paso, no es un agujero en tu CV: es una historia de la que se habla con orgullo en una entrevista.</p>
+
+  <p>Pero lo importante son estos números:</p>
+
+  <div class="funnel">
+    <div class="fn"><div class="big">5</div><div class="lbl">postulaciones</div></div>
+    <div class="arrow">→</div>
+    <div class="fn"><div class="big">4</div><div class="lbl">te llamaron</div></div>
+    <div class="arrow">→</div>
+    <div class="fn"><div class="big">4</div><div class="lbl">llegaste a 3ª entrevista</div></div>
+  </div>
+
+  <p><strong>80% de respuesta. Y en el 100% de esas, llegaste a tercera ronda.</strong> Un candidato promedio necesita entre 20 y 40 postulaciones para conseguir una sola entrevista.</p>
+
+  <div class="pull">Tu problema nunca fue la calidad. Fue el volumen. Aplicaste a cinco.</div>
+
+  <p>Sos excelente en las entrevistas: tenés carisma, te manejás bien, la gente te quiere. Lo único que te falta es práctica y confianza, y eso viene solo con repetición.</p>
+
+  <p>Así que la estrategia es una sola cosa: <strong>subir el volumen sin que te cueste esfuerzo</strong>. Si con 5 aplicaciones conseguiste 4 entrevistas, con 20 —incluso si la tasa se te cae a la mitad— tenés 8. Y con 8 procesos abiertos, no aceptás lo primero que llega: elegís, y negociás.</p>
+</section>
+
+<hr>
+
+<!-- 4 -->
+<section>
+  <div class="eyebrow">Tus opciones</div>
+  <h2>A qué podés aplicar hoy</h2>
+
+  <table>
+    <tr><th>Puesto</th><th>Encaje</th><th>Salario</th></tr>
+    <tr>
+      <td><span class="role">AP / AR Accountant</span><span class="why">Es literalmente lo que hacés todos los días. Aplicá a todo lo que aparezca.</span></td>
+      <td class="fit hi-f">95%</td>
+      <td class="sal">€39k–52k</td>
+    </tr>
+    <tr>
+      <td><span class="role">Accounting Clerk / Finance Officer</span><span class="why">Mismo trabajo, título que usan las multinacionales. Suele pagar mejor.</span></td>
+      <td class="fit hi-f">90%</td>
+      <td class="sal">€41k–56k</td>
+    </tr>
+    <tr>
+      <td><span class="role">Hotel / Hospitality Finance</span><span class="why">Opera, MICROS, Marriott, contracargos. Sos la candidata perfecta — pero el sector paga poco. Usalo de piso, no de techo.</span></td>
+      <td class="fit hi-f">95%</td>
+      <td class="sal">€38k–50k</td>
+    </tr>
+    <tr>
+      <td><span class="role">Payment / Disputes Operations</span><span class="why">Nicho donde casi no tenés competencia: chargebacks, Elavon, FreedomPay. Fintechs y procesadoras de pago.</span></td>
+      <td class="fit md-f">70%</td>
+      <td class="sal">€42k–55k</td>
+    </tr>
+    <tr>
+      <td><span class="role">GL Accountant (junior)</span><span class="why">Tenés las tareas —conciliaciones, asientos, cierre— pero te falta antigüedad. Aplicá igual: se pierde nada.</span></td>
+      <td class="fit md-f">60%</td>
+      <td class="sal">€45k–60k</td>
+    </tr>
+    <tr>
+      <td><span class="role">Assistant Controller</span><span class="why">Hoy es un salto largo. Es el objetivo a 18-24 meses, no a hoy.</span></td>
+      <td class="fit lo-f">35%</td>
+      <td class="sal">€51k–69k</td>
+    </tr>
+  </table>
+
+  <p class="note">Los porcentajes son mi evaluación honesta cruzando tu perfil con lo que piden estas vacantes, no un dato estadístico. Los salarios son de la guía Robert Half 2026 salvo Payment Operations, que es estimado.</p>
+
+  <div class="card acc">
+    <h3>Dónde están estas vacantes</h3>
+    <p>Hay aproximadamente <strong>300 vacantes de contabilidad en inglés solo en Ámsterdam</strong> según englishjobsearch.nl, y más de 2.000 vacantes de accounting en la región. No es un mercado seco.</p>
+    <p style="margin-bottom:0">Los sectores que pagan por encima de hotelería y contratan en inglés: <strong>shared service centers de multinacionales</strong> (Booking, Adyen, Heineken, Philips, Netflix, Uber), <strong>fintech y banca</strong>, <strong>farma</strong>, <strong>logística</strong> y <strong>consultoría</strong>.</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- 5 -->
+<section>
+  <div class="eyebrow">Tus tres cartas</div>
+  <h2>Lo que tenés y otros no</h2>
+
+  <p><strong>Contracargos con Elavon.</strong> Investigás una transacción disputada, reconstruís qué pasó, armás la evidencia y defendés la posición ante un tercero que ya te retuvo la plata. Casi ningún candidato de tu nivel tiene esto, y se transfiere directo a fraude, disputas y payment operations.</p>
+
+  <p><strong>Soporte presencial a una auditoría externa.</strong> Te mandaron a Barcelona a sostener la auditoría del hotel. La mayoría de los perfiles junior nunca toca una auditoría en su vida. Que te hayan mandado a vos dice que confían en tu criterio.</p>
+
+  <p><strong>Aprendés sola.</strong> Generaste un batch payment en Dynamics, lo mandaste al banco, lo subiste, y después hiciste dos pagos manuales urgentes. Nadie te explicó nada y salió todo perfecto a la primera. Esa historia, contada así de concreta, vale oro en una entrevista.</p>
+
+  <div class="card">
+    <h3>Y para la pregunta que te van a hacer</h3>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:10px">"Entraste en marzo. ¿Por qué te querés ir tan pronto?"</p>
+    <div class="quote">
+      <div class="qt">Tu respuesta</div>
+      <p>"I joined Odyssey to build the foundations and I have — I now run the full cycle for two properties on my own. What I am looking for next is depth: a bigger finance team where I can grow into general ledger and reporting instead of being the whole department. That path does not exist where I am, and I would rather move while I am learning than wait until I am stuck."</p>
+    </div>
+    <p style="margin-bottom:0;font-size:15px">Es verdad, es concreto, y no habla de plata. Nunca menciones el sueldo como motivo — no porque esté mal, sino porque el que se va por plata se va otra vez por plata, y eso lo piensan todos los que contratan.</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- 6 -->
+<section>
+  <div class="eyebrow">El plan</div>
+  <h2>Cómo lo hacemos con el mínimo esfuerzo tuyo</h2>
+
+  <p class="lead">La idea es que vos hagas dos cosas nada más: <strong>elegir</strong> y <strong>presentarte</strong>. El resto lo armamos nosotros.</p>
+
+  <div class="step"><div class="sn">1</div><div>
+    <h4>Todos los viernes te llega una lista</h4>
+    <p>Cinco a ocho vacantes filtradas: puesto, empresa, sueldo, y una línea de por qué encajás. Ya vienen elegidas para vos.</p>
+  </div></div>
+
+  <div class="step"><div class="sn">2</div><div>
+    <h4>Vos decís sí o no a cada una</h4>
+    <p>Cinco minutos. Sin leer descripciones largas, sin analizar nada. Solo instinto: esta sí, esta no.</p>
+  </div></div>
+
+  <div class="step"><div class="sn a">3</div><div>
+    <h4>Nosotros armamos el CV y la carta de cada una</h4>
+    <p>Adaptados a esa vacante específica, con tus palabras clave y tu experiencia ordenada según lo que pide el aviso. Vos no escribís nada.</p>
+  </div></div>
+
+  <div class="step"><div class="sn a">4</div><div>
+    <h4>Se envían</h4>
+    <p>Objetivo: cinco por semana. Veinte por mes.</p>
+  </div></div>
+
+  <div class="step"><div class="sn">5</div><div>
+    <h4>Vos hacés lo que hacés bien: las entrevistas</h4>
+    <p>Ahí es donde tu 80% de respuesta se convierte en ofertas. Y con varias ofertas arriba de la mesa, elegís y negociás en vez de aceptar.</p>
+  </div></div>
+
+  <div class="card gr">
+    <h3>Las tres cosas que sí necesitamos de vos</h3>
+    <ul style="margin-bottom:0">
+      <li><strong>Los números de Odyssey:</strong> cuántas facturas por mes, de cuánto son los payment runs, en qué mes fue la auditoría de Barcelona.</li>
+      <li><strong>Actualizar LinkedIn:</strong> agregar Odyssey, que todavía no está. Y sacar la palabra "Junior".</li>
+      <li><strong>Cinco minutos los sábados</strong> para marcar la lista.</li>
+    </ul>
+  </div>
+</section>
+
+<hr>
+
+<!-- 7 -->
+<section>
+  <div class="eyebrow">Esto ya está funcionando</div>
+  <h2>La máquina que armamos</h2>
+
+  <p class="lead">Nada de esto es un plan que hay que empezar. Ya está construido y andando.</p>
+
+  <div class="card acc">
+    <h3>1. Un escaneo automático, todos los viernes</h3>
+    <p style="margin-bottom:0">Hay un proceso que corre solo cada viernes a la mañana. Rastrea vacantes nuevas de finanzas en Utrecht, Ámsterdam y alrededores, descarta todo lo que pida neerlandés y todo lo que pague menos de €38.000, verifica que cada aviso exista de verdad y siga abierto, y arma una página con las 5 a 8 mejores. Cada una con el sueldo, una línea de por qué encajás, y dos botones: <strong>SÍ</strong> y <strong>NO</strong>.</p>
+  </div>
+
+  <div class="card acc">
+    <h3>2. Un generador de aplicaciones</h3>
+    <p>Por cada vacante que marcás con sí, se genera un CV y una carta adaptados a ese aviso puntual: reordenados según lo que pide, con las palabras exactas que usa la empresa para que pase el filtro automático, y el puesto posicionado según el tipo de rol.</p>
+    <p style="margin-bottom:0">Lo que antes eran cuarenta minutos por aplicación ahora son dos.</p>
+  </div>
+
+  <div class="card acc">
+    <h3>3. Reglas para que suene a vos, no a un robot</h3>
+    <p>Esto importa más de lo que parece. El generador tiene instrucciones explícitas de escribir como una persona: nada de palabras de folleto, nada de logros inflados, frases de largo variado, detalles concretos.</p>
+    <p><strong>Y una regla que está por encima de todas:</strong> cada línea del CV tiene que ser algo que vos puedas defender en tres minutos de repreguntas. Si suena más impresionante de lo que podés sostener, se baja. Vos tenés que poder leerlo y pensar "sí, esto lo hice yo".</p>
+    <p style="margin-bottom:0">También sabe detectar las trampas que algunas empresas esconden en los avisos para pescar a quien aplica con inteligencia artificial sin leer. Si aparece una, avisa en vez de caer.</p>
+  </div>
+
+  <div class="card">
+    <h3>4. Un tracker</h3>
+    <p style="margin-bottom:0">Una planilla que lleva la cuenta de todo: dónde aplicaste, en qué estado está cada proceso, cuántos días pasaron sin novedades y qué seguimientos quedaron colgados. Con un tablero que se calcula solo. Nunca más se pierde nada.</p>
+  </div>
+
+  <div class="pull">Tu único trabajo en todo esto: marcar sí o no, y presentarte.</div>
+</section>
+
+<div class="close">
+  <h2>Mile</h2>
+  <p>Sos Contadora Pública. Llevás la contabilidad completa de dos hoteles en otro país, en un idioma que no es el tuyo, con un ERP que aprendiste sola. Sostuviste seis meses vendiendo tortas sin bajar los brazos. Y cuando te sentás en una entrevista, <strong>4 de cada 5 veces te llaman de vuelta</strong>.</p>
+  <p>Y estás cobrando cien euros por encima del mínimo legal.</p>
+  <p>Eso no dice nada de tu valor. Dice todo del lugar donde está puesto tu valor hoy.</p>
+  <p>El plan no te pide que seas otra persona ni que trabajes el doble. Te pide cinco minutos los sábados y que vayas a las entrevistas, que es <strong>lo único que ya sabés hacer mejor que casi nadie</strong>.</p>
+  <p style="margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.18);font-size:15.5px;color:#B9CBE0">La primera lista te llega este viernes.</p>
+</div>
+
+</div>
+</body>
+</html>
