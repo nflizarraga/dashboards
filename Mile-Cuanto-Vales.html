@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mile — lo que hacés y lo que vale</title>
+<style>
+:root{
+  --navy:#1B3A5C;--navy2:#3A5F87;--amber:#C8781E;--amber2:#F0A94C;
+  --cream:#FCFAF6;--ink:#2A3743;--muted:#70808F;--line:#E7E0D5;
+  --green:#2E7D5B;--greenbg:#E8F2EC;--warm:#FDF6EC;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-size:17px;line-height:1.68;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 24px 80px}
+.hero{background:linear-gradient(165deg,#24486E,#1B3A5C 55%,#2E5680);color:#fff;
+  padding:66px 24px 58px;margin-bottom:46px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-100px;top:-100px;width:320px;height:320px;
+  border-radius:50%;background:rgba(240,169,76,.12)}
+.hi{max-width:720px;margin:0 auto;position:relative;z-index:1}
+.kick{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber2);font-weight:700;margin-bottom:18px}
+.hero h1{font-size:38px;line-height:1.18;font-weight:800;letter-spacing:-.02em;margin-bottom:20px}
+.hero p{font-size:18px;color:#D6E2EE;max-width:570px}
+.hero p+p{margin-top:12px}
+.hero strong{color:#fff}
+section{margin-bottom:46px}
+.eyebrow{display:inline-block;font-size:11px;letter-spacing:.17em;text-transform:uppercase;
+  font-weight:700;color:var(--amber);margin-bottom:9px}
+h2{font-size:27px;line-height:1.22;font-weight:800;letter-spacing:-.02em;color:var(--navy);margin-bottom:16px}
+h3{font-size:18px;font-weight:700;color:var(--navy);margin:22px 0 9px}
+p{margin-bottom:14px}
+.lead{font-size:18.5px;color:var(--navy2)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:23px 25px;margin:20px 0}
+.acc{border-left:4px solid var(--amber)}
+.gr{background:var(--greenbg);border-color:#CDE3D7}
+.wm{background:var(--warm);border-color:#F0DFC5}
+.card h3:first-child{margin-top:0}
+.card p:last-child{margin-bottom:0}
+.bar-row{margin-bottom:16px}
+.bl{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;margin-bottom:6px}
+.bl .n{font-weight:700;color:var(--navy)}
+.bl .v{font-weight:800;font-size:16px;color:var(--navy)}
+.bt{height:28px;background:#EDE7DC;border-radius:7px;overflow:hidden}
+.bf{height:100%;border-radius:7px;display:flex;align-items:center;justify-content:flex-end;
+  padding-right:11px;color:#fff;font-size:11.5px;font-weight:700}
+.f0{background:#9FAAB6}.f1{background:var(--amber2)}.f2{background:var(--amber)}
+.f3{background:#B0651A}.f4{background:var(--navy)}
+.note{font-size:13.5px;color:var(--muted);margin-top:12px;line-height:1.52}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:15px}
+th{text-align:left;padding:10px 8px;border-bottom:2px solid var(--navy);color:var(--navy);
+  font-size:11.5px;letter-spacing:.06em;text-transform:uppercase}
+td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.role{font-weight:700;color:var(--navy);display:block}
+.why{color:var(--muted);font-size:13.5px;line-height:1.45;display:block;margin-top:2px}
+.fit{font-weight:800;white-space:nowrap}
+.hf{color:var(--green)}.mf{color:var(--amber)}.lf{color:var(--muted)}
+.sal{font-weight:700;color:var(--navy);white-space:nowrap;font-size:14px}
+.funnel{display:flex;align-items:center;gap:10px;margin:22px 0;flex-wrap:wrap}
+.fn{flex:1;min-width:115px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+.fn .big{font-size:31px;font-weight:800;color:var(--amber);line-height:1}
+.fn .lbl{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+.arrow{color:var(--line);font-size:21px;font-weight:800}
+.doing{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:20px 0}
+.d{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.4}
+ul{margin:0 0 14px 20px}li{margin-bottom:8px;line-height:1.55}
+li::marker{color:var(--amber)}
+.pull{border-left:4px solid var(--amber);padding:5px 0 5px 20px;margin:24px 0;
+  font-size:19px;line-height:1.5;font-weight:600;color:var(--navy)}
+.step{display:flex;gap:15px;margin-bottom:17px;align-items:flex-start}
+.sn{flex:0 0 29px;height:29px;border-radius:50%;background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13.5px}
+.sn.a{background:var(--amber)}
+.step h4{font-size:16.5px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.step p{font-size:15px;margin-bottom:0;line-height:1.55}
+.quote{background:#FDFCFA;border:1px solid var(--line);border-radius:12px;padding:19px 21px;margin:15px 0;
+  font-family:Georgia,serif;font-size:15.5px;line-height:1.7;color:#3D4B59}
+.qt{font-family:-apple-system,sans-serif;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+  font-weight:700;color:var(--amber);margin-bottom:10px}
+hr{border:none;height:1px;background:var(--line);margin:42px 0}
+.close{background:linear-gradient(165deg,#24486E,#1B3A5C);color:#fff;border-radius:16px;padding:36px 32px;margin-top:42px}
+.close h2{color:#fff;font-size:24px}
+.close p{color:#D6E2EE;font-size:17px}
+.close p:last-child{margin-bottom:0}
+.close strong{color:var(--amber2)}
+@media(max-width:600px){
+  body{font-size:16px}.hero{padding:46px 20px 40px}.hero h1{font-size:28px}.hero p{font-size:16.5px}
+  h2{font-size:22px}.wrap{padding:0 18px 60px}.card{padding:18px}
+  table{font-size:13.5px}td,th{padding:9px 5px}
+  .funnel{flex-direction:column}.arrow{transform:rotate(90deg)}.fn{width:100%}
+  .doing{grid-template-columns:1fr}
+  .pull{font-size:17px}.close{padding:26px 21px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero"><div class="hi">
+  <div class="kick">Para Mile</div>
+  <h1>Hicimos las cuentas. Y hay una diferencia enorme a tu favor.</h1>
+  <p>Estuvimos mirando en serio lo que hacés todos los días y lo que el mercado paga por eso. La distancia es más grande de lo que imaginábamos, y es <strong>buena noticia</strong>: significa que hay mucho para ganar.</p>
+  <p>Acá está todo. Y también un plan donde vos casi no tenés que hacer nada.</p>
+</div></div>
+
+<div class="wrap">
+
+<!-- 1 -->
+<section>
+  <div class="eyebrow">Empecemos por acá</div>
+  <h2>Lo que hacés todos los días</h2>
+
+  <p class="lead">Vale la pena verlo escrito, porque cuando algo se hace todos los días deja de parecer difícil. Y esto es difícil.</p>
+
+  <div class="doing">
+    <div class="d">Más de <strong>200 facturas por semana</strong> en Dynamics 365</div>
+    <div class="d"><strong>Conciliaciones bancarias</strong> y de tarjetas</div>
+    <div class="d"><strong>Asientos contables manuales</strong> y ledgers de bancos</div>
+    <div class="d"><strong>Cierre de mes</strong>: proveedores, clientes, partidas abiertas</div>
+    <div class="d"><strong>Contracargos</strong> con Elavon, de punta a punta</div>
+    <div class="d">Soporte presencial a una <strong>auditoría externa</strong></div>
+    <div class="d">Dos hoteles en <strong>otro país</strong>, desde Utrecht</div>
+    <div class="d">En <strong>inglés</strong> con NL y en <strong>español</strong> con España</div>
+  </div>
+
+  <p>Eso no es "un puesto administrativo". Es la contabilidad completa de dos operaciones, sola, con un ERP que aprendiste por tu cuenta, en dos idiomas y dos países.</p>
+
+  <p>Y hay dos cosas ahí adentro que casi nadie de tu nivel tiene:</p>
+
+  <p><strong>Los contracargos.</strong> Cuando un huésped reclama al banco y el adquirente te retiene la plata, vos investigás qué pasó de verdad, armás la evidencia y peleás el caso con Elavon. Eso es trabajo de investigación, no de carga de datos. Y se transfiere directo a fraude, disputas y operaciones de pago, que son áreas que pagan bien.</p>
+
+  <p><strong>La auditoría de Barcelona.</strong> Te mandaron presencialmente a sostener una auditoría externa. La mayoría de la gente con tu antigüedad nunca toca una auditoría. Que te hayan mandado a vos dice algo sobre cuánto confían en tu criterio.</p>
+</section>
+
+<hr>
+
+<!-- 2 -->
+<section>
+  <div class="eyebrow">Y esto ya lo demostraste</div>
+  <h2>Sos buenísima en las entrevistas</h2>
+
+  <p>Aquellos meses entre Rabobank y Odyssey fueron duros. Buscar trabajo desgasta, y encima estabas sosteniéndote haciendo tortas y alfajores. Eso no fue un bache: fue aguantar de pie una etapa difícil, y hacerlo generando plata.</p>
+
+  <p>Pero mirá los números que dejó esa búsqueda:</p>
+
+  <div class="funnel">
+    <div class="fn"><div class="big">5</div><div class="lbl">postulaciones</div></div>
+    <div class="arrow">→</div>
+    <div class="fn"><div class="big">4</div><div class="lbl">te llamaron</div></div>
+    <div class="arrow">→</div>
+    <div class="fn"><div class="big">4</div><div class="lbl">llegaste a 3ª entrevista</div></div>
+  </div>
+
+  <p><strong>Cuatro de cada cinco te contestaron. Y en las cuatro llegaste a tercera ronda.</strong> Para tener contexto: una persona promedio manda entre veinte y cuarenta postulaciones para conseguir <em>una</em> entrevista.</p>
+
+  <div class="card gr">
+    <p><strong>O sea que el problema nunca fue tu perfil, ni tu CV, ni cómo te presentás.</strong> Cuando te sentás enfrente de alguien, funcionás. Lo único que faltó fue cantidad: aplicaste a cinco.</p>
+    <p>Y eso es una noticia buenísima, porque la cantidad es justamente lo más fácil de resolver. Sobre todo si no la tenés que resolver vos sola.</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- 3 -->
+<section>
+  <div class="eyebrow">La parte de los números</div>
+  <h2>Lo que el mercado paga por eso</h2>
+
+  <p>Acá va un dato que puede sorprenderte, y te lo cuento sin dramatismo porque no es una crítica a nada que hayas hecho.</p>
+
+  <p>Tu contrato dice <strong>€2.698,38 brutos por mes</strong>, más el 8% de vacaciones, y te ubica en la categoría <em>"basic wage"</em>. El mínimo legal en Países Bajos, desde julio de 2026, es de €14,99 por hora, que a jornada completa da alrededor de <strong>€2.598 por mes</strong>.</p>
+
+  <div class="card wm">
+    <p>Es decir: tu contrato quedó armado casi en el piso de la escala legal, en una categoría pensada para trabajo sin calificación.</p>
+    <p><strong>Eso no habla de vos. Habla de cómo quedó firmado ese contrato.</strong></p>
+    <p>Lo firmaste cuando necesitabas entrar, después de seis meses de búsqueda, en un país que no es el tuyo. Cualquiera hubiera hecho lo mismo, y fue la decisión correcta en ese momento. Lo que pasa es que el trabajo creció muchísimo desde entonces y el sueldo se quedó donde estaba.</p>
+  </div>
+
+  <p>Estos son los rangos de la guía salarial 2026 de Robert Half para Países Bajos, armada sobre contrataciones reales. Son salarios base anuales, sin vacaciones:</p>
+
+  <div style="margin:22px 0 8px">
+    <div class="bar-row">
+      <div class="bl"><span class="n">Tu base hoy</span><span class="v">€32.381</span></div>
+      <div class="bt"><div class="bf f0" style="width:36%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">AP/AR Accountant — percentil 25</span><span class="v">€38.733</span></div>
+      <div class="bt"><div class="bf f1" style="width:43%">+20%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">AP/AR Accountant — mediana</span><span class="v">€45.112</span></div>
+      <div class="bt"><div class="bf f2" style="width:50%">+39%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">Accounting Clerk — mediana</span><span class="v">€47.835</span></div>
+      <div class="bt"><div class="bf f3" style="width:53%">+48%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">AP/AR Accountant — percentil 75</span><span class="v">€52.223</span></div>
+      <div class="bt"><div class="bf f3" style="width:58%">+61%</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bl"><span class="n">Assistant Controller — mediana</span><span class="v">€60.890</span></div>
+      <div class="bt"><div class="bf f4" style="width:68%">+88%</div></div>
+    </div>
+    <p class="note">El percentil 25 es lo que cobra alguien que <em>recién arranca</em> en el puesto. Vos ya hacés más que eso.</p>
+  </div>
+
+  <div class="card gr">
+    <h3>Lo que buscamos, en concreto</h3>
+    <p><strong>Ahora: entre €42.000 y €52.000.</strong> No es pedir de más. Es cobrar lo que se paga por lo que ya sabés hacer.</p>
+    <p><strong>En un par de años: €55.000 a €65.000</strong>, cuando sumes recorrido en cierre contable y puedas ir por Assistant Controller.</p>
+  </div>
+
+  <div class="pull">La distancia entre esos dos números es lo que cambia bastante cómo vivís. Y está totalmente a tu alcance.</div>
+</section>
+
+<hr>
+
+<!-- 4 -->
+<section>
+  <div class="eyebrow">Tus opciones</div>
+  <h2>A qué podés aplicar</h2>
+
+  <table>
+    <tr><th>Puesto</th><th>Encaje</th><th>Salario</th></tr>
+    <tr>
+      <td><span class="role">AP / AR Accountant</span><span class="why">Es literalmente lo que hacés. Aplicá a todo lo que aparezca.</span></td>
+      <td class="fit hf">95%</td><td class="sal">€39k–52k</td>
+    </tr>
+    <tr>
+      <td><span class="role">Accounting Clerk / Finance Officer</span><span class="why">El mismo trabajo con el nombre que usan las multinacionales. Suele pagar mejor.</span></td>
+      <td class="fit hf">90%</td><td class="sal">€41k–56k</td>
+    </tr>
+    <tr>
+      <td><span class="role">Finanzas con operaciones en España o LatAm</span><span class="why">Tu inglés y tu español juntos valen plata acá. Hay bastante de esto en Ámsterdam.</span></td>
+      <td class="fit hf">90%</td><td class="sal">€42k–55k</td>
+    </tr>
+    <tr>
+      <td><span class="role">Payment / Disputes Operations</span><span class="why">Nicho donde casi no tenés competencia: contracargos, Elavon, FreedomPay.</span></td>
+      <td class="fit mf">70%</td><td class="sal">€42k–55k</td>
+    </tr>
+    <tr>
+      <td><span class="role">GL Accountant (junior)</span><span class="why">Ya hacés las tareas. Te falta antigüedad, nada más. Aplicá igual, no se pierde nada.</span></td>
+      <td class="fit mf">60%</td><td class="sal">€45k–60k</td>
+    </tr>
+    <tr>
+      <td><span class="role">Assistant Controller</span><span class="why">Hoy es un salto largo. Es el objetivo para dentro de dos años.</span></td>
+      <td class="fit lf">35%</td><td class="sal">€51k–69k</td>
+    </tr>
+  </table>
+
+  <p class="note">Los porcentajes son una estimación honesta cruzando tu perfil con lo que piden estas vacantes, no un dato estadístico. Los salarios salen de la guía Robert Half 2026, salvo Payments que es estimado.</p>
+
+  <p>Y hay mercado: solo en Ámsterdam hay alrededor de <strong>300 vacantes de contabilidad en inglés</strong> publicadas. No estamos buscando una aguja en un pajar.</p>
+</section>
+
+<hr>
+
+<!-- 5 -->
+<section>
+  <div class="eyebrow">Antes de que te lo pregunten</div>
+  <h2>La única pregunta incómoda</h2>
+
+  <p style="color:var(--muted);font-size:15.5px">"Entraste en marzo. ¿Por qué te querés ir tan pronto?"</p>
+
+  <p>La respuesta ya está pensada, y es verdadera:</p>
+
+  <div class="quote">
+    <div class="qt">Tu respuesta</div>
+    <p>"I joined Odyssey to build the foundations and I have — I now run the full cycle for two properties on my own. What I am looking for next is depth: a bigger finance team where I can grow into general ledger and reporting instead of being the whole department. That path does not exist where I am, and I would rather move while I am learning than wait until I am stuck."</p>
+  </div>
+
+  <p>Es cierto: hoy sos el departamento de finanzas entero de dos hoteles, y no hay nadie por encima de quien aprender. Querer eso es completamente legítimo.</p>
+
+  <p><strong>El único cuidado:</strong> nunca menciones el sueldo como motivo. No porque esté mal —es un motivo perfectamente válido— sino porque quien contrata piensa "si se va por plata, se va otra vez por plata". El motivo que se dice siempre es crecimiento. Y en tu caso además es el verdadero.</p>
+</section>
+
+<hr>
+
+<!-- 6 -->
+<section>
+  <div class="eyebrow">Cómo lo hacemos</div>
+  <h2>Vos hacés casi nada</h2>
+
+  <p class="lead">La idea es que buscar trabajo no se te vuelva un segundo trabajo. Vos ponés dos cosas: <strong>elegir</strong> y <strong>presentarte</strong>.</p>
+
+  <div class="step"><div class="sn">1</div><div>
+    <h4>Lunes, miércoles y viernes te llega una lista corta</h4>
+    <p>Tres a cinco vacantes, recién publicadas. Puesto, empresa, sueldo y una línea de por qué encajás. Ya vienen filtradas para vos.</p>
+  </div></div>
+
+  <div class="step"><div class="sn">2</div><div>
+    <h4>Marcás sí o no</h4>
+    <p>Dos minutos. Sin leer descripciones largas, sin analizar. Instinto nomás: esta sí, esta no.</p>
+  </div></div>
+
+  <div class="step"><div class="sn a">3</div><div>
+    <h4>Nosotros armamos el CV y la carta de cada una</h4>
+    <p>Adaptados a ese aviso puntual, con las palabras que usa la empresa para que pase los filtros automáticos. Vos no escribís nada.</p>
+  </div></div>
+
+  <div class="step"><div class="sn a">4</div><div>
+    <h4>Se envían</h4>
+    <p>Apuntamos a unas cinco por semana. Con tu tasa de respuesta, eso alcanza y sobra.</p>
+  </div></div>
+
+  <div class="step"><div class="sn">5</div><div>
+    <h4>Vos hacés lo que ya hacés bien</h4>
+    <p>Ir a las entrevistas. Y con varios procesos abiertos a la vez, no tenés que aceptar lo primero: podés elegir.</p>
+  </div></div>
+
+  <div class="card acc">
+    <h3>Por qué cada dos días y no una vez por semana</h3>
+    <p>Porque en las vacantes buenas, estar entre los diez primeros en aplicar cambia mucho las probabilidades. El escaneo corre solo, lunes, miércoles y viernes, y busca lo publicado en las últimas 48 horas.</p>
+    <p><strong>Y si algún día no hay nada bueno, no te llega nada.</strong> Preferimos mandarte dos vacantes que valen la pena antes que seis de relleno.</p>
+  </div>
+
+  <div class="card gr">
+    <h3>Lo único que necesitamos de vos</h3>
+    <ul style="margin-bottom:0">
+      <li>Agregar Odyssey a tu LinkedIn, que todavía no está.</li>
+      <li>Confirmar en qué mes fue la auditoría de Barcelona.</li>
+      <li>Dos minutos cada dos días para marcar la lista.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="close">
+  <h2>Mile</h2>
+  <p>Llegaste a otro país, arrancaste de cero, y hoy llevás la contabilidad completa de dos hoteles en un tercer país, en dos idiomas, con sistemas que aprendiste sola. Sostuviste seis meses difíciles sin bajar los brazos. Y cuando te sentás en una entrevista, <strong>cuatro de cada cinco veces te quieren</strong>.</p>
+  <p>Nada de eso está en discusión. Lo único que quedó desactualizado es el número del recibo.</p>
+  <p>No hace falta que te transformes en otra persona ni que le dediques horas a esto. Alcanza con dos minutos cada dos días, y con seguir siendo la que ya sos cuando te sentás a conversar con alguien.</p>
+  <p><strong>Del resto nos ocupamos nosotros.</strong></p>
+</div>
+
+</div>
+</body>
+</html>
