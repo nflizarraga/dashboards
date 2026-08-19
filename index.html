@@ -10,12 +10,26 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     max-width: 640px;
     margin: 40px auto;
-    padding: 0 20px;
+    padding: 0 20px 60px;
     background: #f6f7f9;
     color: #1a1a2e;
   }
-  h1 { font-size: 1.5rem; }
-  #lista { list-style: none; padding: 0; }
+  h1 { font-size: 1.5rem; margin-bottom: 4px; }
+  .estado { color: #888; font-size: .9rem; margin-top: 0; }
+  #buscador {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    margin: 18px 0 16px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: inherit;
+    background: #fff;
+    border: 1px solid #e2e4e8;
+    border-radius: 10px;
+  }
+  #buscador:focus { outline: 2px solid #1a56db; outline-offset: 1px; }
+  #lista { list-style: none; padding: 0; margin: 0; }
   #lista li {
     background: #fff;
     border: 1px solid #e2e4e8;
@@ -31,81 +45,149 @@
     color: inherit;
     word-break: break-word;
   }
+  #lista a:focus-visible { outline: 2px solid #1a56db; outline-offset: 2px; border-radius: 10px; }
   .nombre { color: #1a56db; font-weight: 500; }
   .fecha { display: block; font-size: .85rem; color: #888; margin-top: 4px; }
-  .estado { color: #888; }
+  .aviso { font-size: .8rem; color: #999; margin-top: 20px; }
   @media (prefers-color-scheme: dark) {
     body { background: #15161a; color: #e6e6e6; }
-    #lista li { background: #1f2126; border-color: #33363d; }
+    #lista li, #buscador { background: #1f2126; border-color: #33363d; }
     .nombre { color: #7aa7ff; }
   }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
 <h1>📊 Dashboards</h1>
 <p class="estado" id="estado">Cargando…</p>
+
+<input id="buscador" type="search" placeholder="Buscar…" autocomplete="off" hidden>
 <ul id="lista"></ul>
+<p class="aviso" id="aviso" hidden></p>
 
 <script>
 const USUARIO = "nflizarraga";
-const REPO = "dashboards";
-const BRANCH = "main";
-const API = `https://api.github.com/repos/${USUARIO}/${REPO}`;
+const REPO    = "dashboards";
+const BRANCH  = "main";
+const API     = `https://api.github.com/repos/${USUARIO}/${REPO}/contents/?ref=${BRANCH}`;
+const CACHE   = "dashboards_lista_v1";
+const CACHE_MIN = 60; // minutos que vale la caché antes de volver a preguntar
 
-async function cargar() {
-  const archivos = await fetch(`${API}/contents/?ref=${BRANCH}`).then(r => r.json());
+let paginas = [];
 
-  const htmls = archivos.filter(f =>
-    f.type === "file" &&
-    /\.html?$/i.test(f.name) &&
-    f.name.toLowerCase() !== "index.html"
-  );
+/* ── Fuente 1: lista.json generado por GitHub Actions (mismo dominio, sin límites) ── */
+async function desdeJson() {
+  const r = await fetch("lista.json", { cache: "no-cache" });
+  if (!r.ok) throw new Error("sin lista.json");
+  const data = await r.json();
+  return data.map(f => ({ archivo: f.archivo, fecha: f.fecha || null }));
+}
 
-  // buscar la fecha del último commit de cada archivo
-  const conFecha = await Promise.all(htmls.map(async f => {
-    try {
-      const commits = await fetch(
-        `${API}/commits?path=${encodeURIComponent(f.path)}&sha=${BRANCH}&per_page=1`
-      ).then(r => r.json());
-      f.fecha = new Date(commits[0].commit.committer.date);
-    } catch (e) {
-      f.fecha = null;
-    }
-    return f;
-  }));
+/* ── Fuente 2: API de GitHub, UNA sola llamada por carga ── */
+async function desdeApi() {
+  const r = await fetch(API);
+  if (!r.ok) throw new Error("API " + r.status);
+  const archivos = await r.json();
+  if (!Array.isArray(archivos)) throw new Error("respuesta inesperada");
+  return archivos
+    .filter(f => f.type === "file"
+      && /\.html?$/i.test(f.name)
+      && f.name.toLowerCase() !== "index.html")
+    .map(f => ({ archivo: f.name, fecha: null }));
+}
 
-  // más recientes arriba
-  conFecha.sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
+/* ── Fuente 3: lo último que funcionó, guardado en el navegador ── */
+function leerCache() {
+  try {
+    const c = JSON.parse(localStorage.getItem(CACHE));
+    return c && Array.isArray(c.paginas) ? c : null;
+  } catch (e) { return null; }
+}
+function guardarCache(paginas) {
+  try { localStorage.setItem(CACHE, JSON.stringify({ ts: Date.now(), paginas })); } catch (e) {}
+}
+
+function titulo(archivo) {
+  return archivo.replace(/\.html?$/i, "").replace(/[_-]+/g, " ").trim();
+}
+
+function render(filtro = "") {
+  const q = filtro.trim().toLowerCase();
+  const visibles = paginas.filter(p => !q || titulo(p.archivo).toLowerCase().includes(q));
 
   const lista = document.getElementById("lista");
-  conFecha.forEach(f => {
+  lista.innerHTML = "";
+
+  visibles.forEach(p => {
     const li = document.createElement("li");
     const a = document.createElement("a");
-    a.href = f.name; // link relativo: funciona en GitHub Pages
+    a.href = encodeURI(p.archivo);
 
     const nombre = document.createElement("span");
     nombre.className = "nombre";
-    nombre.textContent = f.name.replace(/\.html?$/i, "").replace(/[_-]/g, " ");
-
-    const fecha = document.createElement("span");
-    fecha.className = "fecha";
-    fecha.textContent = f.fecha
-      ? "Subido el " + f.fecha.toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })
-      : "";
-
+    nombre.textContent = titulo(p.archivo);
     a.appendChild(nombre);
-    a.appendChild(fecha);
+
+    if (p.fecha) {
+      const fecha = document.createElement("span");
+      fecha.className = "fecha";
+      fecha.textContent = "Subido el " + new Date(p.fecha).toLocaleDateString("es-AR",
+        { day: "numeric", month: "long", year: "numeric" });
+      a.appendChild(fecha);
+    }
+
     li.appendChild(a);
     lista.appendChild(li);
   });
 
+  document.getElementById("buscador").hidden = paginas.length < 8;
   document.getElementById("estado").textContent =
-    conFecha.length ? `${conFecha.length} página${conFecha.length > 1 ? "s" : ""}` : "No hay páginas todavía.";
+    q && !visibles.length ? "Nada coincide con esa búsqueda."
+                          : `${visibles.length} página${visibles.length === 1 ? "" : "s"}`;
 }
 
-cargar().catch(() => {
-  document.getElementById("estado").textContent = "Error cargando la lista.";
-});
+function ordenar(lista) {
+  return lista.sort((a, b) => {
+    if (a.fecha && b.fecha) return new Date(b.fecha) - new Date(a.fecha);
+    return titulo(a.archivo).localeCompare(titulo(b.archivo), "es");
+  });
+}
+
+async function cargar() {
+  const cache = leerCache();
+  const cacheFresca = cache && (Date.now() - cache.ts) < CACHE_MIN * 60000;
+
+  // Si la caché está fresca, mostramos al instante y no molestamos a nadie.
+  if (cacheFresca) {
+    paginas = ordenar(cache.paginas);
+    render();
+  }
+
+  for (const fuente of [desdeJson, desdeApi]) {
+    try {
+      paginas = ordenar(await fuente());
+      guardarCache(paginas);
+      render(document.getElementById("buscador").value);
+      document.getElementById("aviso").hidden = true;
+      return;
+    } catch (e) { /* probamos la siguiente */ }
+  }
+
+  // Nada respondió: mostramos la última lista conocida.
+  if (cache) {
+    paginas = ordenar(cache.paginas);
+    render();
+    const aviso = document.getElementById("aviso");
+    aviso.textContent = "GitHub no respondió ahora mismo. Estás viendo la última lista guardada; recargá en un rato para actualizarla.";
+    aviso.hidden = false;
+  } else {
+    document.getElementById("estado").textContent =
+      "No se pudo cargar la lista. Recargá en unos minutos.";
+  }
+}
+
+document.getElementById("buscador").addEventListener("input", e => render(e.target.value));
+cargar();
 </script>
 </body>
 </html>
