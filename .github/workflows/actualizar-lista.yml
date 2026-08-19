@@ -1,0 +1,47 @@
+name: Actualizar lista de dashboards
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'lista.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  lista:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generar lista.json
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+
+          archivos = [f for f in os.listdir('.')
+                      if f.lower().endswith(('.html', '.htm'))
+                      and f.lower() != 'index.html']
+
+          salida = []
+          for f in sorted(archivos):
+              fecha = subprocess.run(
+                  ['git', 'log', '-1', '--format=%cI', '--', f],
+                  capture_output=True, text=True).stdout.strip()
+              salida.append({'archivo': f, 'fecha': fecha or None})
+
+          with open('lista.json', 'w', encoding='utf-8') as fh:
+              json.dump(salida, fh, ensure_ascii=False, indent=2)
+          PY
+
+      - name: Commitear si cambió
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lista.json
+          git diff --staged --quiet || git commit -m "Actualizar lista.json"
+          git push
