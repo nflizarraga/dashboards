@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mile — dónde buscar y cuánto pedir</title>
+<style>
+:root{
+  color-scheme:light;
+  --navy:#1B3A5C; --navy2:#3A5F87; --amber:#C8781E; --amber2:#F0A94C;
+  --cream:#FCFAF6; --ink:#2A3743; --muted:#70808F; --line:#E7E0D5;
+  --warm:#FDF6EC; --greenbg:#E8F2EC;
+  /* categórica validada — 3 slots, all-pairs, superficie #FCFAF6 */
+  --s1:#3A6EA5; --s2:#C8781E; --s3:#2E9B6B;
+  /* ordinal validada — 4 pasos, un solo tono */
+  --o1:#7FA9D2; --o2:#4E82B6; --o3:#2F639B; --o4:#1B4470;
+  --grid:#E7E0D5; --axis:#C9BFAE;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-size:17px;line-height:1.65;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px 90px}
+
+/* ---------- hero ---------- */
+.hero{background:linear-gradient(165deg,#24486E,#1B3A5C 55%,#2E5680);color:#fff;
+  padding:64px 24px 54px;margin-bottom:44px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-110px;top:-110px;width:340px;height:340px;
+  border-radius:50%;background:rgba(240,169,76,.13)}
+.hi{max-width:760px;margin:0 auto;position:relative;z-index:1}
+.kick{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber2);font-weight:700;margin-bottom:16px}
+.hero h1{font-size:38px;line-height:1.16;font-weight:800;letter-spacing:-.022em;margin-bottom:18px}
+.hero .sub{font-size:18px;color:#D6E2EE;max-width:560px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px}
+.tile{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);
+  border-radius:13px;padding:16px 17px}
+.tile .tl{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:#A9C4DD;font-weight:700}
+.tile .tv{font-size:29px;font-weight:800;letter-spacing:-.02em;margin-top:7px;line-height:1}
+.tile .tn{font-size:12.5px;color:#B9CFE4;margin-top:6px;line-height:1.35}
+.tile.now .tv{color:#C6D6E6}
+.tile.floor .tv{color:var(--amber2)}
+.tile.goal .tv{color:#7FE0B0}
+
+/* ---------- estructura ---------- */
+section{margin-bottom:52px}
+.eyebrow{display:inline-block;font-size:11px;letter-spacing:.17em;text-transform:uppercase;
+  font-weight:700;color:var(--amber);margin-bottom:8px}
+h2{font-size:27px;line-height:1.2;font-weight:800;letter-spacing:-.022em;color:var(--navy);margin-bottom:12px}
+p{margin-bottom:13px}
+.lead{font-size:18px;color:var(--navy2);margin-bottom:20px}
+.note{font-size:13px;color:var(--muted);line-height:1.5;margin-top:12px}
+hr{border:none;height:1px;background:var(--line);margin:0 0 52px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:20px 0}
+.card.wm{background:var(--warm);border-color:#F0DFC5}
+.card.gr{background:var(--greenbg);border-color:#CDE3D7}
+.card p:last-child{margin-bottom:0}
+
+/* ---------- figura genérica ---------- */
+.fig{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px 24px 20px;margin:22px 0}
+.fig-h{font-size:16.5px;font-weight:700;color:var(--navy);line-height:1.35}
+.fig-s{font-size:13.5px;color:var(--muted);margin-top:4px;line-height:1.45}
+.fig-b{margin-top:20px}
+.legend{display:flex;flex-wrap:wrap;gap:7px 18px;margin-top:16px;font-size:12.5px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:7px}
+.sw{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+.swl{width:15px;height:0;border-top:2px dashed #9AA7B4;flex:0 0 auto}
+
+/* ---------- controles ---------- */
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px}
+.seg{display:inline-flex;background:#F2EDE4;border-radius:9px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;font:inherit;font-size:13px;font-weight:600;
+  color:var(--muted);padding:7px 13px;border-radius:7px;cursor:pointer;transition:.15s}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(27,58,92,.13)}
+.seg button:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+.linkbtn{border:0;background:transparent;font:inherit;font-size:13px;font-weight:600;
+  color:var(--navy2);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:6px 2px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:7px;border-radius:5px;background:#EDE7DC}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:23px;height:23px;border-radius:50%;
+  background:var(--amber);border:3px solid #fff;box-shadow:0 1px 5px rgba(27,58,92,.32);margin-top:-8px}
+input[type=range]::-moz-range-track{height:7px;border-radius:5px;background:#EDE7DC}
+input[type=range]::-moz-range-thumb{width:23px;height:23px;border-radius:50%;background:var(--amber);
+  border:3px solid #fff;box-shadow:0 1px 5px rgba(27,58,92,.32)}
+input[type=range]:focus-visible{outline:2px solid var(--navy);outline-offset:4px;border-radius:6px}
+
+/* ---------- jornada ---------- */
+.mini{margin-top:6px}
+.mrow{margin-bottom:13px}
+.ml{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:5px}
+.ml .n{color:var(--muted);font-weight:600}
+.ml .v{font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.mt{height:24px;background:#F2EDE4;border-radius:6px;overflow:hidden}
+.mf{height:100%;border-radius:6px;transition:width .35s cubic-bezier(.4,0,.2,1)}
+.gapbox{display:flex;align-items:baseline;gap:11px;margin-top:16px;flex-wrap:wrap}
+.gapbox .big{font-size:44px;font-weight:800;color:var(--amber);line-height:1;letter-spacing:-.03em}
+.gapbox .txt{font-size:14.5px;color:var(--ink);max-width:330px;line-height:1.45}
+
+/* ---------- rangos salariales ---------- */
+.plot{position:relative;padding-top:20px}
+.prow{position:relative;height:52px}
+.prow .pn{position:absolute;top:0;left:0;font-size:13px;font-weight:600;color:var(--navy);z-index:3}
+.prow .pv{position:absolute;top:0;right:0;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;z-index:3}
+.track{position:absolute;left:0;right:0;top:25px;height:20px}
+.rangebar{position:absolute;top:3px;height:14px;border-radius:4px;cursor:pointer;transition:.2s}
+.rangebar:hover{filter:brightness(1.08)}
+.p50{position:absolute;top:0;width:4px;height:20px;border-radius:2px;background:#fff;
+  box-shadow:0 0 0 2px currentColor;pointer-events:none}
+.mileline{position:absolute;top:17px;bottom:6px;width:0;border-left:2px dashed #93A0AD;z-index:1}
+.mileflag{position:absolute;top:-18px;left:-3px;font-size:11.5px;font-weight:700;color:#6C7A88;white-space:nowrap}
+.axis{position:relative;height:22px;margin-top:2px;border-top:1px solid var(--axis)}
+.axis span{position:absolute;top:5px;font-size:11px;color:var(--muted);transform:translateX(-50%);font-variant-numeric:tabular-nums}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:16px}
+table.tbl th{text-align:right;padding:8px 6px;border-bottom:2px solid var(--navy);color:var(--navy);
+  font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+table.tbl th:first-child,table.tbl td:first-child{text-align:left}
+table.tbl td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+
+/* ---------- calculadora ---------- */
+.calc{background:linear-gradient(165deg,#24486E,#1B3A5C);border-radius:16px;padding:26px 26px 24px;color:#fff;margin:22px 0}
+.calc h3{font-size:17px;font-weight:700;margin-bottom:3px}
+.calc .cs{font-size:13.5px;color:#A9C4DD;margin-bottom:20px}
+.calc .cbig{font-size:52px;font-weight:800;letter-spacing:-.035em;line-height:1;color:var(--amber2);font-variant-numeric:tabular-nums}
+.calc .cbl{font-size:12.5px;color:#A9C4DD;margin-top:7px}
+.calc input[type=range]::-webkit-slider-runnable-track{background:rgba(255,255,255,.19)}
+.calc input[type=range]::-moz-range-track{background:rgba(255,255,255,.19)}
+.calc input[type=range]::-webkit-slider-thumb{border-color:#1B3A5C}
+.calc input[type=range]::-moz-range-thumb{border-color:#1B3A5C}
+.marks{position:relative;height:34px;margin-top:2px;font-size:11px;color:#8FB0CE}
+.marks i{position:absolute;top:0;width:1px;height:8px;background:rgba(255,255,255,.35)}
+.marks b{position:absolute;top:12px;transform:translateX(-50%);white-space:nowrap;font-weight:600;font-style:normal}
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:22px}
+.cg{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.15);border-radius:11px;padding:14px 15px}
+.cg .l{font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#A9C4DD;font-weight:700}
+.cg .v{font-size:22px;font-weight:800;margin-top:6px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.verdict{margin-top:18px;padding:13px 16px;border-radius:11px;font-size:14.5px;line-height:1.45;
+  background:rgba(255,255,255,.09);border-left:3px solid var(--amber2)}
+
+/* ---------- anillos ---------- */
+.split{display:flex;height:34px;border-radius:8px;overflow:hidden;gap:2px;margin-bottom:20px}
+.split div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:12.5px;font-weight:700}
+.ring{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:11px;overflow:hidden}
+.ring>button{width:100%;border:0;background:transparent;font:inherit;text-align:left;cursor:pointer;
+  padding:17px 20px;display:flex;align-items:center;gap:14px}
+.ring>button:hover{background:#FBF8F3}
+.ring>button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
+.dot{width:13px;height:13px;border-radius:4px;flex:0 0 auto}
+.ring .rt{flex:1;min-width:0}
+.ring .rn{display:block;font-size:16px;font-weight:700;color:var(--navy);line-height:1.3}
+.ring .rr{display:block;font-size:13px;color:var(--muted);margin-top:2px;line-height:1.35}
+.ring .rp{font-size:19px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.ring .chev{color:var(--muted);font-size:14px;transition:transform .22s;flex:0 0 auto}
+.ring[data-open="1"] .chev{transform:rotate(180deg)}
+.rbody{padding:0 20px 20px;border-top:1px solid var(--line);margin-top:-1px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0 0}
+.chip{font-size:13px;font-weight:600;padding:6px 12px;border-radius:20px;
+  background:#F4F0E9;color:var(--navy);border:1px solid var(--line)}
+.rbody .why{font-size:14.5px;line-height:1.5;margin-top:15px;color:var(--ink)}
+.rbody .why strong{color:var(--navy)}
+
+/* ---------- mapa ---------- */
+.radar{width:100%;height:auto;overflow:visible;display:block;touch-action:manipulation;margin:0 auto}
+.radar circle.guide{fill:none;stroke-width:1}
+.radar text.rt{font-size:10.5px;fill:#B4A995;font-weight:700;paint-order:stroke;stroke:#fff;stroke-width:3px}
+.radar text.cp{font-size:11px;fill:#C4BAA8;font-weight:800;letter-spacing:.1em}
+.radar text.cl2{font-size:11.5px;fill:var(--navy);font-weight:600;paint-order:stroke;stroke:#fff;
+  stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.radar .pt{cursor:pointer;transition:opacity .2s}
+.radar .pt circle{stroke:#FFFFFF;stroke-width:2}
+.radar .pt:hover circle,.radar .pt.on circle{stroke:var(--navy);stroke-width:3}
+.radar .pt:focus{outline:none}
+.radar .pt:focus-visible circle{stroke:var(--amber);stroke-width:3.5}
+.radar .pt.dim{opacity:.16}
+.radar .hub circle{fill:var(--amber);stroke:#fff;stroke-width:3}
+.radar text.hubl{font-size:12.5px;fill:var(--navy);font-weight:800;paint-order:stroke;stroke:#fff;stroke-width:4px}
+.citylist{columns:2;column-gap:20px;margin-top:14px}
+.cl{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:13px;
+  break-inside:avoid}
+.cl:hover,.cl.on{background:#F4EFE7}
+.cl.dim{opacity:.35}
+.cl .cd{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+.cl .cn{flex:1;font-weight:600;color:var(--navy)}
+.cl .cm{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12.5px}
+.cl .cx{display:block;font-size:11.5px;color:var(--muted);font-weight:500;line-height:1.3}
+#tip{position:fixed;z-index:99;pointer-events:none;background:#1B3A5C;color:#fff;border-radius:9px;
+  padding:9px 12px;font-size:12.5px;line-height:1.45;box-shadow:0 6px 20px rgba(27,58,92,.28);
+  max-width:210px;opacity:0;transition:opacity .12s}
+#tip b{display:block;font-size:13.5px;margin-bottom:2px}
+#tip i{font-style:normal;color:var(--amber2);font-weight:700}
+
+/* ---------- reglas ---------- */
+.rule{display:flex;gap:15px;margin-bottom:20px;align-items:flex-start}
+.rn2{flex:0 0 30px;height:30px;border-radius:50%;background:var(--amber);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.rule h4{font-size:16.5px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.rule p{font-size:15px;margin-bottom:0;line-height:1.5}
+.quote{background:#FDFCFA;border:1px solid var(--line);border-radius:11px;padding:15px 17px;margin:11px 0 0;
+  font-family:Georgia,serif;font-size:15px;line-height:1.65;color:#3D4B59}
+.perks{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.perks span{font-size:13px;padding:6px 12px;border-radius:20px;background:#fff;border:1px solid var(--line);color:var(--navy);font-weight:600}
+
+.close{background:linear-gradient(165deg,#24486E,#1B3A5C);color:#fff;border-radius:16px;padding:34px 32px}
+.close h2{color:#fff;font-size:24px;margin-bottom:14px}
+.close p{color:#D6E2EE;font-size:16.5px}
+.close p:last-child{margin-bottom:0}
+.close strong{color:var(--amber2)}
+
+@media(max-width:700px){
+  body{font-size:16px}
+  .hero{padding:44px 20px 38px}.hero h1{font-size:27px}.hero .sub{font-size:16px}
+  .tiles{grid-template-columns:1fr;gap:9px}.tile{display:flex;align-items:baseline;gap:12px}
+  .tile .tv{font-size:24px;margin-top:0}.tile .tn{display:none}
+  h2{font-size:22px}.wrap{padding:0 18px 64px}
+  .fig{padding:18px 16px 16px}.card{padding:18px}
+  .citylist{columns:1}.cl{padding:7px 6px}
+  .radar text.cl2{font-size:14px;stroke-width:4.5px}
+  .radar text.hubl{font-size:15px}.radar text.rt{font-size:13px}
+  .cgrid{grid-template-columns:1fr}.calc .cbig{font-size:40px}
+  .prow .pv{display:none}
+  .gapbox .big{font-size:36px}
+  .close{padding:26px 21px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero"><div class="hi">
+  <div class="kick">Para Mile · agosto 2026</div>
+  <h1>Dónde buscar, hasta dónde llegar, y cuánto pedir.</h1>
+  <p class="sub">Tres preguntas, tres respuestas. Casi todo son gráficos: tocalos, movelos, jugá con ellos.</p>
+  <div class="tiles">
+    <div class="tile now"><div class="tl">Hoy</div><div class="tv">€32.381</div><div class="tn">base anual</div></div>
+    <div class="tile floor"><div class="tl">Tu piso</div><div class="tv">€45.000</div><div class="tn">por debajo no vale moverse</div></div>
+    <div class="tile goal"><div class="tl">Tu objetivo</div><div class="tv">€50–56k</div><div class="tn">el número que decís en voz alta</div></div>
+  </div>
+</div></div>
+
+<div class="wrap">
+
+<!-- ============ 1 ============ -->
+<section>
+  <div class="eyebrow">Punto de partida</div>
+  <h2>Dónde estás parada hoy</h2>
+  <p class="lead">Tu contrato dice €2.698,38 brutos por mes. El mínimo legal del país subió a €14,99 la hora en julio. Movés las horas de tu jornada y ves la distancia real.</p>
+
+  <div class="fig">
+    <div class="fig-h">Tu sueldo contra el mínimo legal</div>
+    <div class="fig-s">Mensual bruto, sin el 8% de vacaciones</div>
+    <div class="ctl" style="margin-top:16px">
+      <span style="font-size:13px;color:var(--muted);font-weight:600">Tu jornada:</span>
+      <div class="seg" role="group" aria-label="Horas de jornada semanal">
+        <button data-h="36" aria-pressed="false">36 h</button>
+        <button data-h="38" aria-pressed="false">38 h</button>
+        <button data-h="40" aria-pressed="true">40 h</button>
+      </div>
+    </div>
+    <div class="fig-b mini">
+      <div class="mrow">
+        <div class="ml"><span class="n">Mínimo legal a <b id="hlab">40</b> h/semana</span><span class="v" id="minv">€2.598</span></div>
+        <div class="mt"><div class="mf" id="minbar" style="width:96%;background:#B9AF9E"></div></div>
+      </div>
+      <div class="mrow">
+        <div class="ml"><span class="n">Tu sueldo</span><span class="v">€2.698</span></div>
+        <div class="mt"><div class="mf" style="width:100%;background:var(--amber)"></div></div>
+      </div>
+      <div class="gapbox">
+        <div class="big" id="gapn">+3,9%</div>
+        <div class="txt" id="gapt">Estás <b>apenas por encima del mínimo legal del país</b>, haciendo conciliaciones bancarias, asientos y soporte de auditoría.</div>
+      </div>
+    </div>
+    <div class="note">Fuente: Rijksoverheid, mínimo legal desde el 1/7/2026. Falta confirmar tu jornada contratada — cambia bastante el número.</div>
+  </div>
+</section>
+
+<hr>
+
+<!-- ============ 2 ============ -->
+<section>
+  <div class="eyebrow">El mercado</div>
+  <h2>Lo que se paga por lo que hacés</h2>
+  <p class="lead">Cada barra va del percentil 25 al 75. El punto blanco es la mediana. La línea cortada sos vos, hoy.</p>
+
+  <div class="fig">
+    <div class="fig-h">Salarios de partida en Países Bajos, 2026</div>
+    <div class="fig-s">Guía Robert Half, sobre contrataciones reales. Cifras nacionales — el Randstad paga por encima.</div>
+    <div class="ctl" style="margin-top:16px">
+      <div class="seg" role="group" aria-label="Base de comparación">
+        <button data-base="1" aria-pressed="true">Base anual</button>
+        <button data-base="1.08" aria-pressed="false">Con 8% vacaciones</button>
+      </div>
+      <button class="linkbtn" id="togtbl" aria-expanded="false">Ver los números</button>
+    </div>
+    <div class="fig-b">
+      <div class="plot" id="plot"></div>
+      <div class="axis" id="axis"></div>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--s1)"></i>Rango P25 – P75</span>
+      <span><i class="sw" style="background:#fff;box-shadow:0 0 0 2px var(--s1)"></i>Mediana</span>
+      <span><i class="swl"></i>Vos, hoy</span>
+    </div>
+    <table class="tbl" id="tbl" hidden>
+      <thead><tr><th>Rol</th><th>P25</th><th>Mediana</th><th>P75</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="card wm">
+    <p><strong>Lo que dice el gráfico en una línea:</strong> el salto grande no está en negociar mejor un puesto de AP. Está en aplicar al puesto de al lado — el que dice <em>Assistant Accountant</em> o <em>GL</em> en vez de <em>AP Clerk</em>. Son €12.000 de diferencia por cambiar el título al que apuntás.</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- ============ 3 ============ -->
+<section>
+  <div class="eyebrow">La calculadora</div>
+  <h2>Movela y mirá qué cambia</h2>
+  <p class="lead">Todo se cotiza distinto en Países Bajos: mensual, anual, con y sin vacaciones. Esto lo traduce solo.</p>
+
+  <div class="calc">
+    <h3>Si te ofrecen esta base anual…</h3>
+    <div class="cs">Arrastrá para moverte entre €32.000 y €66.000</div>
+    <div class="cbig" id="cval">€45.000</div>
+    <div class="cbl">base anual bruta, sin vacaciones</div>
+    <input type="range" id="slider" min="32000" max="66000" step="500" value="45000"
+           aria-label="Base anual bruta ofrecida" style="margin-top:18px">
+    <div class="marks" id="marks"></div>
+    <div class="cgrid">
+      <div class="cg"><div class="l">Por mes</div><div class="v" id="cm">€3.750</div></div>
+      <div class="cg"><div class="l">Anual con 8%</div><div class="v" id="ca">€48.600</div></div>
+      <div class="cg"><div class="l">Más que hoy</div><div class="v" id="cd">+€1.052/mes</div></div>
+    </div>
+    <div class="verdict" id="cverd"></div>
+  </div>
+  <div class="note">Tu base de hoy: €32.381 anuales · €2.698 por mes · €34.971 con el 8% incluido.</div>
+</section>
+
+<hr>
+
+<!-- ============ 4 ============ -->
+<section>
+  <div class="eyebrow">Qué puestos</div>
+  <h2>Tres anillos, no uno</h2>
+  <p class="lead">Aplicar solo a lo que entrás segura es lo que te deja en el mismo lugar. Tocá cada anillo para ver los títulos.</p>
+
+  <div class="split" role="img" aria-label="Reparto sugerido: 60% anillo A, 30% anillo B, 10% anillo C">
+    <div style="flex:60;background:var(--s1)">60%</div>
+    <div style="flex:30;background:var(--s2)">30%</div>
+    <div style="flex:10;background:var(--s3)">10%</div>
+  </div>
+
+  <div class="ring" data-open="0">
+    <button aria-expanded="false">
+      <i class="dot" style="background:var(--s1)"></i>
+      <span class="rt"><span class="rn">A · Entrás segura</span><span class="rr">Lo que ya hacés, con otro nombre</span></span>
+      <span class="rp">€42–50k</span><span class="chev">▾</span>
+    </button>
+    <div class="rbody" hidden>
+      <div class="chips">
+        <span class="chip">Accounts Payable Specialist</span><span class="chip">AP Accountant</span>
+        <span class="chip">AP/AR Officer</span><span class="chip">Accounts Receivable Specialist</span>
+        <span class="chip">Credit Control Officer</span><span class="chip">P2P Analyst</span>
+        <span class="chip">O2C Analyst</span><span class="chip">Finance Operations Analyst</span>
+        <span class="chip">Accounting Assistant</span><span class="chip">Financial Administrator</span>
+      </div>
+      <p class="why">Encaje uno a uno con tu día de hoy. Sirve para tener pipeline y para no quedarte nunca sin proceso abierto. <strong>Pero es el anillo con el techo más bajo</strong>, así que no puede ser el único.</p>
+    </div>
+  </div>
+
+  <div class="ring" data-open="0">
+    <button aria-expanded="false">
+      <i class="dot" style="background:var(--s2)"></i>
+      <span class="rt"><span class="rn">B · El puente</span><span class="rr">Acá está el salto de verdad</span></span>
+      <span class="rp">€50–62k</span><span class="chev">▾</span>
+    </button>
+    <div class="rbody" hidden>
+      <div class="chips">
+        <span class="chip">Assistant Accountant</span><span class="chip">GL Accountant</span>
+        <span class="chip">Junior Financial Accountant</span><span class="chip">Finance Officer — multi-entity</span>
+        <span class="chip">Assistant Controller</span><span class="chip">Accountant — Shared Service Centre</span>
+      </div>
+      <p class="why">El truco para saber si un aviso de este anillo es tuyo: <strong>si menciona bank reconciliations, journal entries y month-end close, ya hacés las tres.</strong> No necesitás aprender nada nuevo. Necesitás postularte al título correcto.</p>
+    </div>
+  </div>
+
+  <div class="ring" data-open="0">
+    <button aria-expanded="false">
+      <i class="dot" style="background:var(--s3)"></i>
+      <span class="rt"><span class="rn">C · Donde casi nadie compite</span><span class="rr">Tu perfil es raro acá, y eso vale</span></span>
+      <span class="rp">€45–58k</span><span class="chev">▾</span>
+    </button>
+    <div class="rbody" hidden>
+      <div class="chips">
+        <span class="chip">Disputes Analyst</span><span class="chip">Chargeback Analyst</span>
+        <span class="chip">Payment Operations Analyst</span><span class="chip">Transaction Monitoring</span>
+        <span class="chip">KYC / CDD Analyst</span><span class="chip">Credit Control — Spanish speaking</span>
+        <span class="chip">Billing / Revenue Operations</span><span class="chip">Finance Analyst — travel tech</span>
+      </div>
+      <p class="why">Los contracargos con Elavon casi ningún candidato de AP los tiene, y son exactamente lo que piden en disputas y pagos. El <strong>español operativo</strong> se paga aparte en carteras de España y LatAm. Y en travel-tech usás lo que sabés de hotelería <strong>sin volver a un hotel</strong>.</p>
+    </div>
+  </div>
+
+  <div class="card gr">
+    <p><strong>Lo que queda afuera:</strong> hotelería, retail chico, y cualquier aviso que pida neerlandés en cualquier nivel.</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- ============ 5 ============ -->
+<section>
+  <div class="eyebrow">Dónde</div>
+  <h2>No son solo Utrecht y Ámsterdam</h2>
+  <p class="lead">Vivís en el nudo ferroviario del país. La regla no es la ciudad: es <strong>una hora puerta a puerta</strong>. Movés el control y ves cuánto mercado se abre.</p>
+
+  <div class="fig">
+    <div class="fig-h">El mapa de los 60 minutos desde Utrecht</div>
+    <div class="fig-s">Cada punto es una ciudad. La distancia al centro es el tiempo en tren; la dirección es la dirección real. Pasá el dedo o el mouse por encima.</div>
+    <div class="ctl" style="margin-top:16px">
+      <label for="mins" style="font-size:13px;color:var(--muted);font-weight:600;white-space:nowrap">Hasta <b id="minsv" style="color:var(--navy)">60</b> min</label>
+      <input type="range" id="mins" min="15" max="90" step="5" value="60" style="flex:1;min-width:150px">
+    </div>
+    <div class="fig-b">
+      <svg class="radar" viewBox="0 0 580 580" role="img" aria-label="Mapa radial de ciudades por tiempo de tren desde Utrecht. El detalle completo está en la lista debajo.">
+        <g id="guides"></g>
+        <g id="pts"></g>
+      </svg>
+      <div class="citylist" id="clist"></div>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--o1);border-radius:50%"></i>hasta 20 min</span>
+      <span><i class="sw" style="background:var(--o2);border-radius:50%"></i>20–40</span>
+      <span><i class="sw" style="background:var(--o3);border-radius:50%"></i>40–60</span>
+      <span><i class="sw" style="background:var(--o4);border-radius:50%"></i>más de 60</span>
+    </div>
+    <div class="note">Tiempos aproximados de tren entre estaciones centrales. Verificá siempre contra la dirección real en ns.nl.</div>
+  </div>
+
+  <div class="card wm">
+    <p><strong>La condición, para que esto no se te vaya de las manos:</strong> la distancia extra tiene que comprarse con algo.</p>
+    <p style="margin-top:10px">→ <strong>Utrecht y Ámsterdam:</strong> aplicás a todo, los tres anillos.<br>
+       → <strong>Rotterdam, Den Haag, Leiden, Hoofddorp, Den Bosch:</strong> solo anillo B o C, o solo si paga €52k o más.</p>
+    <p style="margin-top:10px">Un AP de €45k en Rotterdam es el mismo puesto con dos horas menos de vida por día. No vale.</p>
+  </div>
+  <div class="note">Dato menor y real: la compensación de viaje libre de impuestos subió a €0,25 por kilómetro en 2026, y muchas empresas grandes dan NS Business Card. El viaje largo se negocia — el tiempo no se recupera.</div>
+</section>
+
+<hr>
+
+<!-- ============ 6 ============ -->
+<section>
+  <div class="eyebrow">Cuando llegue el momento</div>
+  <h2>Tres reglas para la charla del sueldo</h2>
+
+  <div class="rule">
+    <div class="rn2">1</div>
+    <div>
+      <h4>Nunca digas los €32k</h4>
+      <p>Es un ancla que te cuesta entre €8.000 y €13.000. Te lo van a preguntar igual. Esta es la respuesta:</p>
+      <div class="quote">“I would rather talk about the range for this role. Based on the market for AP and GL work at this level, I am targeting €50–55k.”</div>
+    </div>
+  </div>
+
+  <div class="rule">
+    <div class="rn2">2</div>
+    <div>
+      <h4>Negociá siempre en la misma base</h4>
+      <p>Acá se cotiza mensual bruto por 12, y el 8% de vacaciones va aparte. Confundir base con <em>all-in</em> son cuatro mil euros de diferencia dentro de la misma conversación. Preguntá cuál de las dos te están diciendo.</p>
+    </div>
+  </div>
+
+  <div class="rule">
+    <div class="rn2">3</div>
+    <div>
+      <h4>El número se ajusta al anillo</h4>
+      <p>Pedir €55k en un aviso de AP clerk te saca del proceso. Pedir €48k en un Assistant Accountant es regalar plata. Mirá primero de qué anillo es la vacante, después decís el rango.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p style="font-weight:700;color:var(--navy);margin-bottom:4px">Y mirá el paquete entero, no el bruto</p>
+    <p style="font-size:14.5px;color:var(--muted);margin-bottom:0">En banca y pharma esto vale más que el sueldo:</p>
+    <div class="perks">
+      <span>Pensión</span><span>13º mes</span><span>Bono</span><span>Días de vacaciones</span>
+      <span>Presupuesto de formación</span><span>NS Business Card</span><span>Teletrabajo</span>
+    </div>
+  </div>
+</section>
+
+<div class="close">
+  <h2>Lo que cambia a partir de acá</h2>
+  <p>No tenés que trabajar más ni aprender nada nuevo. Tenés que <strong>aplicar a otro título</strong>, <strong>mirar cinco ciudades más</strong> y <strong>no decir tu sueldo actual</strong>.</p>
+  <p style="margin-top:14px">Y tener el piso escrito antes de que suene el teléfono: <strong>€45.000 de base</strong>. Por debajo de eso, no vale moverse.</p>
+</div>
+
+</div>
+
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+const fmt = n => { const s = String(Math.round(Math.abs(n)));
+  return s.length > 3 ? s.slice(0, s.length-3) + "." + s.slice(-3) : s; };
+const eur = n => "€" + fmt(n);
+const MILE_BASE = 32381, MILE_MONTH = 2698.38, MIN_HOUR = 14.99;
+
+/* ---------- 1. jornada ---------- */
+const hbtns = document.querySelectorAll('.seg button[data-h]');
+function setH(h){
+  hbtns.forEach(b => b.setAttribute("aria-pressed", b.dataset.h === String(h)));
+  const min = MIN_HOUR * h * 52 / 12;
+  const pct = (MILE_MONTH / min - 1) * 100;
+  document.getElementById("hlab").textContent = h;
+  document.getElementById("minv").textContent = eur(min);
+  document.getElementById("minbar").style.width = (min / MILE_MONTH * 100).toFixed(1) + "%";
+  document.getElementById("gapn").textContent = "+" + pct.toFixed(1).replace(".", ",") + "%";
+  document.getElementById("gapt").innerHTML = pct < 6
+    ? "Estás <b>apenas por encima del mínimo legal del país</b>, haciendo conciliaciones bancarias, asientos contables y soporte de auditoría."
+    : (pct < 12
+      ? "Estás <b>por encima del mínimo, pero muy poco</b>, para un trabajo contable calificado con dos entidades en otro país."
+      : "Es el escenario más favorable, y aun así seguís <b>muy por debajo del percentil 25</b> del rol que ya ejercés.");
+}
+hbtns.forEach(b => b.addEventListener("click", () => setH(+b.dataset.h)));
+setH(40);
+
+/* ---------- 2. rangos ---------- */
+const ROLES = [
+  {n:"AR / AP Accountant",       p25:38733, p50:45112, p75:52223},
+  {n:"Accounting Clerk",         p25:41485, p50:47853, p75:55656},
+  {n:"Assistant Controller",     p25:50672, p50:60890, p75:68668},
+  {n:"Financial Accountant",     p25:63527, p50:75753, p75:90157}
+];
+const MAXV = 95000;
+let baseMult = 1;
+const plot = document.getElementById("plot"), axis = document.getElementById("axis");
+
+function drawPlot(){
+  const m = baseMult, pc = v => (v * m / (MAXV * m)) * 100;
+  plot.innerHTML = "";
+  ROLES.forEach(r => {
+    const row = document.createElement("div");
+    row.className = "prow";
+    row.innerHTML =
+      '<span class="pn">' + r.n + '</span>' +
+      '<span class="pv">' + eur(r.p25*m) + ' – ' + eur(r.p75*m) + '</span>' +
+      '<div class="track">' +
+        '<div class="rangebar" style="left:' + pc(r.p25) + '%;width:' + (pc(r.p75)-pc(r.p25)) + '%;background:var(--s1)">' +
+          '<i class="p50" style="left:' + ((r.p50-r.p25)/(r.p75-r.p25)*100) + '%;color:var(--s1);margin-left:-2px"></i>' +
+        '</div>' +
+      '</div>';
+    const bar = row.querySelector(".rangebar");
+    const txt = "<b>" + r.n + "</b>P25 " + eur(r.p25*m) + " · mediana <i>" + eur(r.p50*m) +
+                "</i> · P75 " + eur(r.p75*m) + "<br>Mediana vs. tu base: <i>+" +
+                Math.round(r.p50/MILE_BASE*100-100) + "%</i>";
+    bar.addEventListener("mouseenter", e => showTip(e, txt));
+    bar.addEventListener("mousemove", moveTip);
+    bar.addEventListener("mouseleave", hideTip);
+    bar.addEventListener("click", e => { showTip(e, txt); setTimeout(hideTip, 2600); });
+    plot.appendChild(row);
+  });
+  const ml = document.createElement("div");
+  ml.className = "mileline";
+  ml.style.left = pc(MILE_BASE) + "%";
+  ml.innerHTML = '<span class="mileflag">vos, hoy · ' + eur(MILE_BASE*m) + '</span>';
+  plot.appendChild(ml);
+
+  axis.innerHTML = "";
+  [0,20000,40000,60000,80000].forEach(v => {
+    const s = document.createElement("span");
+    s.style.left = pc(v) + "%";
+    s.textContent = v === 0 ? "0" : "€" + Math.round(v*m/1000) + "k";
+    axis.appendChild(s);
+  });
+}
+document.querySelectorAll('.seg button[data-base]').forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll('.seg button[data-base]').forEach(x =>
+      x.setAttribute("aria-pressed", x === b));
+    baseMult = +b.dataset.base;
+    drawPlot(); fillTable();
+  });
+});
+const tbl = document.getElementById("tbl");
+function fillTable(){
+  const m = baseMult;
+  tbl.querySelector("tbody").innerHTML =
+    '<tr><td><b>Vos, hoy</b></td><td>—</td><td><b>' + eur(MILE_BASE*m) + '</b></td><td>—</td></tr>' +
+    ROLES.map(r => '<tr><td>' + r.n + '</td><td>' + eur(r.p25*m) + '</td><td>' +
+      eur(r.p50*m) + '</td><td>' + eur(r.p75*m) + '</td></tr>').join("");
+}
+document.getElementById("togtbl").addEventListener("click", e => {
+  const open = tbl.hasAttribute("hidden");
+  tbl.toggleAttribute("hidden", !open);
+  e.target.setAttribute("aria-expanded", String(open));
+  e.target.textContent = open ? "Ocultar los números" : "Ver los números";
+});
+drawPlot(); fillTable();
+
+/* ---------- 3. calculadora ---------- */
+const sl = document.getElementById("slider");
+const MARKS = [[45000,"piso"],[50000,"objetivo"],[62000,"techo"]];
+(function(){
+  const box = document.getElementById("marks");
+  MARKS.forEach(([v,l]) => {
+    const p = (v - +sl.min) / (+sl.max - +sl.min) * 100;
+    const i = document.createElement("i"); i.style.left = "calc(" + p + "% )"; box.appendChild(i);
+    if(l){ const b = document.createElement("b"); b.style.left = p + "%"; b.textContent = l; box.appendChild(b); }
+  });
+})();
+function calc(){
+  const v = +sl.value;
+  document.getElementById("cval").textContent = eur(v);
+  document.getElementById("cm").textContent = eur(v/12);
+  document.getElementById("ca").textContent = eur(v*1.08);
+  const dm = (v - MILE_BASE)/12;
+  document.getElementById("cd").textContent = (dm < 0 ? "−" : "+") + eur(dm) + "/mes";
+  const pct = Math.round(v/MILE_BASE*100-100);
+  let t;
+  if(v < 45000) t = "<b>Por debajo de tu piso.</b> Son " + eur(45000-v) + " menos de lo acordado. Acá se agradece y se sigue buscando.";
+  else if(v < 50000) t = "<b>Aceptable, no ideal.</b> Cubre el piso (+" + pct + "% sobre hoy), pero es la mediana nacional del rol que ya hacés. Negociá antes de firmar.";
+  else if(v < 56000) t = "<b>Este es el objetivo.</b> +" + pct + "% sobre hoy, y arriba del percentil 75 de AR/AP Accountant. Mirá el paquete completo y cerrá.";
+  else t = "<b>Territorio anillo B.</b> +" + pct + "% sobre hoy. Esto ya es Assistant Controller o GL en fintech, banca o pharma. Si llega, es el mejor escenario del plan.";
+  document.getElementById("cverd").innerHTML = t;
+}
+sl.addEventListener("input", calc); calc();
+
+/* ---------- 4. anillos ---------- */
+document.querySelectorAll(".ring").forEach(r => {
+  const btn = r.querySelector("button"), body = r.querySelector(".rbody");
+  btn.addEventListener("click", () => {
+    const open = r.dataset.open === "1";
+    r.dataset.open = open ? "0" : "1";
+    btn.setAttribute("aria-expanded", String(!open));
+    body.toggleAttribute("hidden", open);
+  });
+});
+
+/* ---------- 5. mapa radial ---------- */
+const CITIES = [
+  {n:"Houten",           m:9,  a:196, x:"pegado a Utrecht"},
+  {n:"Breukelen",        m:10, a:318, x:"oficinas sobre el A2"},
+  {n:"Driebergen-Zeist", m:12, a:95,  x:"Triodos — prioridad cero", lab:1},
+  {n:"Nieuwegein",       m:12, a:212, x:"zona de oficinas"},
+  {n:"Woerden",          m:13, a:268, x:""},
+  {n:"Hilversum",        m:17, a:25,  x:"Nike EHQ", lab:1},
+  {n:"Amersfoort",       m:18, a:52,  x:"industria y servicios", lab:1},
+  {n:"Gouda",            m:22, a:246, x:""},
+  {n:"Ámsterdam CS",     m:27, a:345, x:"todo el mercado", lab:1},
+  {n:"Den Bosch",        m:30, a:165, x:"", lab:1},
+  {n:"Schiphol",         m:31, a:303, x:"sedes EMEA"},
+  {n:"Ámsterdam Zuid",   m:35, a:325, x:"Zuidas — banca y tech"},
+  {n:"Arnhem",           m:35, a:105, x:"", lab:1},
+  {n:"Hoofddorp",        m:40, a:295, x:"SHV Energy"},
+  {n:"Den Haag",         m:40, a:256, x:"Shell, Aegon, NN", lab:1},
+  {n:"Rotterdam",        m:40, a:230, x:"trading, shipping, energía", lab:1},
+  {n:"Leiden",           m:46, a:285, x:"biotech", lab:1},
+  {n:"Delft",            m:50, a:242, x:""},
+  {n:"Amstelveen",       m:50, a:313, x:""},
+  {n:"Eindhoven",        m:50, a:180, x:""},
+  {n:"Veldhoven",        m:80, a:188, x:"ASML — solo si es muy híbrido"}
+];
+const CX = 290, CY = 290, MAXR = 210, MAXM = 90;
+const rOf = m => Math.sqrt(m / MAXM) * MAXR;   // raíz: separa las ciudades cercanas
+const bandColor = m => m <= 20 ? "var(--o1)" : m <= 40 ? "var(--o2)" : m <= 60 ? "var(--o3)" : "var(--o4)";
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, at) => { const e = document.createElementNS(NS, t); for(const k in at) e.setAttribute(k, at[k]); return e; };
+const pos = (m, a) => { const r = rOf(m), rad = (a - 90) * Math.PI/180;
+  return [CX + r*Math.cos(rad), CY + r*Math.sin(rad)]; };
+
+(function guides(){
+  const g = document.getElementById("guides");
+  [20,40,60,90].forEach(m => {
+    const r = rOf(m), main = m === 60;
+    g.appendChild(el("circle", {class:"guide", cx:CX, cy:CY, r:r,
+      "stroke-dasharray": main ? "none" : "3 5",
+      stroke: main ? "#C0B6A4" : "#E7E0D5", "stroke-width": main ? 1.4 : 1}));
+    const d = r * Math.SQRT1_2;   // etiquetas sobre la diagonal sudeste, que está vacía
+    const t = el("text", {class:"rt", x:CX + d, y:CY + d + 4, "text-anchor":"middle"});
+    t.textContent = m + " min"; g.appendChild(t);
+  });
+  [["N",0],["E",90],["S",180],["O",270]].forEach(([lbl,ang]) => {
+    const rad = (ang - 90) * Math.PI/180, r = MAXR + 28;
+    const t = el("text", {class:"cp", x:CX + r*Math.cos(rad), y:CY + r*Math.sin(rad) + 4,
+      "text-anchor":"middle"});
+    t.textContent = lbl; g.appendChild(t);
+  });
+})();
+
+const ptsG = document.getElementById("pts"), clist = document.getElementById("clist");
+const nodes = [];
+CITIES.forEach(c => {
+  const [x, y] = pos(c.m, c.a);
+  const g = el("g", {class:"pt", tabindex:"0", role:"img"});
+  g.appendChild(el("circle", {cx:x, cy:y, r:8.5, fill:bandColor(c.m)}));
+  const label = c.n + " · " + c.m + " min" + (c.x ? " · " + c.x : "");
+  g.appendChild(el("title", {})).textContent = label;
+  if(c.lab){
+    const a = c.a, t = el("text", {class:"cl2"});
+    if(a < 22 || a >= 338){ t.setAttribute("x", x); t.setAttribute("y", y - 14); t.setAttribute("text-anchor","middle"); }
+    else if(a < 158){ t.setAttribute("x", x + 13); t.setAttribute("y", y + 4); t.setAttribute("text-anchor","start"); }
+    else if(a < 202){ t.setAttribute("x", x); t.setAttribute("y", y + 20); t.setAttribute("text-anchor","middle"); }
+    else { t.setAttribute("x", x - 13); t.setAttribute("y", y + 4); t.setAttribute("text-anchor","end"); }
+    t.textContent = c.n; g.appendChild(t);
+  }
+  ptsG.appendChild(g);
+
+  const row = document.createElement("div");
+  row.className = "cl";
+  row.innerHTML = '<i class="cd" style="background:' + bandColor(c.m) + '"></i>' +
+    '<span class="cn">' + c.n + (c.x ? '<span class="cx">' + c.x + '</span>' : '') + '</span>' +
+    '<span class="cm">' + c.m + ' min</span>';
+  clist.appendChild(row);
+
+  const tiptxt = "<b>" + c.n + "</b><i>" + c.m + " min</i> en tren desde Utrecht" + (c.x ? "<br>" + c.x : "");
+  const on = e => { g.classList.add("on"); row.classList.add("on"); showTip(e, tiptxt); };
+  const off = () => { g.classList.remove("on"); row.classList.remove("on"); hideTip(); };
+  [g, row].forEach(t => {
+    t.addEventListener("mouseenter", on);
+    t.addEventListener("mousemove", moveTip);
+    t.addEventListener("mouseleave", off);
+    t.addEventListener("focus", on);
+    t.addEventListener("blur", off);
+  });
+  nodes.push({c, g, row});
+});
+const hub = el("g", {class:"hub"});
+hub.appendChild(el("circle", {cx:CX, cy:CY, r:9}));
+const hl = el("text", {class:"hubl", x:CX, y:CY + 28, "text-anchor":"middle"});
+hl.textContent = "Utrecht"; hub.appendChild(hl);
+ptsG.appendChild(hub);
+
+const mins = document.getElementById("mins");
+function filterMap(){
+  const lim = +mins.value;
+  document.getElementById("minsv").textContent = lim;
+  let count = 0;
+  nodes.forEach(({c,g,row}) => {
+    const out = c.m > lim;
+    g.classList.toggle("dim", out);
+    row.classList.toggle("dim", out);
+    if(!out) count++;
+  });
+}
+mins.addEventListener("input", filterMap); filterMap();
+
+/* ---------- tooltip ---------- */
+const tip = document.getElementById("tip");
+function showTip(e, html){ tip.innerHTML = html; tip.style.opacity = "1"; moveTip(e); }
+function moveTip(e){
+  const px = e.clientX ?? 0, py = e.clientY ?? 0;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = px + 16, y = py - h - 10;
+  if(x + w > innerWidth - 10) x = px - w - 16;
+  if(y < 8) y = py + 20;
+  tip.style.left = Math.max(8, x) + "px";
+  tip.style.top = y + "px";
+}
+function hideTip(){ tip.style.opacity = "0"; }
+</script>
+</body>
+</html>
