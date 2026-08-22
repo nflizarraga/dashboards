@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Croesestraat 58 | Estado al 22 ago 2026 — Silencio</title>
+<style>
+  :root{
+    --ink:#17202a; --muted:#5c6673; --soft:#f5f7fa; --line:#d9e0e8; --panel:#fff;
+    --blue:#2563eb; --blue-soft:#dbeafe; --green:#11845b; --green-soft:#dff7eb;
+    --amber:#b7791f; --amber-soft:#fff2cf; --red:#b42318; --red-soft:#ffe4e0;
+    --violet:#6d28d9; --violet-soft:#ede9fe; --teal:#0f766e; --teal-soft:#ccfbf1;
+    --shadow:0 18px 50px rgba(23,32,42,.10); --radius:10px; --max:1100px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;color:var(--ink);
+    background:linear-gradient(180deg,#eef4fb 0,#f8fafc 420px,#f8fafc 100%);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    line-height:1.5;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 22px;}
+  a{color:inherit;}
+  .topbar{position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(217,224,232,.85);
+    background:rgba(248,250,252,.92);backdrop-filter:blur(14px);}
+  .topbar-inner{display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:62px;}
+  .brand{display:flex;flex-direction:column;gap:2px;}
+  .brand strong{font-size:15px;}
+  .brand span{color:var(--muted);font-size:12px;}
+  .nav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;}
+  .nav a{border:1px solid var(--line);border-radius:8px;background:var(--panel);
+    padding:7px 10px;font-size:12px;font-weight:700;text-decoration:none;}
+  .nav a:hover{border-color:#9fb1c5;}
+  header.hero{padding:34px 0 12px;}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;
+    color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+  .hero-main{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(239,246,255,.96));
+    border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:28px;position:relative;overflow:hidden;}
+  .hero-main:after{content:"";position:absolute;right:-140px;top:-120px;width:330px;height:330px;
+    border:40px solid rgba(37,99,235,.09);transform:rotate(18deg);}
+  h1{margin:0 0 8px;font-size:27px;letter-spacing:-.01em;}
+  .lede{color:var(--muted);font-size:15px;max-width:780px;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;
+    border-radius:999px;padding:5px 11px;border:1px solid var(--line);background:#fff;}
+  .pill.blue{background:var(--blue-soft);border-color:#bcd2f7;color:#1e40af;}
+  .pill.green{background:var(--green-soft);border-color:#aee5cc;color:#0c6b48;}
+  .pill.amber{background:var(--amber-soft);border-color:#ecd79a;color:#8a5b09;}
+  .pill.red{background:var(--red-soft);border-color:#f0c9c4;color:#9b1c12;}
+  section{padding:26px 0 4px;}
+  .sec-title{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 14px;}
+  .sec-title .n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+    border-radius:7px;background:var(--ink);color:#fff;font-size:12px;}
+  .grid{display:grid;gap:14px;}
+  .g2{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .g3{grid-template-columns:repeat(3,minmax(0,1fr));}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr;}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;box-shadow:var(--shadow);}
+  .card h3{margin:0 0 8px;font-size:15px;}
+  .card p{margin:0 0 8px;font-size:14px;color:#2c3744;}
+  .card p:last-child{margin-bottom:0;}
+  .tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.05em;
+    text-transform:uppercase;padding:3px 7px;border-radius:6px;margin-bottom:9px;}
+  .tag.hecho{background:var(--blue-soft);color:#1e40af;}
+  .tag.infer{background:var(--violet-soft);color:#5b21b6;}
+  .tag.riesgo{background:var(--red-soft);color:#9b1c12;}
+  .callout{border:1px solid var(--line);border-left:4px solid var(--blue);
+    border-radius:8px;padding:16px 18px;box-shadow:var(--shadow);background:#fff;}
+  .callout.green{border-left-color:var(--green);}
+  .callout.amber{border-left-color:var(--amber);}
+  .callout.red{border-left-color:var(--red);}
+  .callout h3{margin:0 0 6px;font-size:15px;}
+  .callout p{margin:0;font-size:14px;color:#2c3744;}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);
+    border-radius:var(--radius);overflow:hidden;font-size:13px;box-shadow:var(--shadow);}
+  th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{background:var(--soft);font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
+  tr:last-child td{border-bottom:none;}
+  td strong{color:var(--ink);}
+  .hl{background:var(--green-soft);}
+  /* Timeline */
+  .tline{display:grid;gap:10px;}
+  .trow{display:grid;grid-template-columns:110px 1fr;gap:14px;background:#fff;border:1px solid var(--line);
+    border-radius:9px;padding:13px 15px;box-shadow:var(--shadow);align-items:start;}
+  .trow .d{font-size:12px;font-weight:800;color:var(--blue);padding-top:2px;}
+  .trow .t h4{margin:0 0 3px;font-size:14px;}
+  .trow .t p{margin:0;font-size:13px;color:var(--muted);}
+  .trow.done{opacity:.92;}
+  .trow.now{border-color:#aee5cc;background:var(--green-soft);}
+  .trow.now .d{color:#0c6b48;}
+  /* Escenarios */
+  .esc{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+    overflow:hidden;display:flex;flex-direction:column;}
+  .esc .head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 16px;
+    border-bottom:1px solid var(--line);background:var(--soft);}
+  .esc .head h3{margin:0;font-size:14.5px;}
+  .esc .prob{flex:none;font-size:11px;font-weight:800;border-radius:999px;padding:4px 10px;}
+  .esc .prob.alta{background:var(--green-soft);color:#0c6b48;}
+  .esc .prob.media{background:var(--amber-soft);color:#8a5b09;}
+  .esc .prob.baja{background:var(--blue-soft);color:#1e40af;}
+  .esc .prob.min{background:var(--soft);color:var(--muted);border:1px solid var(--line);}
+  .esc .body{padding:14px 16px;font-size:13.5px;color:#2c3744;flex:1;}
+  .esc .body p{margin:0 0 8px;}
+  .esc .body p:last-child{margin:0;}
+  .esc .body b.q{color:var(--ink);}
+  .esc .foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;background:#fff;}
+  .esc .foot b{color:var(--ink);}
+  .delta{font-size:11px;font-weight:800;border-radius:5px;padding:2px 6px;margin-left:6px;}
+  .delta.up{background:var(--amber-soft);color:#8a5b09;}
+  .delta.down{background:var(--blue-soft);color:#1e40af;}
+  .delta.eq{background:var(--soft);color:var(--muted);}
+  .probtrack{height:8px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:8px;}
+  .probfill{height:100%;border-radius:4px;background:var(--blue);}
+  .checklist{display:grid;gap:8px;}
+  .checklist .item{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:12px 14px;font-size:13.5px;box-shadow:var(--shadow);}
+  .checklist .item:before{content:"✓";flex:none;width:22px;height:22px;border-radius:6px;
+    background:var(--teal-soft);color:#0c5d56;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:12px;}
+  .donts{display:grid;gap:8px;}
+  .donts .item{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #f0c9c4;
+    border-radius:8px;padding:11px 14px;font-size:13.5px;}
+  .donts .item:before{content:"✕";flex:none;color:var(--red);font-weight:800;}
+  .alerts{display:grid;gap:10px;}
+  .arow{display:grid;grid-template-columns:1fr 1fr;gap:14px;background:#fff;border:1px solid var(--line);
+    border-radius:9px;padding:13px 15px;box-shadow:var(--shadow);}
+  @media(max-width:640px){.arow{grid-template-columns:1fr;}}
+  .arow h4{margin:0 0 3px;font-size:13.5px;display:flex;align-items:center;gap:7px;}
+  .arow h4:before{content:"⚠";color:var(--amber);}
+  .arow p{margin:0;font-size:13px;color:var(--muted);}
+  .arow .resp{font-size:13px;color:#2c3744;border-left:3px solid var(--teal);padding-left:12px;align-self:center;}
+  .arow .resp b{color:var(--ink);}
+  footer{padding:30px 0 50px;color:var(--muted);font-size:12px;text-align:center;}
+  .disc{max-width:780px;margin:0 auto;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="wrap topbar-inner">
+  <div class="brand"><strong>Croesestraat 58</strong><span>Estado del caso · 22 de agosto de 2026</span></div>
+  <nav class="nav">
+    <a href="#paso">Qué pasó</a><a href="#lectura">Cómo leerlo</a><a href="#escenarios">Escenarios</a>
+    <a href="#movemos">¿Movemos?</a><a href="#alertas">Alertas</a><a href="#reglas">Reglas</a>
+  </nav>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <div class="kicker">Resumen para Mile · Actualización sin novedades</div>
+  <div class="hero-main">
+    <h1>Siete semanas de silencio — y el silencio habla</h1>
+    <p class="lede">Mandamos la contraoferta de <b>€50.000</b> el 6 de julio. Desde entonces: nada. Pero ese "nada" tiene
+    contenido: su ultimátum de "21 días o juicio" <b>venció a mediados de julio y no demandaron</b>. La amenaza que era
+    su carta más fuerte quedó vacía en los hechos. Nuestra oferta caducó el 24 de julio, así que hoy no hay ninguna
+    oferta nuestra sobre la mesa — y eso también nos conviene. Seguimos en casa, pagando puntual, sin apuro.</p>
+    <div class="meta-row">
+      <span class="pill blue">Contraoferta enviada: 6 jul</span>
+      <span class="pill green">Su ultimátum venció ~15 jul: NO demandaron</span>
+      <span class="pill amber">Nuestra oferta caducó: 24 jul</span>
+      <span class="pill green">Hoy: silencio total, statu quo a favor</span>
+    </div>
+  </div>
+</div></header>
+
+<section id="paso"><div class="wrap">
+  <h2 class="sec-title"><span class="n">1</span> Qué pasó (y qué no pasó)</h2>
+  <div class="tline">
+    <div class="trow done"><div class="d">24 JUN</div><div class="t">
+      <h4>Su "oferta final": €10.000 + amenaza</h4>
+      <p>Tawfik: €10.000, salida 31-dic-2026, y "21 días o iniciamos procedimiento judicial sin más aviso".</p></div></div>
+    <div class="trow done"><div class="d">6 JUL</div><div class="t">
+      <h4>Nuestra contraoferta: €50.000</h4>
+      <p>Rechazamos los €10.000, aceptamos su estructura (fecha, notario, depósito), desactivamos su amenaza legal por escrito,
+      y pusimos nuestro número con vencimiento al 24-jul y caducidad automática si demandaban.</p></div></div>
+    <div class="trow done"><div class="d">~15 JUL</div><div class="t">
+      <h4>Venció SU ultimátum… y no pasó nada</h4>
+      <p>Los 21 días de su carta se cumplieron. Ni demanda, ni kort geding, ni carta de abogado. La amenaza no se ejecutó.</p></div></div>
+    <div class="trow done"><div class="d">24 JUL</div><div class="t">
+      <h4>Venció NUESTRA oferta</h4>
+      <p>Los €50.000 caducaron solos, tal como estaba escrito. Hoy no le debemos ninguna oferta a nadie.</p></div></div>
+    <div class="trow now"><div class="d">22 AGO</div><div class="t">
+      <h4>Silencio total — 7 semanas</h4>
+      <p>Seguimos viviendo en Croesestraat 58, pagando €1.400 puntuales. El activo de Chad sigue trabado y su urgencia
+      financiera no se evaporó por callarse.</p></div></div>
+  </div>
+</div></section>
+
+<section id="lectura"><div class="wrap">
+  <h2 class="sec-title"><span class="n">2</span> Cómo leer el silencio</h2>
+  <div class="grid g3">
+    <div class="card"><span class="tag hecho">Hecho</span>
+      <h3>El bluff quedó a la vista</h3>
+      <p>Dijeron "21 días o litigamos". Pasaron casi 60 y no litigaron. Esto confirma lo que veníamos analizando:
+      su causal judicial ("necesito la casa para venderla") es débil y ellos lo saben.</p>
+      <p><b>La próxima amenaza con plazo vale todavía menos que esta.</b></p></div>
+    <div class="card"><span class="tag infer">Inferencia</span>
+      <h3>El silencio tiene varias explicaciones</h3>
+      <p>Puede ser que estén recalculando, juntando plata, consultando un abogado de verdad, explorando vender ocupada,
+      o simple parálisis de Chad (verano incluido).</p>
+      <p>El silencio <b>no confirma ninguna</b> — por eso vigilamos señales, no adivinamos.</p></div>
+    <div class="card"><span class="tag hecho">A favor</span>
+      <h3>No hay oferta nuestra en la mesa</h3>
+      <p>Que los €50.000 hayan caducado es bueno: si vuelven, la conversación arranca de nuevo <b>desde nuestro lado</b>.
+      Podemos re-anclar en 50, o incluso señalar que el paso del tiempo cambió las condiciones.</p>
+      <p>Ellos, en cambio, siguen atados a su historial: 2.100 → 7.500 → 10.000.</p></div>
+  </div>
+  <div style="margin-top:14px" class="callout amber">
+    <h3>El matiz que importa: la fecha 31-dic-2026 se achica</h3>
+    <p>El paquete que ellos ofrecieron incluía nuestra salida el 31 de diciembre. Cada semana de silencio le come margen a esa
+    fecha: mudarnos "antes de fin de año" ya exige cerrar el acuerdo <b>en septiembre u octubre</b> como muy tarde. Si esto se
+    estira a 2027, la fecha se renegocia entera — y una salida más lejana vale <b>más</b> compensación, no menos. El tiempo
+    corre contra su calendario, no contra nuestros derechos.</p>
+  </div>
+</div></section>
+
+<section id="escenarios"><div class="wrap">
+  <h2 class="sec-title"><span class="n">3</span> Escenarios actualizados (vs. estimación de julio)</h2>
+  <div class="grid g2">
+
+    <div class="esc"><div class="head"><h3>A · Vuelven con oferta mejorada</h3><span class="prob alta">~35% <span class="delta down">↓ leve</span></span></div>
+      <div class="body"><p>Sigue siendo lo más probable: su problema (casa trabada, urgencia de plata) no se resolvió callándose.
+      El regreso típico: una carta "excepcionalmente, nuestro cliente ofrece €X" con X entre 15 y 25 mil.</p>
+      <p><b class="q">Nosotros:</b> la escalera del plan sigue vigente (cierre objetivo €30–38 mil), pero arrancamos libres:
+      nuestra última palabra ya no existe, podemos volver a pedir 50.</p>
+      <div class="probtrack"><div class="probfill" style="width:35%"></div></div></div>
+      <div class="foot">Si vuelven con número: <b>no responder rápido</b>. El que espera, cobra más.</div></div>
+
+    <div class="esc"><div class="head"><h3>B · Silencio largo (meses)</h3><span class="prob media">~25–30% <span class="delta up">↑ sube</span></span></div>
+      <div class="body"><p>Chad puede simplemente aguantar, o estar esperando que "nos ablandemos" solos. Con cada mes,
+      la salida al 31-dic se vuelve imposible y todo se corre a 2027.</p>
+      <p><b class="q">Nosotros:</b> nada. Vivimos, pagamos, documentamos. Si para <b>fines de septiembre</b> no hay señales,
+      decidimos juntos si conviene una carta corta y neutral ("seguimos abiertos a una resolución") — sin número, sin apuro.</p>
+      <div class="probtrack"><div class="probfill" style="width:27%;background:var(--amber)"></div></div></div>
+      <div class="foot">El statu quo nos favorece: alquiler protegido de €1.400 en un mercado carísimo.</div></div>
+
+    <div class="esc"><div class="head"><h3>C · Pivote: venden la casa ocupada (o nos la ofrecen)</h3><span class="prob media">~15% <span class="delta up">↑ sube</span></span></div>
+      <div class="body"><p>Si el buyout le salió caro, Chad puede intentar vender con nosotros adentro — el comprador hereda
+      nuestro contrato — o volver a ofrecernos la casa.</p>
+      <p><b class="q">Nosotros:</b> si reabre la venta directa, la referencia sigue siendo <b>€380–400 mil</b> (carril separado,
+      nunca mezclado con el buyout). Si vende ocupada a un tercero, el buyout se evapora: por eso esta es la rama a vigilar
+      más de cerca.</p>
+      <div class="probtrack"><div class="probfill" style="width:15%;background:var(--amber)"></div></div></div>
+      <div class="foot">Señales: tasador, fotos, visitas, anuncio en Funda. Ver sección Alertas.</div></div>
+
+    <div class="esc"><div class="head"><h3>D · Demanda judicial tardía</h3><span class="prob baja">~10% <span class="delta eq">= igual</span></span></div>
+      <div class="body"><p>Puede pasar, sobre todo si contratan un advocaat nuevo que quiera intentarlo. Pero dejar vencer su
+      propio ultimátum sin actuar debilita aún más su posición: hasta su urgencia declarada quedó desmentida por su calma.</p>
+      <p><b class="q">Nosotros:</b> abogado el mismo día, defensa total, y el canal de negociación queda abierto — los arreglos
+      mid-juicio suelen ser más caros para el que demandó.</p>
+      <div class="probtrack"><div class="probfill" style="width:10%;background:var(--red)"></div></div></div>
+      <div class="foot">Sigue siendo su peor camino, y ahora con menos credibilidad.</div></div>
+
+    <div class="esc"><div class="head"><h3>E · Movidas menores: subida de renta, pedidos de acceso</h3><span class="prob baja">~5–10% <span class="delta eq">= igual</span></span></div>
+      <div class="body"><p>Justus ya había anunciado una notificación formal de subida de renta que nunca llegó. Puede
+      reaparecer como forma de presión de bajo costo.</p>
+      <p><b class="q">Nosotros:</b> carril separado, sin drama: verificar tope legal 2026 (4,4% máximo en sector libre) y puntos
+      WWS con el Huurteam de Utrecht antes de responder. Accesos: solo por escrito, 48h, con nosotros presentes.</p>
+      <div class="probtrack"><div class="probfill" style="width:8%"></div></div></div>
+      <div class="foot">Molesto pero inofensivo si se maneja por protocolo.</div></div>
+
+    <div class="esc"><div class="head"><h3>F · Contacto informal de Chad ("hablemos como amigos")</h3><span class="prob baja">~10% <span class="delta up">↑ posible</span></span></div>
+      <div class="body"><p>Clásico después de que la vía formal se empantana: un mensaje directo, amable, buscando sacarnos
+      un número o una fecha "en confianza".</p>
+      <p><b class="q">Nosotros:</b> amabilidad total, contenido cero. "Preferimos seguir por escrito con tu asesor." Ni números,
+      ni fechas, ni 'entre nosotros'. Todo lo dicho informalmente después aparece citado en cartas.</p>
+      <div class="probtrack"><div class="probfill" style="width:10%"></div></div></div>
+      <div class="foot">Lo cortés no quita lo blindado.</div></div>
+
+  </div>
+</div></section>
+
+<section id="movemos"><div class="wrap">
+  <h2 class="sec-title"><span class="n">4</span> ¿Y nosotros? ¿Movemos primero?</h2>
+  <div class="grid g2">
+    <div class="callout green">
+      <h3>Por ahora: no. El silencio se gana esperando</h3>
+      <p>Regla básica de negociación: <b>no ofertar contra uno mismo</b>. El último movimiento fue nuestro (€50.000);
+      el que tiene que hablar ahora es él. Cada semana que pasa, nosotros vivimos bien y barato, y su activo sigue trabado.
+      Romper el silencio primero regalaría exactamente lo que el silencio nos está dando: la señal de que no tenemos apuro.</p>
+    </div>
+    <div class="callout amber">
+      <h3>Con una fecha de revisión: fines de septiembre</h3>
+      <p>La ventana buena para cerrar con salida 31-dic era <b>julio–septiembre</b>. Si llegamos a octubre sin señales,
+      no es un drama — nuestros derechos no vencen — pero conviene decidir juntos: (a) seguir esperando tranquilos hasta 2027,
+      o (b) mandar una carta corta y neutral que reabra el canal sin poner número ni mostrar apuro. Esa decisión se toma
+      ese día, no hoy. Mientras tanto: <b>abogado de huurrecht identificado y listo</b>, aunque sea sin contratar.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="alertas"><div class="wrap">
+  <h2 class="sec-title"><span class="n">5</span> Señales de alerta y qué hacemos con cada una</h2>
+  <div class="alerts">
+    <div class="arow"><div><h4>Carta de un advocaat (abogado real, no "jurist")</h4>
+      <p>Significaría que se preparan en serio para litigar o para negociar fuerte.</p></div>
+      <div class="resp"><b>Respuesta:</b> activar nuestro abogado ese mismo día. Ninguna respuesta sin revisión profesional.</div></div>
+    <div class="arow"><div><h4>Piden acceso para tasador, fotos o visitas</h4>
+      <p>Señal de preparación de venta — posiblemente ocupada, la rama que más nos afecta.</p></div>
+      <div class="resp"><b>Respuesta:</b> cooperar según protocolo (por escrito, 48h, con nosotros presentes) y reevaluar
+      la estrategia de inmediato: el buyout puede estar por evaporarse.</div></div>
+    <div class="arow"><div><h4>La casa aparece publicada (Funda u otra)</h4>
+      <p>Venta ocupada en marcha. El comprador hereda nuestro contrato, pero el buyout con Chad muere.</p></div>
+      <div class="resp"><b>Respuesta:</b> consulta con abogado sobre opciones y, si nos interesa comprar, reactivar el carril
+      de los €380–400 mil por escrito.</div></div>
+    <div class="arow"><div><h4>Notificación formal de subida de renta</h4>
+      <p>Presión de bajo costo, ya anunciada una vez y nunca concretada.</p></div>
+      <div class="resp"><b>Respuesta:</b> verificar tope legal y puntos WWS con Huurteam Utrecht. Carril separado, respuesta sobria.</div></div>
+    <div class="arow"><div><h4>Mensaje informal de Chad</h4>
+      <p>Búsqueda de números o fechas "en confianza" fuera del canal formal.</p></div>
+      <div class="resp"><b>Respuesta:</b> amable y por escrito: "preferimos continuar vía tu asesor". Cero contenido negociable.</div></div>
+  </div>
+</div></section>
+
+<section id="reglas"><div class="wrap">
+  <h2 class="sec-title"><span class="n">6</span> Reglas vigentes (no cambian con el silencio)</h2>
+  <div class="grid g2">
+    <div class="checklist">
+      <div class="item">Renta de €1.400 puntual, siempre. Sigue siendo nuestro chaleco antibalas.</div>
+      <div class="item">Todo por escrito. El silencio de ellos no se comenta ni se festeja en ningún mail.</div>
+      <div class="item">Abogado de huurrecht identificado, con teléfono a mano, listo para activar en un día.</div>
+      <div class="item">Documentar cualquier contacto, visita o novedad, con fecha, en la carpeta del caso.</div>
+      <div class="item">Revisión conjunta a fines de septiembre si el silencio continúa.</div>
+    </div>
+    <div class="donts">
+      <div class="item">No romper el silencio primero (por ahora). Ni "¿recibieron nuestra carta?" — la recibieron.</div>
+      <div class="item">No revelar jamás el piso interno (€27,5–30 mil).</div>
+      <div class="item">No aceptar llamadas ni reuniones sin agenda escrita previa.</div>
+      <div class="item">No mezclar buyout, renta y compra de la casa: tres carriles, tres paper trails.</div>
+      <div class="item">No interpretar el silencio como victoria definitiva: es ventaja, no cierre. El caso sigue abierto.</div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap disc">
+  <p>Actualización preparada el 22 de agosto de 2026. Situación: sin novedades desde la contraoferta del 6 de julio (doc 36);
+  ultimátum de T&E vencido sin acción judicial; oferta propia caducada el 24 de julio. Las probabilidades son estimaciones del
+  análisis, no certezas. Material de un analista de negociación y asistente legal <b>no abogado</b>; los puntos jurídicos deben
+  ratificarse con un advocaat huurrecht.</p>
+</div></footer>
+
+</body>
+</html>
