@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nico &amp; Mile — Dónde estamos y dónde se nos va la plata</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--tinta:#0f172a;--azul:#2563eb;--azulo:#1e3a8a;--verde:#059669;--ambar:#d97706;--rojo:#dc2626;
+      --gris:#64748b;--linea:#e2e8f0;--fondo:#f1f5f9;--card:#fff;}
+*{box-sizing:border-box;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,sans-serif;}
+body{margin:0;background:var(--fondo);color:var(--tinta);line-height:1.55;}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 18px 60px;}
+header{text-align:center;padding:34px 0 26px;}
+h1{font-size:clamp(26px,4.4vw,40px);margin:0 0 8px;letter-spacing:-.02em;
+   background:linear-gradient(90deg,var(--azulo),var(--azul));-webkit-background-clip:text;
+   -webkit-text-fill-color:transparent;background-clip:text;}
+.sub{color:var(--gris);font-size:15px;}
+section{background:var(--card);border-radius:18px;padding:26px;margin-bottom:20px;
+        box-shadow:0 1px 3px rgba(15,23,42,.07),0 8px 24px -12px rgba(15,23,42,.12);}
+h2{font-size:21px;margin:0 0 4px;color:var(--azulo);letter-spacing:-.01em;}
+h2 .em{font-size:22px;margin-right:8px;}
+.h2sub{color:var(--gris);font-size:14px;margin:0 0 20px;}
+h3{font-size:15px;margin:26px 0 10px;color:var(--gris);text-transform:uppercase;letter-spacing:.06em;}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:14px;}
+.kpi{background:linear-gradient(160deg,#f8fafc,#fff);border:1px solid var(--linea);
+     border-radius:14px;padding:16px 18px;border-top:3px solid var(--azul);}
+.kpi.v{border-top-color:var(--verde);} .kpi.a{border-top-color:var(--ambar);}
+.kpi .l{font-size:11.5px;color:var(--gris);text-transform:uppercase;letter-spacing:.05em;font-weight:600;}
+.kpi .n{font-size:27px;font-weight:800;letter-spacing:-.02em;margin:3px 0 1px;}
+.kpi .d{font-size:12.5px;color:var(--gris);}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px;}
+th{background:var(--azulo);color:#fff;padding:10px 9px;text-align:right;font-size:12px;
+   text-transform:uppercase;letter-spacing:.04em;}
+th:first-child{text-align:left;border-radius:9px 0 0 0;} th:last-child{border-radius:0 9px 0 0;}
+td{padding:9px;border-bottom:1px solid var(--linea);text-align:right;}
+td:first-child{text-align:left;font-weight:600;}
+tbody tr:hover{background:#f8fafc;}
+tfoot td{font-weight:800;border-top:2px solid var(--azulo);background:#f8fafc;}
+.chart{position:relative;height:330px;}
+.chart.tall{height:390px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;}
+@media(max-width:780px){.grid2{grid-template-columns:1fr;}}
+.hito{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--linea);align-items:flex-start;}
+.hito:last-child{border-bottom:none;}
+.hito .ic{font-size:20px;flex-shrink:0;width:30px;text-align:center;}
+.hito b{display:block;font-size:15px;}
+.hito span{font-size:13.5px;color:var(--gris);}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11.5px;font-weight:700;}
+.p-v{background:#d1fae5;color:#065f46;} .p-a{background:#fef3c7;color:#92400e;}
+.p-r{background:#fee2e2;color:#991b1b;} .p-b{background:#dbeafe;color:#1e40af;}
+.nota{font-size:13px;color:var(--gris);background:#f8fafc;border-left:3px solid var(--azul);
+      padding:12px 15px;border-radius:0 9px 9px 0;margin-top:16px;}
+.big{font-size:17px;line-height:1.65;}
+.big b{color:var(--azulo);}
+.idea{border:1px solid var(--linea);border-radius:13px;padding:16px 18px;margin-bottom:12px;
+      border-left:4px solid var(--ambar);}
+.idea h4{margin:0 0 5px;font-size:15.5px;}
+.idea p{margin:0;font-size:14px;color:#334155;}
+.idea .ah{float:right;font-weight:800;color:var(--verde);font-size:15px;}
+footer{text-align:center;color:var(--gris);font-size:12.5px;padding:24px 0 0;}
+</style></head><body><div class="wrap">
+
+<header>
+  <h1>Dónde estamos y dónde se nos va la plata</h1>
+  <p class="sub">Nico &amp; Mile · agosto 2026 · con 2.093 movimientos reales de todas nuestras cuentas</p>
+</header>
+
+<section>
+  <h2><span class="em">📍</span>Dónde estamos hoy</h2>
+  <p class="h2sub">Contando el sueldo de Mile que entra mañana, y ya descontando lo que hay que pagarle a AMEX.</p>
+  <div class="kpis">
+    <div class="kpi v"><div class="l">Patrimonio total</div><div class="n">€9.264</div><div class="d">hace un año: €0</div></div>
+    <div class="kpi v"><div class="l">Invertido</div><div class="n">€3.213</div><div class="d">€1.626 Nico · €1.587 Mile</div></div>
+    <div class="kpi"><div class="l">Colchón flexible</div><div class="n">€1.851</div><div class="d">para usar cuando haga falta</div></div>
+    <div class="kpi v"><div class="l">Deuda</div><div class="n">€0</div><div class="d">AMEX e ICS al día</div></div>
+  </div>
+  <p class="big" style="margin-top:22px">
+    En julio el ahorro estaba en <b>cero</b>: el Mundial se llevó todo. En un mes reconstruimos
+    <b>€9.264</b>, sin deuda, y encima invirtiendo casi lo mismo cada uno. El sistema nuevo
+    —Nico paga el alquiler, Mile pone €700 a la conjunta, y lo que sobra se invierte— <b>funciona</b>.
+  </p>
+</section>
+
+<section>
+  <h2><span class="em">🎯</span>Cómo venimos</h2>
+  <p class="h2sub">Lo que cambió desde que empezamos a mirar los números en serio.</p>
+  <div class="hito"><div class="ic">✅</div><div><b>Cerramos BBVA Argentina y terminamos Klarna</b>
+    <span>Dejaron de salir ~€225 por mes en cuotas, impuestos y comisiones que ya no servían para nada.</span></div></div>
+  <div class="hito"><div class="ic">✅</div><div><b>Las suscripciones bajaron de €220 a €104 por mes</b>
+    <span>Menos de la mitad. Ahora solo quedan las que usamos de verdad.</span></div></div>
+  <div class="hito"><div class="ic">✅</div><div><b>La cuenta conjunta ordenó el gasto compartido</b>
+    <span>Antes Nico cubría de forma implícita casi dos tercios de todo. Ahora está claro quién pone qué.</span></div></div>
+  <div class="hito"><div class="ic">✅</div><div><b>Devolvimos los €950 del préstamo y pagamos el viaje entero sin deuda</b>
+    <span>El Mundial costó €8.577 y se pagó completo. Cero cuotas, cero intereses.</span></div></div>
+  <div class="hito"><div class="ic">📊</div><div><b>El primer mes con el sistema nuevo cerró en €4.916</b>
+    <span>Contra un promedio histórico de €5.183. Y de esos €4.916, hay €734 que fueron cosas de una sola vez
+    (el reloj y la cuota anual de fútbol): el gasto corriente real fue <b>€4.182</b>.</span></div></div>
+  <div class="hito"><div class="ic">🔍</div><div><b>Descubrimos que la cuota de AMEX es €65 por mes</b>
+    <span>Subió en febrero de €6,50 a €65 y nadie lo había visto. Son <b>€780 al año</b>.</span></div></div>
+</section>
+
+<section>
+  <h2><span class="em">🛒</span>El supermercado, en detalle</h2>
+  <p class="h2sub">Promedio por mes de los 6 ciclos normales (dic–may) más junio. Sin el mes del viaje.</p>
+  <div class="kpis" style="margin-bottom:26px">
+    <div class="kpi"><div class="l">Promedio por mes</div><div class="n" id="k-sup"></div><div class="d">entre todos los supermercados</div></div>
+    <div class="kpi a"><div class="l">Visitas al súper</div><div class="n" id="k-vis"></div><div class="d">en 7 meses · <span id="k-vismes"></span> por mes</div></div>
+    <div class="kpi"><div class="l">Ticket promedio</div><div class="n" id="k-tick"></div><div class="d">por visita</div></div>
+    <div class="kpi a"><div class="l">Albert Heijn</div><div class="n" id="k-ah"></div><div class="d">del gasto total en súper</div></div>
+  </div>
+
+  <div class="grid2">
+    <div><div class="chart"><canvas id="torta"></canvas></div></div>
+    <div>
+      <h3 style="margin-top:0">La historia en una frase</h3>
+      <p class="big" id="historia"></p>
+    </div>
+  </div>
+
+  <h3>Cuánto y cómo compramos en cada uno</h3>
+  <table>
+    <thead><tr><th>Supermercado</th><th>€/mes</th><th>Total 7 meses</th><th>Visitas</th><th>Ticket promedio</th><th>% del súper</th></tr></thead>
+    <tbody id="tabla-sup"></tbody>
+    <tfoot><tr><td>TOTAL</td><td id="t-prom"></td><td id="t-total"></td><td id="t-n"></td><td id="t-ticket"></td><td>100%</td></tr></tfoot>
+  </table>
+
+  <h3>Mes a mes</h3>
+  <div class="chart"><canvas id="barras"></canvas></div>
+  <div class="nota" id="nota-sup"></div>
+</section>
+
+<section>
+  <h2><span class="em">💸</span>En qué se nos va la plata</h2>
+  <p class="h2sub">Promedio por mes (dic–may), comparado con el primer mes del sistema nuevo. Sin contar el Mundial ni el viaje.</p>
+  <div class="chart tall"><canvas id="cats"></canvas></div>
+  <div class="nota">Las barras claras son el promedio histórico y las oscuras el mes de julio–agosto.
+  Donde la oscura es más corta, bajamos. <b>Regalos</b> se ve enorme porque incluye el reloj de cumpleaños,
+  y <b>Salud/fitness</b> porque incluye la cuota anual de fútbol: las dos son de una sola vez.</div>
+</section>
+
+<section>
+  <h2><span class="em">🔧</span>Qué podríamos mejorar</h2>
+  <p class="h2sub">Ordenado por cuánta plata hay en juego, no por lo fácil que sea.</p>
+
+  <div class="idea"><span class="ah">hasta €150/mes</span>
+    <h4>1. Menos viajes al súper, más planificados</h4>
+    <p>Vamos <b>48 veces por mes</b> al supermercado y gastamos <b>€10 por visita</b>. En Albert Heijn son 200 visitas
+    de €10; en Lidl son 27 de €42. Comprar dos veces por semana con lista, en vez de todos los días lo que falta,
+    suele bajar el total entre un 15% y un 20% — y además ahorra tiempo.</p></div>
+
+  <div class="idea"><span class="ah">~€100/mes</span>
+    <h4>2. Cambiar dónde compramos, no cuánto</h4>
+    <p>Albert Heijn se lleva <b>€289 por mes</b>, el 42% de todo el súper. Es el más caro de los tres que usamos.
+    Pasar la compra grande a Lidl o Bendi y dejar Albert Heijn solo para lo urgente puede ahorrar ~€100 al mes
+    sin comprar menos comida.</p></div>
+
+  <div class="idea"><span class="ah">€90/mes</span>
+    <h4>3. Restaurantes: el gasto más grande después del alquiler</h4>
+    <p>Son <b>€684 por mes</b>, más que el súper. No hace falta dejar de salir: dos salidas menos por mes
+    ya son €90. Vale la pena mirarlo juntos y decidir cuáles nos importan de verdad.</p></div>
+
+  <div class="idea"><span class="ah">€780/año</span>
+    <h4>4. Revisar la cuota de AMEX</h4>
+    <p><b>€65 por mes</b> desde febrero, más €10 de la tarjeta extra. Son €900 al año entre las dos.
+    La pregunta es simple: ¿lo que da esa tarjeta vale €900? Si no, hay versiones más baratas.</p></div>
+
+  <div class="idea"><span class="ah">a decidir</span>
+    <h4>5. Ropa y cuidado personal</h4>
+    <p><b>€294 por mes</b> entre los dos. No es un problema, pero es el tipo de gasto que crece sin que nadie
+    lo note. Ponerle un número acordado por mes lo vuelve una decisión en vez de una sorpresa.</p></div>
+
+  <p class="big" style="margin-top:24px">Si tomáramos las tres primeras, serían <b>~€340 por mes</b> más
+  para invertir — <b>€4.000 al año</b> — sin cambiar nada importante de cómo vivimos.</p>
+</section>
+
+<footer>Hecho con los movimientos reales de ABN, AMEX, ICS y Revolut · dic 2025 – ago 2026 · conciliado al céntimo</footer>
+</div>
+
+<script>
+const D = {"super": {"ciclos": ["2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06"], "porciclo": [1143.47, 882.64, 684.45, 511.2, 585.3, 836.66, 229.09], "tiendas": [{"nombre": "Albert Heijn", "total": 2024.61, "prom": 289.23, "n": 200, "ticket": 10.12}, {"nombre": "Lidl", "total": 1131.81, "prom": 161.69, "n": 27, "ticket": 41.92}, {"nombre": "Bendi", "total": 784.88, "prom": 112.13, "n": 30, "ticket": 26.16}, {"nombre": "Otros / varios", "total": 248.68, "prom": 35.53, "n": 23, "ticket": 10.81}, {"nombre": "PLUS", "total": 247.03, "prom": 35.29, "n": 24, "ticket": 10.29}, {"nombre": "Nettorama", "total": 139.06, "prom": 19.87, "n": 3, "ticket": 46.35}, {"nombre": "Jumbo", "total": 97.77, "prom": 13.97, "n": 13, "ticket": 7.52}, {"nombre": "Compras en España", "total": 65.2, "prom": 9.31, "n": 8, "ticket": 8.15}, {"nombre": "Carnicería", "total": 54.95, "prom": 7.85, "n": 1, "ticket": 54.95}, {"nombre": "Hira", "total": 29.1, "prom": 4.16, "n": 1, "ticket": 29.1}, {"nombre": "Dirk", "total": 19.97, "prom": 2.85, "n": 3, "ticket": 6.66}, {"nombre": "Kelly's Expat", "total": 18.65, "prom": 2.66, "n": 1, "ticket": 18.65}, {"nombre": "Spar", "total": 11.1, "prom": 1.59, "n": 1, "ticket": 11.1}], "serie": {"Albert Heijn": [533.55, 311.68, 279.44, 251.26, 327.86, 227.15, 93.67], "Lidl": [301.59, 132.62, 241.38, 84.47, 125.94, 206.6, 39.21], "Bendi": [216.56, 114.21, 117.29, 49.94, 110.93, 175.95, -0.0], "Otros / varios": [34.8, 159.68, 12.5, 8.4, -0.0, 33.3, -0.0], "PLUS": [26.49, 43.73, 10.13, 117.13, 9.47, 7.17, 32.91], "Nettorama": [-0.0, -0.0, -0.0, -0.0, -0.0, 121.29, 17.77]}}, "cat": {"cats": [{"n": "Alquiler", "base": 1369.0, "c7": 1400.0}, {"n": "Restaurantes / bares / delivery", "base": 684.0, "c7": 692.0}, {"n": "Supermercado", "base": 668.0, "c7": 801.0}, {"n": "Viajes", "base": 466.0, "c7": 11.0}, {"n": "Seguro medico", "base": 351.0, "c7": 323.0}, {"n": "Salud / farmacia / fitness", "base": 337.0, "c7": 496.0}, {"n": "Ropa / belleza / cuidado personal", "base": 294.0, "c7": 167.0}, {"n": "Entretenimiento / eventos", "base": 213.0, "c7": 137.0}, {"n": "Compras / hogar", "base": 202.0, "c7": 13.0}, {"n": "Transporte local", "base": 149.0, "c7": 11.0}, {"n": "Argentina / envios", "base": 105.0, "c7": 0.0}, {"n": "Suscripciones / software", "base": 104.0, "c7": 105.0}, {"n": "Comisiones bancarias / tarjetas", "base": 88.0, "c7": 103.0}, {"n": "Telefono / internet", "base": 61.0, "c7": 98.0}, {"n": "Terapia", "base": 52.0, "c7": 139.0}, {"n": "Regalos", "base": 40.0, "c7": 421.0}], "totalBase": 5183.0, "total07": 4916.0}};
+const eur = n => "€" + Math.round(n).toLocaleString("es-ES");
+const PAL = ["#2563eb","#0891b2","#7c3aed","#db2777","#ea580c","#059669","#ca8a04","#64748b","#0f766e","#9333ea","#be123c","#4d7c0f","#a16207"];
+
+// ---- KPIs supermercado ----
+const T = D.super.tiendas, totMes = T.reduce((a,t)=>a+t.prom,0), totN = T.reduce((a,t)=>a+t.n,0);
+const totAll = T.reduce((a,t)=>a+t.total,0), ah = T.find(t=>t.nombre==="Albert Heijn");
+document.getElementById("k-sup").textContent = eur(totMes);
+document.getElementById("k-vis").textContent = totN;
+document.getElementById("k-vismes").textContent = Math.round(totN/7) + " veces";
+document.getElementById("k-tick").textContent = "€" + (totAll/totN).toFixed(2).replace(".",",");
+document.getElementById("k-ah").textContent = Math.round(100*ah.total/totAll) + "%";
+const lidl = T.find(t=>t.nombre==="Lidl");
+document.getElementById("historia").innerHTML =
+  `En Albert Heijn entramos <b>${ah.n} veces</b> y gastamos <b>€${ah.ticket.toFixed(2).replace(".",",")}</b> por vez.
+   En Lidl entramos <b>${lidl.n} veces</b> y gastamos <b>€${lidl.ticket.toFixed(2).replace(".",",")}</b>.
+   No es que compremos mucho: es que compramos <b>muy seguido y de a poco</b>, y casi siempre en el más caro.`;
+
+// ---- torta ----
+const esChica = t => t.prom < 13 || t.nombre === "Otros / varios";
+const GR = T.filter(t=>!esChica(t)), CH = T.filter(esChica);
+const vis = GR.concat(CH.length ? [{nombre:"Resto (" + CH.length + " comercios)",
+  prom:CH.reduce((a,t)=>a+t.prom,0), total:CH.reduce((a,t)=>a+t.total,0),
+  n:CH.reduce((a,t)=>a+t.n,0)}] : []);
+new Chart(document.getElementById("torta"), {
+  type:"doughnut",
+  data:{labels:vis.map(t=>t.nombre),
+        datasets:[{data:vis.map(t=>t.prom),backgroundColor:PAL,borderWidth:3,borderColor:"#fff",hoverOffset:14}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:"52%",
+    plugins:{legend:{position:"right",labels:{boxWidth:13,padding:11,font:{size:12.5}}},
+      tooltip:{callbacks:{label:c=>` ${c.label}: ${eur(c.raw)}/mes · ${Math.round(100*c.raw/totMes)}%`}},
+      title:{display:true,text:"Gasto mensual por supermercado",font:{size:14,weight:"600"},padding:{bottom:12}}}}
+});
+
+// ---- tabla ----
+document.getElementById("tabla-sup").innerHTML = T.map((t,i)=>`<tr>
+  <td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${PAL[i%PAL.length]};margin-right:7px"></span>${t.nombre}</td>
+  <td><b>${eur(t.prom)}</b></td><td>${eur(t.total)}</td><td>${t.n}</td>
+  <td>€${t.ticket.toFixed(2).replace(".",",")}</td>
+  <td>${(100*t.total/totAll).toFixed(1)}%</td></tr>`).join("");
+document.getElementById("t-prom").textContent=eur(totMes);
+document.getElementById("t-total").textContent=eur(totAll);
+document.getElementById("t-n").textContent=totN;
+document.getElementById("t-ticket").textContent="€"+(totAll/totN).toFixed(2).replace(".",",");
+
+// ---- barras por ciclo, apiladas por tienda ----
+const NOM = {"2025-12":"dic","2026-01":"ene","2026-02":"feb","2026-03":"mar","2026-04":"abr","2026-05":"may","2026-06":"jun"};
+const serieK = Object.keys(D.super.serie);
+const otrosSerie = D.super.porciclo.map((tot,i) =>
+  Math.max(0, +(tot - serieK.reduce((a,k)=>a+D.super.serie[k][i],0)).toFixed(2)));
+new Chart(document.getElementById("barras"), {
+  type:"bar",
+  data:{labels:D.super.ciclos.map(c=>NOM[c]||c),
+        datasets:serieK.map((k,i)=>({label:k,data:D.super.serie[k],backgroundColor:PAL[i],borderRadius:5}))
+                 .concat([{label:"Otros",data:otrosSerie,backgroundColor:"#cbd5e1",borderRadius:5}])},
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{x:{stacked:true,grid:{display:false}},
+            y:{stacked:true,ticks:{callback:v=>eur(v)},grid:{color:"#eef2f7"}}},
+    plugins:{legend:{position:"bottom",labels:{boxWidth:12,padding:11,font:{size:12}}},
+      tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${eur(c.raw)}`}},
+      title:{display:true,text:"Gasto en supermercado, mes a mes",font:{size:14,weight:"600"},padding:{bottom:12}}}}
+});
+const pc = D.super.porciclo, mx = Math.max(...pc), mn = Math.min(...pc);
+document.getElementById("nota-sup").innerHTML =
+  `El mes más caro fue <b>${eur(mx)}</b> y el más barato <b>${eur(mn)}</b>: una diferencia de <b>${eur(mx-mn)}</b>.
+   Esa variación es la señal de que el súper no está planificado — es lo que se compra sobre la marcha.
+   Junio se ve bajo porque estuvimos 11 días de viaje.`;
+
+// ---- categorías ----
+const C = D.cat.cats.filter(c=>c.base>=40);
+new Chart(document.getElementById("cats"), {
+  type:"bar",
+  data:{labels:C.map(c=>c.n.replace(" / bares / delivery","").replace(" / belleza / cuidado personal"," y belleza").replace(" / farmacia / fitness"," y gym").replace(" / envios","")),
+        datasets:[{label:"Promedio dic–may",data:C.map(c=>c.base),backgroundColor:"#bfdbfe",borderRadius:5},
+                  {label:"Jul–ago (sistema nuevo)",data:C.map(c=>c.c7),backgroundColor:"#1e3a8a",borderRadius:5}]},
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",
+    scales:{x:{ticks:{callback:v=>eur(v)},grid:{color:"#eef2f7"}},y:{grid:{display:false}}},
+    plugins:{legend:{position:"bottom",labels:{boxWidth:12,padding:12,font:{size:12.5}}},
+      tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${eur(c.raw)}`}}}}
+});
+</script></body></html>
