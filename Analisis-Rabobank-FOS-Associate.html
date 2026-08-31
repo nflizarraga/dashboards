@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FOS Associate — Rabobank · Análisis para Mile</title>
+<style>
+  :root{
+    color-scheme: light;
+    --plane:#f9f9f7; --surface:#fcfcfb;
+    --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --axis:#c3c2b7;
+    --border:rgba(11,11,11,0.10);
+    --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+    --b250:#86b6ef; --b400:#3987e5; --b500:#256abf; --b650:#104281;
+    --band:rgba(42,120,214,0.09);
+    --shadow:0 1px 2px rgba(11,11,11,.04), 0 8px 24px -12px rgba(11,11,11,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --plane:#0d0d0d; --surface:#1a1a19;
+      --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+      --grid:#2c2c2a; --axis:#383835;
+      --border:rgba(255,255,255,0.10);
+      --b250:#5598e7; --b400:#3987e5; --b500:#256abf; --b650:#184f95;
+      --band:rgba(57,135,229,0.14);
+      --shadow:none;
+    }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--plane); color:var(--ink);
+    font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:40px 22px 80px}
+  header.top{border-bottom:1px solid var(--border);padding-bottom:26px;margin-bottom:34px}
+  .eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{font-size:31px;line-height:1.18;margin:12px 0 10px;letter-spacing:-.02em;font-weight:700}
+  .sub{color:var(--ink-2);font-size:15px;margin:0}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+  .chip{font-size:12.5px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;color:var(--ink-2);background:var(--surface)}
+  h2{font-size:19px;margin:42px 0 14px;letter-spacing:-.01em;font-weight:700}
+  h2:first-of-type{margin-top:0}
+  h3{font-size:15px;margin:24px 0 8px;font-weight:700}
+  p{margin:0 0 14px;color:var(--ink-2)}
+  p strong, li strong{color:var(--ink);font-weight:650}
+  a{color:var(--b500);text-decoration:none;border-bottom:1px solid var(--border)}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow)}
+
+  /* verdict */
+  .verdict{display:grid;grid-template-columns:190px 1fr;gap:26px;align-items:center}
+  @media(max-width:620px){.verdict{grid-template-columns:1fr;gap:18px}}
+  .score{text-align:center}
+  .score .num{font-size:62px;font-weight:700;line-height:1;letter-spacing:-.035em}
+  .score .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-top:8px}
+  .meter{height:8px;border-radius:4px;background:var(--grid);margin-top:14px;overflow:hidden}
+  .meter i{display:block;height:100%;border-radius:4px;background:var(--b400)}
+  .stamp{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--good);padding:5px 12px;border-radius:999px;margin-bottom:12px}
+  .verdict p{margin-bottom:0}
+
+  /* charts */
+  figure{margin:0}
+  figcaption{font-size:13px;color:var(--muted);margin-top:14px;line-height:1.5}
+  .ch-title{font-size:14.5px;font-weight:700;margin-bottom:2px}
+  .ch-note{font-size:12.5px;color:var(--muted);margin-bottom:18px}
+  .row{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:14px;align-items:center;margin-bottom:9px}
+  @media(max-width:620px){.row{grid-template-columns:1fr;gap:3px;margin-bottom:14px}}
+  .rl{font-size:13px;color:var(--ink-2);line-height:1.35}
+  .rl b{display:block;font-size:11px;color:var(--muted);font-weight:600}
+  .track{position:relative;height:22px;background:linear-gradient(var(--grid),var(--grid)) left center/100% 1px no-repeat}
+  .bar{position:relative;height:22px;border-radius:0 4px 4px 0;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-size:12px;font-weight:700;min-width:34px;transition:filter .15s}
+  .bar:hover{filter:brightness(1.08)}
+  .bar.out{justify-content:flex-start;padding-right:0;padding-left:8px;color:var(--ink-2)}
+  .tag{font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:4px;margin-right:5px;white-space:nowrap;display:inline-block;letter-spacing:.01em}
+  .t-good{background:rgba(12,163,12,.13);color:#0a7c0a}
+  .t-part{background:rgba(236,131,90,.18);color:#a84d24}
+  .t-gap{background:rgba(208,59,59,.13);color:#b32f2f}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .t-good{background:rgba(12,163,12,.2);color:#4ec44e}
+    :root:not([data-theme="light"]) .t-part{background:rgba(236,131,90,.2);color:#f0a483}
+    :root:not([data-theme="light"]) .t-gap{background:rgba(208,59,59,.2);color:#e57070}
+  }
+  .band{position:absolute;top:-6px;bottom:-6px;background:var(--band);border-left:1px dashed var(--axis);border-right:1px dashed var(--axis);z-index:0}
+  .scale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:8px;font-variant-numeric:tabular-nums}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2);margin-bottom:16px}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+  /* misc */
+  ul{margin:0 0 14px;padding-left:20px;color:var(--ink-2)}
+  li{margin-bottom:7px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:620px){.cols{grid-template-columns:1fr}}
+  .box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+  .box h3{margin-top:0}
+  .box ul{margin-bottom:0;padding-left:18px;font-size:14px}
+  .quote{border-left:3px solid var(--b400);padding:2px 0 2px 18px;margin:16px 0;color:var(--ink);font-size:15px}
+  .warnbox{background:rgba(250,178,25,.10);border:1px solid rgba(250,178,25,.35);border-radius:12px;padding:18px 20px;margin:18px 0}
+  .warnbox p:last-child{margin-bottom:0}
+  ol.plan{counter-reset:s;list-style:none;padding:0;margin:0}
+  ol.plan li{counter-increment:s;position:relative;padding-left:40px;margin-bottom:16px;color:var(--ink-2)}
+  ol.plan li::before{content:counter(s);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--b500);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:8px}
+  th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--grid)}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+  td.n{text-align:right;font-variant-numeric:tabular-nums}
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--border);font-size:12.5px;color:var(--muted)}
+  #tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--plane);font-size:12px;padding:6px 9px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:99;max-width:230px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Análisis de vacante · 31 de agosto de 2026</div>
+  <h1>FOS Associate — Rabobank</h1>
+  <p class="sub">Front Office Support · KYC para Wholesale, Europa &amp; África · Utrecht · Referencia JR_00142694</p>
+  <div class="chips">
+    <span class="chip">Escala 08 · €4.105 – €5.862/mes</span>
+    <span class="chip">36 horas · híbrido</span>
+    <span class="chip">Aviso en inglés</span>
+    <span class="chip">Neerlandés no requerido</span>
+    <span class="chip">Utrecht</span>
+  </div>
+</header>
+
+<div class="card verdict">
+  <div class="score">
+    <div class="num">64<span style="font-size:30px">%</span></div>
+    <div class="meter"><i style="width:64%"></i></div>
+    <div class="lbl">Match ponderado</div>
+  </div>
+  <div>
+    <span class="stamp">Aplicar</span>
+    <p><strong>Sí, aplicá — pero con la cabeza fría.</strong> Es el mejor paquete salarial que apareció desde que arrancamos: el piso de la escala ya son <strong>€62.000 al año all-in</strong>, un 78% más de lo que cobrás hoy. Pide inglés, no neerlandés, es en Utrecht, y el español está listado como plus fuerte. Tiene <strong>un solo problema, pero es grande</strong>: pide tres años de KYC y vos tenés cero. No es una apuesta segura, es un billete de lotería barato con premio enorme. Comprarlo cuesta una hora.</p>
+  </div>
+</div>
+
+<h2>El número</h2>
+<p>Rabobank paga sobre el bruto mensual: un 13.º mes completo, 8% de vakantiegeld y un 10% de presupuesto personal. Sobre la escala 08, esto es lo que da:</p>
+
+<figure class="card">
+  <div class="ch-title">Paquete anual all-in</div>
+  <div class="ch-note">Base + 13.º mes + 8% vakantiegeld + 10% Employee Benefit Budget. La franja marca tu objetivo de €48–52k.</div>
+  <div id="salchart"></div>
+  <div class="scale"><span>€0</span><span>€30k</span><span>€60k</span><span>€90k</span></div>
+  <figcaption>Aun en el peor escenario —el mínimo absoluto de la escala— el paquete supera tu objetivo de negociación por más de €10.000. Y si te bajaran a escala 07, el piso sigue siendo ~€53.300: +52%.</figcaption>
+</figure>
+
+<h2>Requisito por requisito</h2>
+
+<figure class="card">
+  <div class="ch-title">Match por requisito del aviso</div>
+  <div class="ch-note">El ancho es qué tan bien lo cumplís. El "peso" es cuánto cuenta ese requisito en la decisión de un reclutador. Ordenado de más a menos peso.</div>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--good)"></i> Cumple</span>
+    <span><i class="sw" style="background:var(--serious)"></i> Parcial</span>
+    <span><i class="sw" style="background:var(--crit)"></i> Gap</span>
+  </div>
+  <div id="reqchart"></div>
+  <div class="scale"><span>0%</span><span>50%</span><span>100%</span></div>
+  <figcaption>Ponderado da 64%. Pero mirá dónde está el rojo: es la barra que más pesa. Ese es todo el problema, y todo lo demás está en verde.</figcaption>
+</figure>
+
+<h2>El único problema real</h2>
+<p>El aviso dice, textual: <em>"Minimum of 3 years' experience with KYC, CDD and/or Compliance"</em>. No dice "preferentemente". Es un número, y los números son lo que el sistema filtra primero. Escala 08 no es un puesto de entrada: es un rol de nivel medio para llevar la cartera KYC de los clientes más grandes y complejos del banco.</p>
+<p>Lo adyacente que sí tenés —investigar transacciones disputadas y armar evidencia para Elavon, soporte presencial a una auditoría, dos años adentro de un banco regulado— es <strong>el instinto correcto sin el vocabulario</strong>. Sirve muchísimo en una conversación. No sirve en un filtro automático.</p>
+
+<div class="warnbox">
+  <p><strong>Por eso la aplicación en frío no alcanza.</strong> Mi estimación: por el formulario solo, la probabilidad de que te llamen es de alrededor de 1 en 10. Con un mail directo a la recruiter el mismo día, poniendo el gap sobre la mesa vos primero, sube a algo así como 1 en 4. La diferencia entera está en ese mail.</p>
+</div>
+
+<h2>Lo que jugás a favor que casi nadie más tiene</h2>
+<div class="cols">
+  <div class="box">
+    <h3>Ya sos de la casa</h3>
+    <ul>
+      <li>Dos años trabajando dentro de Rabobank Utrecht.</li>
+      <li><strong>Ya pasaste el screening de confiabilidad.</strong> Para el banco eso es fricción y riesgo que se ahorra.</li>
+      <li>Conocés Croeselaan, la cultura y la gente.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h3>El puesto es mitad relación</h3>
+    <ul>
+      <li>Pide <em>"maintain a strong stakeholder position in an international environment"</em>. Vos atendiste al Managing Board.</li>
+      <li>Es "la mano derecha" de los Commercial Bankers: coordinación y trato, con KYC como materia.</li>
+      <li>No es análisis puro. Es exactamente la mitad blanda donde sos fuerte.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h3>El español está listado</h3>
+    <ul>
+      <li><em>"Spanish, French or Italian are a very good plus"</em> — para Wholesale Europa y África.</li>
+      <li>Sos nativa en español y lo usás todos los días para trabajar con España.</li>
+      <li>Sos ciudadana italiana. Muy pocos candidatos de KYC en Países Bajos traen eso.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h3>Cero fricción logística</h3>
+    <ul>
+      <li>Utrecht, híbrido. Vivís ahí.</li>
+      <li>Piden vivir en Países Bajos y tener derecho a trabajar: las dos, sin sponsorship.</li>
+      <li>El neerlandés es "bienvenido", no requisito. Tu A1 suma como señal.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Los chequeos del filtro</h2>
+<table>
+  <tr><th>Chequeo</th><th>Resultado</th></tr>
+  <tr><td>Fuente primaria</td><td>✅ rabobank.jobs, sitio de carreras del propio banco</td></tr>
+  <tr><td>Viva hoy</td><td>✅ Publicada y con formulario abierto al 31/08</td></tr>
+  <tr><td>Cuerpo del aviso en inglés</td><td>✅ Íntegro en inglés; neerlandés explícitamente no requerido</td></tr>
+  <tr><td>Ámsterdam / Utrecht en el aviso</td><td>✅ Utrecht (NL), híbrido</td></tr>
+  <tr><td>Empresa identificable</td><td>✅ Rabobank, con recruiter y mail directo publicados</td></tr>
+  <tr><td>Nada de hotelería</td><td>✅ Corporate banking</td></tr>
+</table>
+<p style="font-size:13.5px">Pasa los seis. La vacante de FEC que habíamos analizado en agosto (TM Analyst, JR_00143301) <strong>ya está caída</strong> — la verifiqué hoy y da 404. Esta es la puerta de Rabobank que está abierta ahora.</p>
+
+<h2>La trampa, dicha de frente</h2>
+<p>Esto no es contabilidad. FOS Associate te aleja del general ledger y del reporting, que es adonde querías ir. Y una vez que entrás en KYC, tendés a quedarte en KYC.</p>
+<p>Pero el encuadre que ordena la decisión es el mismo de siempre:</p>
+<div class="quote">El objetivo no es ser FOS Associate. El objetivo es entrar a Rabobank con una escala CAO adentro. Desde adentro, moverte a Finance, Control o Internal Audit es infinitamente más fácil que entrar desde afuera — y sin resignar el sueldo.</div>
+<p>Con ese encuadre no estás abandonando la contabilidad: estás comprando la entrada al edificio. Y la entrada vale <strong>€27.000 más por año</strong> que lo que tenés hoy.</p>
+
+<h2>Qué haría yo</h2>
+<ol class="plan">
+  <li><strong>Aplicar esta semana, con una hora de trabajo, no diez.</strong> El CV de Rabobank ya está armado en una columna y ATS-limpio; hay que reordenar los bullets para que el ángulo bancario y de investigación quede arriba, y listo.</li>
+  <li><strong>El mismo día, mail a Moniek Peeters</strong> (<a href="mailto:Moniek.Peeters@rabobank.nl">Moniek.Peeters@rabobank.nl</a>), la recruiter, que está publicada en el aviso. Cinco líneas: ex-Rabobank ya screeneada, contadora pública, español nativo para Wholesale Europa y África, y el gap de KYC nombrado por vos antes de que lo encuentren ellos. Eso es lo que convierte 1 en 10 en 1 en 4.</li>
+  <li><strong>No quemar a Philippe acá.</strong> Esa carta se juega una sola vez y hay que jugarla donde el requisito de años sea alcanzable. Acá pediría, como mucho, consejo — no el puesto.</li>
+  <li><strong>No frenar el pipeline.</strong> Esta es una vacante, no un plan. Las aplicaciones semanales de AP/GL en Ámsterdam y Utrecht siguen igual esta semana.</li>
+  <li><strong>Nunca el sueldo como motivo.</strong> Si te llaman, la razón declarada es crecer hacia riesgo y flujos de dinero desde la contabilidad. La plata se conversa recién cuando hay oferta.</li>
+</ol>
+
+<footer>
+  Fuentes: <a href="https://rabobank.jobs/en/job/fos-associate/JR_00142694/">Aviso FOS Associate, JR_00142694 — rabobank.jobs</a> (leído el 31/08/2026) · Perfil maestro de Milena Reniero y estrategia Rabobank FEC, carpeta <em>Trabajo Mile</em>.<br>
+  Los porcentajes de match y las probabilidades de respuesta son estimaciones propias basadas en el texto del aviso, no cifras del banco.
+</footer>
+
+</div>
+<div id="tip"></div>
+
+<script>
+const F = n => '€' + n.toLocaleString('es-ES');
+
+/* ---------- salary chart ---------- */
+const SMAX = 90000;
+const sal = [
+  {l:'Hoy · Odyssey',      s:'all-in, base €32.380', v:34971,  c:'var(--b250)', dark:true},
+  {l:'Escala 08 · piso',   s:'€4.105/mes',           v:62232,  c:'var(--b400)'},
+  {l:'Escala 08 · medio',  s:'€4.984/mes',           v:75551,  c:'var(--b500)'},
+  {l:'Escala 08 · techo',  s:'€5.862/mes',           v:88867,  c:'var(--b650)'}
+];
+document.getElementById('salchart').innerHTML = sal.map(d=>`
+  <div class="row">
+    <div class="rl">${d.l}<b>${d.s}</b></div>
+    <div class="track">
+      <div class="band" style="left:${48000/SMAX*100}%;width:${4000/SMAX*100}%"></div>
+      <div class="bar" style="width:${d.v/SMAX*100}%;background:${d.c};position:relative;z-index:1${d.dark?';color:#0b0b0b':''}"
+           data-tip="${d.l} — ${F(d.v)} al año all-in${d.v>34971?' · +'+Math.round((d.v/34971-1)*100)+'% vs hoy':''}">${F(d.v)}</div>
+    </div>
+  </div>`).join('');
+
+/* ---------- requirements chart ---------- */
+const reqs = [
+  {l:'3 años en KYC / CDD / Compliance', w:30, v:15,  st:'gap',  n:'Cero años directos. Lo adyacente no computa en un filtro.'},
+  {l:'Comunicación y stakeholders',      w:15, v:90,  st:'good', n:'Atendió al Managing Board del banco.'},
+  {l:'Título universitario completo',    w:10, v:100, st:'good', n:'Contadora Pública, UNC, carrera de 5 años.'},
+  {l:'Inglés (obligatorio)',             w:10, v:100, st:'good', n:'Trabaja en inglés todos los días.'},
+  {l:'Procesos y productos Wholesale',   w:10, v:35,  st:'part', n:'Banca corporativa desde el lado cliente, no producto.'},
+  {l:'Español / francés / italiano',     w:8,  v:100, st:'good', n:'Español nativo y ciudadanía italiana. Listado como plus fuerte.'},
+  {l:'Hands-on y mejora continua',       w:8,  v:85,  st:'good', n:'Reorganizó procedimientos e implementó software contable.'},
+  {l:'Elegibilidad y screening',         w:7,  v:100, st:'good', n:'UE, vive en Utrecht y ya pasó el screening de Rabobank.'},
+  {l:'Neerlandés (bienvenido)',          w:2,  v:50,  st:'part', n:'A1. No es requisito.'}
+];
+const COL={good:'var(--good)',part:'var(--serious)',gap:'var(--crit)'};
+const TAG={good:['t-good','Cumple'],part:['t-part','Parcial'],gap:['t-gap','Gap']};
+document.getElementById('reqchart').innerHTML = reqs.map(d=>`
+  <div class="row">
+    <div class="rl">${d.l}<b><span class="tag ${TAG[d.st][0]}">${TAG[d.st][1]}</span> peso ${d.w}%</b></div>
+    <div class="track">
+      <div class="bar" style="width:${d.v}%;background:${COL[d.st]}${d.st==='part'?';color:#0b0b0b':''}" data-tip="${d.l} — ${d.v}% · ${d.n}">${d.v}%</div>
+    </div>
+  </div>`).join('');
+
+/* ---------- tooltip ---------- */
+const tip = document.getElementById('tip');
+document.addEventListener('mouseover', e=>{
+  const t = e.target.closest('[data-tip]');
+  if(!t){tip.style.opacity=0;return;}
+  tip.textContent = t.dataset.tip; tip.style.opacity=1;
+});
+document.addEventListener('mousemove', e=>{
+  if(tip.style.opacity==='0'||!tip.style.opacity) return;
+  const x = Math.min(e.clientX+14, innerWidth-244);
+  tip.style.left = x+'px'; tip.style.top = (e.clientY+16)+'px';
+});
+</script>
+</body>
+</html>
