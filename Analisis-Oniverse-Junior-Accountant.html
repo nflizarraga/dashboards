@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Junior Accountant — Oniverse · Análisis para Mile</title>
+<style>
+  :root{
+    color-scheme: light;
+    --plane:#f9f9f7; --surface:#fcfcfb;
+    --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --axis:#c3c2b7;
+    --border:rgba(11,11,11,0.10);
+    --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+    --b250:#86b6ef; --b400:#3987e5; --b500:#256abf; --b650:#104281;
+    --band:rgba(42,120,214,0.09);
+    --shadow:0 1px 2px rgba(11,11,11,.04), 0 8px 24px -12px rgba(11,11,11,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --plane:#0d0d0d; --surface:#1a1a19;
+      --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+      --grid:#2c2c2a; --axis:#383835;
+      --border:rgba(255,255,255,0.10);
+      --b250:#5598e7; --b400:#3987e5; --b500:#256abf; --b650:#184f95;
+      --band:rgba(57,135,229,0.14);
+      --shadow:none;
+    }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--plane); color:var(--ink);
+    font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:40px 22px 80px}
+  header.top{border-bottom:1px solid var(--border);padding-bottom:26px;margin-bottom:34px}
+  .eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{font-size:31px;line-height:1.18;margin:12px 0 10px;letter-spacing:-.02em;font-weight:700}
+  .sub{color:var(--ink-2);font-size:15px;margin:0}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+  .chip{font-size:12.5px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;color:var(--ink-2);background:var(--surface)}
+  h2{font-size:19px;margin:42px 0 14px;letter-spacing:-.01em;font-weight:700}
+  h3{font-size:15px;margin:24px 0 8px;font-weight:700}
+  p{margin:0 0 14px;color:var(--ink-2)}
+  p strong, li strong{color:var(--ink);font-weight:650}
+  a{color:var(--b500);text-decoration:none;border-bottom:1px solid var(--border)}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow)}
+
+  .verdict{display:grid;grid-template-columns:190px 1fr;gap:26px;align-items:center}
+  @media(max-width:620px){.verdict{grid-template-columns:1fr;gap:18px}}
+  .score{text-align:center}
+  .score .num{font-size:62px;font-weight:700;line-height:1;letter-spacing:-.035em}
+  .score .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-top:8px}
+  .meter{height:8px;border-radius:4px;background:var(--grid);margin-top:14px;overflow:hidden}
+  .meter i{display:block;height:100%;border-radius:4px;background:var(--good)}
+  .stamp{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--good);padding:5px 12px;border-radius:999px;margin-bottom:12px}
+  .verdict p{margin-bottom:0}
+
+  figure{margin:0}
+  figcaption{font-size:13px;color:var(--muted);margin-top:14px;line-height:1.5}
+  .ch-title{font-size:14.5px;font-weight:700;margin-bottom:2px}
+  .ch-note{font-size:12.5px;color:var(--muted);margin-bottom:18px}
+  .row{display:grid;grid-template-columns:minmax(150px,235px) 1fr;gap:14px;align-items:center;margin-bottom:9px}
+  @media(max-width:620px){.row{grid-template-columns:1fr;gap:3px;margin-bottom:14px}}
+  .rl{font-size:13px;color:var(--ink-2);line-height:1.35}
+  .rl b{display:block;font-size:11px;color:var(--muted);font-weight:600}
+  .track{position:relative;height:22px;background:linear-gradient(var(--grid),var(--grid)) left center/100% 1px no-repeat}
+  .bar{position:relative;height:22px;border-radius:0 4px 4px 0;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-size:12px;font-weight:700;min-width:36px;transition:filter .15s;z-index:1}
+  .bar:hover{filter:brightness(1.08)}
+  .tag{font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:4px;margin-right:5px;white-space:nowrap;display:inline-block;letter-spacing:.01em}
+  .t-good{background:rgba(12,163,12,.13);color:#0a7c0a}
+  .t-part{background:rgba(236,131,90,.18);color:#a84d24}
+  .t-gap{background:rgba(208,59,59,.13);color:#b32f2f}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .t-good{background:rgba(12,163,12,.2);color:#4ec44e}
+    :root:not([data-theme="light"]) .t-part{background:rgba(236,131,90,.2);color:#f0a483}
+    :root:not([data-theme="light"]) .t-gap{background:rgba(208,59,59,.2);color:#e57070}
+  }
+  .band{position:absolute;top:-7px;bottom:-7px;background:var(--band);border-left:1px dashed var(--axis);border-right:1px dashed var(--axis);z-index:0}
+  .bandlbl{font-size:11px;color:var(--muted);margin-bottom:6px}
+  .scale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:8px;font-variant-numeric:tabular-nums}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2);margin-bottom:16px}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+  ul{margin:0 0 14px;padding-left:20px;color:var(--ink-2)}
+  li{margin-bottom:7px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:620px){.cols{grid-template-columns:1fr}}
+  .box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+  .box h3{margin-top:0}
+  .box ul{margin-bottom:0;padding-left:18px;font-size:14px}
+  .box.pro{border-left:3px solid var(--good)}
+  .box.con{border-left:3px solid var(--serious)}
+  .quote{border-left:3px solid var(--b400);padding:2px 0 2px 18px;margin:16px 0;color:var(--ink);font-size:15px}
+  .warnbox{background:rgba(250,178,25,.10);border:1px solid rgba(250,178,25,.35);border-radius:12px;padding:18px 20px;margin:18px 0}
+  .warnbox p:last-child{margin-bottom:0}
+  ol.plan{counter-reset:s;list-style:none;padding:0;margin:0}
+  ol.plan li{counter-increment:s;position:relative;padding-left:40px;margin-bottom:16px;color:var(--ink-2)}
+  ol.plan li::before{content:counter(s);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--b500);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:8px}
+  th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--grid)}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+  td.n{text-align:right;font-variant-numeric:tabular-nums}
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--border);font-size:12.5px;color:var(--muted)}
+  #tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--plane);font-size:12px;padding:6px 9px;border-radius:6px;opacity:0;transition:opacity .12s;z-index:99;max-width:240px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Análisis de vacante · 2 de septiembre de 2026</div>
+  <h1>Junior Accountant — Oniverse</h1>
+  <p class="sub">El grupo italiano que antes se llamaba Calzedonia · Filial holandesa, Ámsterdam-Centrum · Retail de moda</p>
+  <div class="chips">
+    <span class="chip">€2.800 – €3.400/mes</span>
+    <span class="chip">Full-time · presencial</span>
+    <span class="chip">Aviso en inglés</span>
+    <span class="chip">Neerlandés es un plus, no requisito</span>
+    <span class="chip">HR@calzedonia.nl</span>
+  </div>
+</header>
+
+<div class="card verdict">
+  <div class="score">
+    <div class="num">84<span style="font-size:30px">%</span></div>
+    <div class="meter"><i style="width:84%"></i></div>
+    <div class="lbl">Match ponderado</div>
+  </div>
+  <div>
+    <span class="stamp">Aplicar</span>
+    <p><strong>Es la primera vacante sin un solo requisito que no cumplas.</strong> Cumplís todo lo duro y en experiencia y título estás por encima de lo que piden. El trabajo, además, es casi textualmente lo que dijiste que querías: conciliaciones bancarias, cierre mensual y anual, revenue por entidad. <strong>El problema no es si te van a llamar. Es el precio.</strong> El techo publicado son €3.400 al mes, y eso queda por debajo del objetivo de €48–52k.</p>
+  </div>
+</div>
+
+<h2>Qué es esta empresa</h2>
+<p>Oniverse es el nombre nuevo del <strong>grupo Calzedonia</strong>, italiano, fundado en 1986. Adentro están Calzedonia, Intimissimi, Tezenis, Falconeri, Atelier Emé y Antonio Marras, más una pata de comida y vino y otra de astilleros náuticos. Más de <strong>5.600 tiendas en 59 países</strong> y 30 plantas productivas propias.</p>
+<p>La filial holandesa se abrió en 2018 y está en Ámsterdam. O sea: una oficina chica y joven, colgada de un grupo enorme con la matriz en Verona. Eso importa para vos por dos motivos opuestos, y conviene tenerlos los dos a la vista: hay un departamento de finanzas de verdad del otro lado (gente de quien aprender, procesos escritos, un cierre que se consolida hacia Italia), y al mismo tiempo la oficina local probablemente sea un equipo de pocas personas donde vas a tocar de todo.</p>
+
+<h2>El puesto, en las palabras del aviso</h2>
+<table>
+  <tr><th>Tarea</th><th>Qué es en tu vocabulario</th></tr>
+  <tr><td>Daily reconciliation of store sales</td><td>Conciliación diaria de ventas de tienda contra caja y banco. Es lo mismo que hacés hoy con el POS de los hoteles.</td></tr>
+  <tr><td>Shop revenue check &amp; store books</td><td>Control del revenue por punto de venta y su mayor.</td></tr>
+  <tr><td>Report monthly revenue to landlords</td><td>Reporte mensual de facturación a los dueños de los locales. Los alquileres de retail se pagan como porcentaje de la venta.</td></tr>
+  <tr><td>AP, AR and bank reconciliation support</td><td>Tu día a día actual, tal cual.</td></tr>
+  <tr><td>Assist in internal closing (monthly, yearly)</td><td><strong>Acá está el punto.</strong> Cierre mensual <em>y anual</em>. Es el paso hacia general ledger que venías buscando.</td></tr>
+  <tr><td>General administrative tasks as required</td><td>Administración suelta. En una oficina chica, esto pesa más de lo que parece.</td></tr>
+</table>
+
+<h2>Requisito por requisito</h2>
+
+<figure class="card">
+  <div class="ch-title">Match por requisito del aviso</div>
+  <div class="ch-note">El ancho es qué tan bien lo cumplís. El "peso" es cuánto cuenta ese requisito en la decisión de quien contrata. Ordenado de más a menos peso. Pasá el mouse por cada barra.</div>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--good)"></i> Cumple</span>
+    <span><i class="sw" style="background:var(--serious)"></i> Parcial</span>
+    <span><i class="sw" style="background:var(--crit)"></i> Gap</span>
+  </div>
+  <div id="reqchart"></div>
+  <div class="scale"><span>0%</span><span>50%</span><span>100%</span></div>
+  <figcaption>Ponderado da 84%, el más alto de todo lo que analizamos hasta ahora. Y lo importante: <strong>no hay ninguna barra roja</strong>. Los tres naranjas son los tres "would be a plus" del aviso, que por definición no eliminan a nadie.</figcaption>
+</figure>
+
+<div class="warnbox">
+  <p><strong>Ojo con el otro lado del 84%.</strong> Un match tan alto en una vacante que se llama "Entry Level" quiere decir dos cosas a la vez: que te van a mirar, y que el puesto está apuntado a alguien con un año de experiencia. Pedirle €3.400 a una empresa que buscaba un perfil de un año requiere que la conversación de sueldo la lleves vos, y con argumentos: <strong>~800 facturas por mes en dos entidades legales, conciliaciones bancarias y de tarjetas, ejecución de payment runs y soporte presencial a una auditoría externa.</strong> Nada de eso lo trae un junior de un año.</p>
+</div>
+
+<h2>El número</h2>
+<p>El aviso publica la banda, cosa que se agradece: <strong>€2.800 a €3.400 brutos por mes</strong>. Sumando el 8% de vacaciones que es obligatorio por ley, así queda contra lo que cobrás hoy:</p>
+
+<figure class="card">
+  <div class="ch-title">Paquete anual all-in</div>
+  <div class="ch-note">Bruto mensual × 12 + 8% de vakantiegeld. La franja azul marca tu objetivo de €48–52k.</div>
+  <div id="salchart"></div>
+  <div class="scale"><span>€0</span><span>€20k</span><span>€40k</span><span>€60k</span></div>
+  <figcaption>El piso de la banda es prácticamente lo que ganás hoy: <strong>€1.317 más al año, un 3,8%</strong>. Eso no paga ni el tren. El techo sí es un salto real, <strong>+26%</strong>, pero aun así se queda a unos €4.000 del piso del objetivo. Nota: el aviso menciona "employee benefits package" sin detallarlo — si hubiera un 13.º mes, el techo treparía a ~€47,7k y la conversación cambia bastante. Hay que preguntarlo.</figcaption>
+</figure>
+
+<h2>Lo bueno y lo malo, sin maquillar</h2>
+<div class="cols">
+  <div class="box pro">
+    <h3>A favor</h3>
+    <ul>
+      <li><strong>El contenido es el objetivo.</strong> Cierre mensual y anual, conciliaciones bancarias, revenue por entidad. Te mueve de "la que procesa facturas" a "la que participa del cierre".</li>
+      <li><strong>Sale de hotelería y la transición es cortísima.</strong> Retail y hotelería comparten la mecánica: muchos puntos de venta, muchísimas transacciones chicas, conciliación diaria de caja contra banco. Cambiás de sector sin empezar de cero.</li>
+      <li><strong>Es un grupo italiano con España adentro.</strong> Calzedonia e Intimissimi tienen cientos de tiendas en España. Tu español nativo y tu ciudadanía italiana valen ahí de verdad, no como adorno del CV.</li>
+      <li><strong>Cumplís todo.</strong> Título, experiencia, inglés, residencia en Países Bajos, derecho a trabajar. Cero fricción.</li>
+      <li><strong>SAP aparece como plus y vos lo tocaste</strong> en NH Hotels. No fue para contabilidad, pero el nombre en el CV es real.</li>
+      <li><strong>Publican el mail de RRHH.</strong> Podés escribir directo el mismo día.</li>
+    </ul>
+  </div>
+  <div class="box con">
+    <h3>En contra</h3>
+    <ul>
+      <li><strong>El techo queda corto.</strong> €44,1k all-in contra un objetivo de €48–52k. Y el piso de la banda es tu sueldo de hoy.</li>
+      <li><strong>Dice "Entry Level" con todas las letras.</strong> Pasar de Financial Associate a Junior Accountant es un título para atrás, aunque el trabajo sea mejor.</li>
+      <li><strong>Presencial cinco días en Ámsterdam-Centrum.</strong> Hoy tenés híbrido y quince minutos en bici. Serían unos 27 minutos de tren más los tramos a pie, ida y vuelta, todos los días. Preguntá si reembolsan el transporte: sin reembolso, el pasaje suelto ronda los €11 por trayecto y se come buena parte del aumento.</li>
+      <li><strong>Más de 100 postulantes y Easy Apply.</strong> La vacante está muy expuesta y el filtro inicial va a ser rápido.</li>
+      <li><strong>Parte del rol es administración pura.</strong> "General administrative tasks as required" en una oficina chica puede ser bastante más que un renglón.</li>
+      <li><strong>Antigüedad.</strong> Si te fueras ahora, Odyssey quedaría en unos siete meses. Se explica bien una vez; dos veces seguidas ya es un patrón.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Los chequeos del filtro</h2>
+<table>
+  <tr><th>Chequeo</th><th>Resultado</th></tr>
+  <tr><td>Fuente primaria</td><td>⚠️ LinkedIn, no la web de la empresa. Pero el aviso está publicado por la propia empresa y da el mail corporativo.</td></tr>
+  <tr><td>Viva hoy</td><td>✅ Republicada hace dos días, "actively reviewing applicants"</td></tr>
+  <tr><td>Cuerpo del aviso en inglés</td><td>✅ Íntegro en inglés</td></tr>
+  <tr><td>Neerlandés</td><td>✅ <em>"a knowledge of Dutch would be a plus"</em>. No es requisito</td></tr>
+  <tr><td>Ámsterdam / Utrecht en el aviso</td><td>✅ Ámsterdam-Centrum</td></tr>
+  <tr><td>Empresa identificable</td><td>✅ Oniverse / Calzedonia Group, con mail de RRHH publicado</td></tr>
+  <tr><td>Nada de hotelería</td><td>✅ Retail de moda</td></tr>
+  <tr><td>Trampas anti-IA en el aviso</td><td>✅ Revisé el HTML: no hay texto oculto, ni comentarios, ni instrucciones escondidas</td></tr>
+</table>
+
+<h2>Cómo lo veo</h2>
+<p>Esta vacante es distinta de las anteriores. Con Rabobank el problema era que te faltaba un requisito duro y el premio era enorme. Acá es al revés: <strong>no te falta nada y el premio es mediano</strong>.</p>
+<div class="quote">La pregunta no es si podés conseguirlo. Es si te conviene mudarte del híbrido y de los quince minutos en bici por un título junior y, en el mejor de los casos, €9.000 más al año.</div>
+<p>Y la respuesta honesta es: depende de a cuánto cierre. A €3.400 con transporte reembolsado y un cierre mensual de verdad para meter mano, es un sí bastante claro — porque lo que comprás no es solo el sueldo, es la línea "monthly and yearly closing" en el CV, que es la que te habilita las vacantes de €48k el año que viene. A €2.900 o €3.000, no. A ese precio te estarías mudando de ciudad todos los días para ganar lo mismo.</p>
+<p>Así que aplicá, pero entrá a la conversación sabiendo cuál es tu número.</p>
+
+<h2>Qué haría yo</h2>
+<ol class="plan">
+  <li><strong>Aplicar esta semana</strong>, con el CV posicionado como <em>Financial Accountant</em> y con los bullets de conciliación, cierre y multi-entidad arriba de todo. Los de AP van, pero no primeros: el aviso ya asume que sabés hacer AP.</li>
+  <li><strong>Mail el mismo día a <a href="mailto:HR@calzedonia.nl">HR@calzedonia.nl</a>.</strong> Con más de 100 postulantes en Easy Apply, el mail directo es la diferencia entre estar en la pila y estar arriba de la pila. Cinco líneas: qué aplicaste, el volumen que manejás hoy, y el español y el italiano para un grupo con España adentro.</li>
+  <li><strong>Preguntá por el paquete completo en la primera llamada</strong>, sin rodeos y sin pedir perdón: 13.º mes, reembolso de transporte, horas contratadas. Son tres preguntas normales y cambian el número real.</li>
+  <li><strong>Definí tu piso antes de la entrevista, no durante.</strong> Mi sugerencia: €3.300 sin extras, o €3.100 si hay 13.º mes y transporte pago.</li>
+  <li><strong>El motivo del cambio es crecer hacia general ledger y reporting.</strong> Nunca la plata, ni acá ni en ningún lado.</li>
+  <li><strong>No frenes el pipeline.</strong> Esta es una vacante decente, no la vacante. Las de €48k+ siguen siendo la apuesta principal.</li>
+</ol>
+
+<footer>
+  Fuentes: <a href="https://www.linkedin.com/jobs/view/4445889592/">Aviso Junior Accountant, Oniverse — LinkedIn</a> (leído el 02/09/2026) · Perfil maestro de Milena Reniero, carpeta <em>Trabajo Mile</em> · Tiempo y precio del tren, <a href="https://www.thetrainline.com/en/train-times/utrecht-centraal-to-amsterdam-centraal">Trainline, Utrecht Centraal – Amsterdam Centraal</a>.<br>
+  El porcentaje de match y los pesos de cada requisito son estimaciones propias basadas en el texto del aviso, no cifras de la empresa. El cálculo del paquete usa el 8% de vakantiegeld obligatorio; el aviso no detalla qué más incluye el "employee benefits package".
+</footer>
+
+</div>
+<div id="tip"></div>
+
+<script>
+const F = n => '€' + n.toLocaleString('es-ES');
+
+/* ---------- salary chart ---------- */
+const SMAX = 60000;
+const sal = [
+  {l:'Hoy · Odyssey',        s:'€2.698/mes · all-in', v:34971, c:'var(--b250)'},
+  {l:'Oniverse · piso',      s:'€2.800/mes',          v:36288, c:'var(--b400)'},
+  {l:'Oniverse · techo',     s:'€3.400/mes',          v:44064, c:'var(--b500)'},
+  {l:'Techo + 13.º mes',     s:'si existiera',        v:47736, c:'var(--b650)'}
+];
+document.getElementById('salchart').innerHTML =
+  '<div class="bandlbl">Franja azul = objetivo €48.000 – €52.000</div>' +
+  sal.map(d=>`
+  <div class="row">
+    <div class="rl">${d.l}<b>${d.s}</b></div>
+    <div class="track">
+      <div class="band" style="left:${48000/SMAX*100}%;width:${4000/SMAX*100}%"></div>
+      <div class="bar" style="width:${d.v/SMAX*100}%;background:${d.c}" data-tip="${d.l} — ${F(d.v)} al año all-in">${F(d.v)}</div>
+    </div>
+  </div>`).join('');
+
+/* ---------- requirements chart ---------- */
+const reqs = [
+  {l:'Experiencia previa en rol similar', w:16, v:100, st:'good', n:'Piden pasantía o 1 año. Ella tiene Odyssey más un año en Lizárraga.'},
+  {l:'AP, AR y conciliación bancaria',    w:16, v:100, st:'good', n:'Es literalmente su día a día en Odyssey, con ~800 facturas por mes.'},
+  {l:'Título en Contabilidad o Finanzas', w:14, v:100, st:'good', n:'Contadora Pública, UNC, carrera de cinco años.'},
+  {l:'Soporte al cierre mensual y anual', w:13, v:80,  st:'good', n:'Participa del cierre de mes; el anual todavía no lo llevó de punta a punta.'},
+  {l:'Conciliación diaria de ventas',     w:11, v:70,  st:'good', n:'Concilia tarjetas y revenue de POS hotelero: Opera, MICROS, FreedomPay.'},
+  {l:'Inglés fluido, oral y escrito',     w:9,  v:100, st:'good', n:'Trabaja en inglés todos los días con el equipo y su jefe.'},
+  {l:'Vivir en Países Bajos',             w:7,  v:100, st:'good', n:'Utrecht, y ciudadana italiana: sin sponsorship.'},
+  {l:'Experiencia en retail (plus)',      w:6,  v:20,  st:'part', n:'Hotelería, no retail. La mecánica de POS es parecida, el sector no.'},
+  {l:'SAP (plus)',                        w:5,  v:45,  st:'part', n:'Lo usó en NH Hotels para recursos y eventos, no para contabilidad.'},
+  {l:'Neerlandés (plus)',                 w:3,  v:25,  st:'part', n:'A1. Explícitamente no es requisito.'}
+];
+const COL={good:'var(--good)',part:'var(--serious)',gap:'var(--crit)'};
+const TAG={good:['t-good','Cumple'],part:['t-part','Parcial'],gap:['t-gap','Gap']};
+document.getElementById('reqchart').innerHTML = reqs.map(d=>`
+  <div class="row">
+    <div class="rl">${d.l}<b><span class="tag ${TAG[d.st][0]}">${TAG[d.st][1]}</span> peso ${d.w}%</b></div>
+    <div class="track">
+      <div class="bar" style="width:${d.v}%;background:${COL[d.st]}${d.st==='part'?';color:#0b0b0b':''}" data-tip="${d.l} — ${d.v}% · ${d.n}">${d.v}%</div>
+    </div>
+  </div>`).join('');
+
+/* ---------- tooltip ---------- */
+const tip = document.getElementById('tip');
+document.addEventListener('mouseover', e=>{
+  const t = e.target.closest('[data-tip]');
+  if(!t){tip.style.opacity=0;return;}
+  tip.textContent = t.dataset.tip; tip.style.opacity=1;
+});
+document.addEventListener('mousemove', e=>{
+  if(tip.style.opacity==='0'||!tip.style.opacity) return;
+  const x = Math.min(e.clientX+14, innerWidth-254);
+  tip.style.left = x+'px'; tip.style.top = (e.clientY+16)+'px';
+});
+</script>
+</body>
+</html>
