@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tu LinkedIn en 5 minutos — Mile</title>
+<style>
+  :root{
+    --bg:#f6f5f2;
+    --card:#ffffff;
+    --ink:#1c1b19;
+    --muted:#6b6862;
+    --line:#e2dfd8;
+    --accent:#1a5c4a;
+    --accent-soft:#e8f1ee;
+    --bad:#a63d2f;
+    --bad-soft:#fbeae7;
+    --code-bg:#fbfaf8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+  header{margin-bottom:32px}
+  .eyebrow{
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin:0 0 8px
+  }
+  h1{font-size:32px;line-height:1.15;margin:0 0 10px;letter-spacing:-.02em}
+  .lead{font-size:17px;color:var(--muted);margin:0;max-width:58ch}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0 36px}
+  @media (max-width:600px){.grid2{grid-template-columns:1fr}}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .box h3{margin:0 0 12px;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+  .box.good h3{color:var(--accent)}
+  .box.bad h3{color:var(--bad)}
+  .box ul{margin:0;padding:0;list-style:none}
+  .box li{position:relative;padding-left:24px;margin-bottom:9px;font-size:15px}
+  .box li:last-child{margin-bottom:0}
+  .box.good li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700}
+  .box.bad li::before{content:"✕";position:absolute;left:0;color:var(--bad);font-weight:700}
+  .step{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:24px;margin-bottom:18px
+  }
+  .step-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+  .num{
+    flex:0 0 auto;width:26px;height:26px;border-radius:50%;
+    background:var(--accent);color:#fff;font-size:14px;font-weight:700;
+    display:inline-flex;align-items:center;justify-content:center;
+    align-self:center
+  }
+  .step h2{font-size:19px;margin:0;letter-spacing:-.01em}
+  .where{font-size:13px;color:var(--muted);margin:0 0 14px 38px}
+  @media (max-width:600px){.where{margin-left:0}}
+  .why{
+    background:var(--accent-soft);border-radius:8px;padding:11px 14px;
+    font-size:14px;color:#134034;margin:0 0 14px
+  }
+  .why.warn{background:var(--bad-soft);color:#7d2d22}
+  .copybox{
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    background:var(--code-bg);margin-bottom:12px
+  }
+  .copybox:last-of-type{margin-bottom:0}
+  .copybox-head{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:9px 12px 9px 14px;border-bottom:1px solid var(--line);background:#fff
+  }
+  .label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .txt{
+    padding:14px;font-size:14.5px;line-height:1.6;white-space:pre-wrap;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace
+  }
+  button.copy{
+    flex:0 0 auto;border:1px solid var(--accent);background:var(--accent);color:#fff;
+    font-size:13px;font-weight:600;padding:6px 14px;border-radius:999px;cursor:pointer;
+    font-family:inherit;transition:background .15s,color .15s;white-space:nowrap
+  }
+  button.copy:hover{background:#14473a}
+  button.copy.done{background:#fff;color:var(--accent)}
+  .alt{font-size:13.5px;color:var(--muted);margin:10px 0 0}
+  .fields{font-size:14.5px;margin:0 0 14px;padding:0;list-style:none}
+  .fields li{padding:7px 0;border-bottom:1px dashed var(--line);display:flex;gap:10px;flex-wrap:wrap}
+  .fields li:last-child{border-bottom:0}
+  .fields b{flex:0 0 150px;font-weight:600;color:var(--muted);font-size:13.5px}
+  footer{
+    margin-top:36px;padding:22px 24px;background:#fff;border:1px solid var(--line);
+    border-radius:14px;font-size:14.5px;color:var(--muted)
+  }
+  footer strong{color:var(--ink)}
+  footer p{margin:0 0 10px}
+  footer p:last-child{margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Mile · LinkedIn</p>
+  <h1>Tu perfil, en 5 minutos</h1>
+  <p class="lead">Cuatro cambios y listo. Cada bloque tiene un botón para copiar: lo apretás, vas a LinkedIn y pegás. Nada más.</p>
+</header>
+
+<div class="grid2">
+  <div class="box good">
+    <h3>Esto ya está bien</h3>
+    <ul>
+      <li>Tu URL es limpia: <em>linkedin.com/in/milenareniero</em></li>
+      <li>Ubicación correcta: Utrecht</li>
+      <li>La carrera de la UNC está cargada</li>
+      <li>El perfil está en inglés</li>
+    </ul>
+  </div>
+  <div class="box bad">
+    <h3>Esto hay que arreglarlo</h3>
+    <ul>
+      <li>Odyssey no figura: seguís apareciendo en Rabobank</li>
+      <li>El titular dice "Finance - Customer Service"</li>
+      <li>El "Acerca de" está vacío</li>
+      <li>Rabobank no tiene fecha de fin</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="num">1</span><h2>Cerrá Rabobank</h2></div>
+  <p class="where">Experiencia → Rabobank → lápiz → Fecha de finalización</p>
+  <div class="why warn">Es lo más urgente. Hoy LinkedIn te muestra como si todavía trabajaras ahí, y eso confunde a cualquiera que te busque.</div>
+  <ul class="fields">
+    <li><b>Fecha de fin</b> Septiembre 2025</li>
+    <li><b>Destildar</b> "Actualmente en este puesto"</li>
+  </ul>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="num">2</span><h2>Agregá Odyssey</h2></div>
+  <p class="where">Perfil → + Agregar sección → Experiencia</p>
+  <ul class="fields">
+    <li><b>Cargo</b> Financial Associate</li>
+    <li><b>Empresa</b> Odyssey Hotel Group</li>
+    <li><b>Tipo</b> Jornada completa · Híbrido</li>
+    <li><b>Desde</b> Marzo 2026 · tildar "Actualmente en este puesto"</li>
+    <li><b>Ubicación</b> Utrecht, Netherlands</li>
+  </ul>
+  <div class="why">En "Descripción" va esto. Son cuatro líneas a propósito: lo primero que se lee son las conciliaciones y el cierre, no las facturas. Eso es lo que te hace leer como contadora y no como administrativa.</div>
+  <div class="copybox">
+    <div class="copybox-head">
+      <span class="label">Descripción del puesto</span>
+      <button class="copy" data-target="t1">Copiar</button>
+    </div>
+    <div class="txt" id="t1">• Bank and credit card reconciliations, manual journal entries and month-end close support for two legal entities operating in Spain.
+• End-to-end accounts payable across both entities, around 800 supplier invoices a month, plus batch payment runs and urgent manual payments.
+• Chargeback claims with Elavon and on-site support to the external audit of the Barcelona property.
+• Daily work in English with the Dutch team and in Spanish with the teams in Spain. Systems: Microsoft Dynamics 365 Business Central, Oracle Opera, MICROS, FreedomPay, Excel.</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="num">3</span><h2>Cambiá el titular</h2></div>
+  <p class="where">Perfil → lápiz arriba a la derecha → Titular</p>
+  <div class="why">"Finance - Customer Service" te mezcla dos carreras y deja la duda de cuál sos. Esta línea es lo único que ve un recruiter antes de decidir si te abre.</div>
+  <div class="copybox">
+    <div class="copybox-head">
+      <span class="label">Titular</span>
+      <button class="copy" data-target="t2">Copiar</button>
+    </div>
+    <div class="txt" id="t2">Financial Associate at Odyssey Hotel Group | Accounting, Reconciliations &amp; Month-End Close | Public Accountant | EN/ES</div>
+  </div>
+  <div class="copybox">
+    <div class="copybox-head">
+      <span class="label">Alternativa más corta</span>
+      <button class="copy" data-target="t3">Copiar</button>
+    </div>
+    <div class="txt" id="t3">Financial Associate | Reconciliations, Month-End Close &amp; AP | Public Accountant | EN/ES</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="num">4</span><h2>Escribí el "Acerca de"</h2></div>
+  <p class="where">Perfil → + Agregar sección → Acerca de</p>
+  <div class="why">Tres frases, nada más. El perfil vacío en esa parte se lee como perfil abandonado, y es lo que aparece apenas te abren.</div>
+  <div class="copybox">
+    <div class="copybox-head">
+      <span class="label">Acerca de</span>
+      <button class="copy" data-target="t4">Copiar</button>
+    </div>
+    <div class="txt" id="t4">Public Accountant (Universidad Nacional de Córdoba) working in finance in the Netherlands.
+
+At Odyssey Hotel Group I handle the accounting for two entities operating in Spain: bank and credit card reconciliations, manual journal entries, month-end close and end-to-end accounts payable, in English with the Dutch team and in Spanish with the teams in Spain.
+
+What I enjoy most is the part of the job where the numbers have to tie out — reconciliations, the close, and the reporting that comes out of it. That is where I want to keep growing.</div>
+  </div>
+</div>
+
+<footer>
+  <p><strong>Un detalle antes de empezar.</strong> Entrá a Configuración → Visibilidad → "Compartir actualizaciones del perfil con la red" y ponelo en <strong>No</strong>. Así podés editar tranquila sin que le aparezca un aviso a todo el mundo en Odyssey. Cuando termines lo podés volver a activar, o dejarlo apagado.</p>
+  <p>Si en algún momento querés poner <strong>#OpenToWork</strong>, elegí la opción "solo para recruiters" y no el marco verde en la foto: el marco lo ve tu empresa también.</p>
+</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('button.copy').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var el = document.getElementById(btn.dataset.target);
+    var text = el.innerText;
+    var done = function(){
+      var old = btn.textContent;
+      btn.textContent = '¡Copiado!';
+      btn.classList.add('done');
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1600);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(text, done); });
+    } else {
+      fallback(text, done);
+    }
+  });
+});
+function fallback(text, done){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch(e) {}
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>
