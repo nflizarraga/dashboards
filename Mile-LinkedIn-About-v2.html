@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tu "Acerca de", ajustado</title>
+<style>
+  :root{
+    --bg:#f6f5f2;--card:#ffffff;--ink:#1c1b19;--muted:#6b6862;--line:#e2dfd8;
+    --accent:#1a5c4a;--accent-soft:#e8f1ee;--code-bg:#fbfaf8;--star:#b07d2b;--star-soft:#fbf3e4;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:740px;margin:0 auto;padding:40px 20px 80px}
+  header{margin-bottom:24px}
+  .eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 8px}
+  h1{font-size:30px;line-height:1.15;margin:0 0 10px;letter-spacing:-.02em}
+  .lead{font-size:16.5px;color:var(--muted);margin:0;max-width:60ch}
+  .tip{background:var(--accent-soft);border-radius:10px;padding:14px 16px;font-size:14.5px;color:#134034;margin:22px 0 30px}
+  .tip p{margin:0 0 8px}
+  .tip p:last-child{margin:0}
+  .tip b{font-weight:700}
+  .opt{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:18px}
+  .opt.pick{border-color:var(--star);box-shadow:0 0 0 3px var(--star-soft)}
+  .opt-head{display:flex;align-items:center;gap:11px;margin-bottom:4px;flex-wrap:wrap}
+  .num{flex:0 0 auto;width:25px;height:25px;border-radius:50%;background:var(--accent);color:#fff;
+    font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+  .opt.pick .num{background:var(--star)}
+  .opt h2{font-size:18px;margin:0;letter-spacing:-.01em}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    background:var(--star-soft);color:var(--star);padding:3px 9px;border-radius:999px}
+  .tone{font-size:13.5px;color:var(--muted);margin:0 0 16px 36px}
+  @media (max-width:600px){.tone{margin-left:0}}
+  .copybox{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--code-bg);margin-bottom:10px}
+  .copybox:last-child{margin-bottom:0}
+  .copybox-head{display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:8px 12px 8px 14px;border-bottom:1px solid var(--line);background:#fff}
+  .label{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .txt{padding:14px;font-size:14.5px;line-height:1.62;white-space:pre-wrap}
+  .words{font-size:11.5px;color:var(--muted);font-weight:600}
+  button.copy{flex:0 0 auto;border:1px solid var(--accent);background:var(--accent);color:#fff;
+    font-size:12.5px;font-weight:600;padding:5px 13px;border-radius:999px;cursor:pointer;
+    font-family:inherit;transition:background .15s,color .15s;white-space:nowrap}
+  button.copy:hover{background:#14473a}
+  button.copy.done{background:#fff;color:var(--accent)}
+  .extra{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:22px;margin-bottom:18px}
+  .extra h2{font-size:18px;margin:0 0 4px}
+  footer{margin-top:30px;padding:20px 22px;background:#fff;border:1px solid var(--line);
+    border-radius:14px;font-size:14.5px;color:var(--muted)}
+  footer strong{color:var(--ink)}
+  footer p{margin:0 0 9px}
+  footer p:last-child{margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Mile · LinkedIn</p>
+  <h1>Tu texto, tres largos</h1>
+  <p class="lead">Tenías razón: las cinco de antes eran la misma descripción de tareas. Estas tres son <em>el tuyo</em>, el que elegiste, en tres recortes distintos. Elegí el largo que te guste y listo.</p>
+</header>
+
+<div class="tip">
+  <p><strong>Sobre tu pregunta de si la gente lo lee.</strong> LinkedIn muestra solo las <b>dos o tres primeras líneas</b> y después corta con un "ver más". La mayoría no lo abre.</p>
+  <p>O sea: lo único que se lee seguro es la primera frase. Todo lo que venga después es para el que ya se interesó. Por eso el largo importa menos de lo que parece — lo que importa es que la primera línea diga quién sos.</p>
+</div>
+
+<div class="opt">
+  <div class="opt-head"><span class="num">1</span><h2>El tuyo, casi tal cual</h2></div>
+  <p class="tone">Igual al que elegiste. Solo le saqué "take on new challenges" del final, que no agrega nada.</p>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">English · 68 palabras</span><button class="copy" data-target="e1">Copiar</button></div>
+    <div class="txt" id="e1">I am a Public Accountant from Argentina, currently building my career in the Netherlands.
+
+At Odyssey Hotel Group I handle the accounting for two entities in Spain, including reconciliations, journal entries, month-end close and accounts payable, working in both English and Spanish.
+
+I am organized and detail-oriented, and I enjoy understanding how processes work and solving discrepancies. I am always looking to keep learning and to grow within accounting and finance.</div>
+  </div>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">Español</span><button class="copy" data-target="s1">Copiar</button></div>
+    <div class="txt" id="s1">Soy Contadora Pública argentina y estoy construyendo mi carrera en Países Bajos.
+
+En Odyssey Hotel Group llevo la contabilidad de dos entidades en España: conciliaciones, asientos, cierre de mes y cuentas por pagar, trabajando en inglés y en español.
+
+Soy organizada y detallista, y disfruto entender cómo funcionan los procesos y resolver diferencias. Busco seguir aprendiendo y creciendo dentro de contabilidad y finanzas.</div>
+  </div>
+</div>
+
+<div class="opt pick">
+  <div class="opt-head"><span class="num">2</span><h2>El tuyo, más ágil</h2><span class="badge">Mi voto</span></div>
+  <p class="tone">Lo mismo en 20 palabras menos. Cambié "organizada y detallista" —que lo pone absolutamente todo el mundo— por lo que ya decías vos dos líneas más abajo, que es más tuyo y dice más.</p>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">English · 48 palabras</span><button class="copy" data-target="e2">Copiar</button></div>
+    <div class="txt" id="e2">I am a Public Accountant from Argentina, building my career in the Netherlands.
+
+At Odyssey Hotel Group I handle the accounting for two entities in Spain: reconciliations, journal entries, month-end close and accounts payable, in both English and Spanish.
+
+I like understanding how a process works and finding where a number stops adding up. That is the part I want to keep growing into.</div>
+  </div>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">Español</span><button class="copy" data-target="s2">Copiar</button></div>
+    <div class="txt" id="s2">Soy Contadora Pública argentina y estoy construyendo mi carrera en Países Bajos.
+
+En Odyssey Hotel Group llevo la contabilidad de dos entidades en España: conciliaciones, asientos, cierre de mes y cuentas por pagar, en inglés y en español.
+
+Me gusta entender cómo funciona un proceso y encontrar dónde deja de cerrar un número. Esa es la parte en la que quiero seguir creciendo.</div>
+  </div>
+</div>
+
+<div class="opt">
+  <div class="opt-head"><span class="num">3</span><h2>El tuyo, mínimo</h2></div>
+  <p class="tone">Dos párrafos. Entra entero antes del "ver más", así que se lee completo sí o sí.</p>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">English · 34 palabras</span><button class="copy" data-target="e3">Copiar</button></div>
+    <div class="txt" id="e3">Public Accountant from Argentina, building my career in the Netherlands.
+
+At Odyssey Hotel Group I handle the accounting for two entities in Spain — reconciliations, journal entries, month-end close and accounts payable — in English and in Spanish.</div>
+  </div>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">Español</span><button class="copy" data-target="s3">Copiar</button></div>
+    <div class="txt" id="s3">Contadora Pública argentina, construyendo mi carrera en Países Bajos.
+
+En Odyssey Hotel Group llevo la contabilidad de dos entidades en España —conciliaciones, asientos, cierre de mes y cuentas por pagar— en inglés y en español.</div>
+  </div>
+</div>
+
+<div class="extra">
+  <h2>La línea opcional</h2>
+  <p class="tone" style="margin-left:0">Se pega al final de cualquiera de las tres. Es lo único del texto que no tiene nada que ver con el trabajo, y por eso es lo que la gente se acuerda. Vos decidís si va.</p>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">English</span><button class="copy" data-target="e4">Copiar</button></div>
+    <div class="txt" id="e4">Outside of work, I bake. It is the other thing I am good at.</div>
+  </div>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">Español</span><button class="copy" data-target="s4">Copiar</button></div>
+    <div class="txt" id="s4">Fuera del trabajo hago pastelería. Es la otra cosa que me sale bien.</div>
+  </div>
+</div>
+
+<footer>
+  <p><strong>Cuál va al perfil.</strong> Tu perfil está en inglés, así que la versión que se pega en "Acerca de" es la inglesa. La española está para que leas exactamente qué dice.</p>
+  <p><strong>Si preferís "I'm" a "I am".</strong> Cambialo sin culpa, suena más hablado y es tu perfil. Solo mantené el mismo criterio en todo el texto.</p>
+</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('button.copy').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var el = document.getElementById(btn.dataset.target);
+    var text = el.innerText;
+    var done = function(){
+      var old = btn.textContent;
+      btn.textContent = '¡Copiado!';
+      btn.classList.add('done');
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1600);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(text, done); });
+    } else { fallback(text, done); }
+  });
+});
+function fallback(text, done){
+  var ta=document.createElement('textarea');
+  ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); done(); }catch(e){}
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>
