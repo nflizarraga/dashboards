@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acerca de — 5 opciones para Mile</title>
+<style>
+  :root{
+    --bg:#f6f5f2;
+    --card:#ffffff;
+    --ink:#1c1b19;
+    --muted:#6b6862;
+    --line:#e2dfd8;
+    --accent:#1a5c4a;
+    --accent-soft:#e8f1ee;
+    --code-bg:#fbfaf8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:740px;margin:0 auto;padding:40px 20px 80px}
+  header{margin-bottom:26px}
+  .eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 8px}
+  h1{font-size:31px;line-height:1.15;margin:0 0 10px;letter-spacing:-.02em}
+  .lead{font-size:16.5px;color:var(--muted);margin:0;max-width:60ch}
+  .note{
+    background:var(--accent-soft);border-radius:10px;padding:14px 16px;
+    font-size:14.5px;color:#134034;margin:22px 0 30px
+  }
+  .note p{margin:0 0 8px}
+  .note p:last-child{margin:0}
+  .opt{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:18px}
+  .opt-head{display:flex;align-items:center;gap:11px;margin-bottom:4px;flex-wrap:wrap}
+  .num{
+    flex:0 0 auto;width:25px;height:25px;border-radius:50%;background:var(--accent);color:#fff;
+    font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center
+  }
+  .opt h2{font-size:18px;margin:0;letter-spacing:-.01em}
+  .tone{font-size:13.5px;color:var(--muted);margin:0 0 16px 36px}
+  @media (max-width:600px){.tone{margin-left:0}}
+  .copybox{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--code-bg);margin-bottom:10px}
+  .copybox:last-child{margin-bottom:0}
+  .copybox-head{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:8px 12px 8px 14px;border-bottom:1px solid var(--line);background:#fff
+  }
+  .label{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .txt{padding:14px;font-size:14.5px;line-height:1.62;white-space:pre-wrap}
+  button.copy{
+    flex:0 0 auto;border:1px solid var(--accent);background:var(--accent);color:#fff;
+    font-size:12.5px;font-weight:600;padding:5px 13px;border-radius:999px;cursor:pointer;
+    font-family:inherit;transition:background .15s,color .15s;white-space:nowrap
+  }
+  button.copy:hover{background:#14473a}
+  button.copy.done{background:#fff;color:var(--accent)}
+  footer{
+    margin-top:30px;padding:20px 22px;background:#fff;border:1px solid var(--line);
+    border-radius:14px;font-size:14.5px;color:var(--muted)
+  }
+  footer strong{color:var(--ink)}
+  footer p{margin:0 0 9px}
+  footer p:last-child{margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Mile · LinkedIn</p>
+  <h1>"Acerca de": cinco opciones</h1>
+  <p class="lead">Todas dicen lo mismo, cambia el tono. Leelas, quedate con una y apretá copiar. Ninguna infla nada: solo cuentan lo que hacés.</p>
+</header>
+
+<div class="note">
+  <p><strong>Cuál usar, la inglesa o la española.</strong> Tu perfil está en inglés, así que la versión que va en el campo "Acerca de" es la inglesa. La española está para que veas exactamente qué dice cada una y elijas tranquila.</p>
+  <p>Si en algún momento querés, LinkedIn deja tener el perfil en dos idiomas (Perfil → arriba a la derecha → Agregar perfil en otro idioma). Ahí entra la versión en español tal cual.</p>
+</div>
+
+<div class="opt">
+  <div class="opt-head"><span class="num">1</span><h2>La directa</h2></div>
+  <p class="tone">Dice qué hacés y se calla. Sin adjetivos. La más segura de todas.</p>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">English</span><button class="copy" data-target="e1">Copiar</button></div>
+    <div class="txt" id="e1">Public Accountant from Argentina, working in finance in the Netherlands.
+
+At Odyssey Hotel Group I take care of the day-to-day accounting of two entities that operate in Spain: bank and credit card reconciliations, journal entries, accounts payable and month-end close.
+
+I work in English with the team here and in Spanish with the colleagues in Spain.</div>
+  </div>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">Español</span><button class="copy" data-target="s1">Copiar</button></div>
+    <div class="txt" id="s1">Contadora Pública argentina, trabajando en finanzas en Países Bajos.
+
+En Odyssey Hotel Group me ocupo de la contabilidad diaria de dos entidades que operan en España: conciliaciones bancarias y de tarjetas, asientos, cuentas por pagar y cierre de mes.
+
+Trabajo en inglés con el equipo de acá y en español con los colegas de España.</div>
+  </div>
+</div>
+
+<div class="opt">
+  <div class="opt-head"><span class="num">2</span><h2>La que mira para adelante</h2></div>
+  <p class="tone">Suma una línea sobre hacia dónde querés ir. Sin decir que estás buscando trabajo.</p>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">English</span><button class="copy" data-target="e2">Copiar</button></div>
+    <div class="txt" id="e2">Public Accountant (Universidad Nacional de Córdoba), now working in finance in the Netherlands.
+
+My day-to-day at Odyssey Hotel Group is reconciliations, journal entries, accounts payable and supporting the month-end close for two entities operating in Spain.
+
+I am still early in my career here and I learn something in every close. What I would like next is to go deeper into general ledger and reporting.</div>
+  </div>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">Español</span><button class="copy" data-target="s2">Copiar</button></div>
+    <div class="txt" id="s2">Contadora Pública (Universidad Nacional de Córdoba), hoy trabajando en finanzas en Países Bajos.
+
+Mi día a día en Odyssey Hotel Group son las conciliaciones, los asientos, las cuentas por pagar y el soporte al cierre de mes de dos entidades que operan en España.
+
+Todavía estoy empezando mi carrera acá y en cada cierre aprendo algo. Lo que me gustaría hacer más adelante es meterme más a fondo en el libro mayor y en el reporting.</div>
+  </div>
+</div>
+
+<div class="opt">
+  <div class="opt-head"><span class="num">3</span><h2>La de los dos países</h2></div>
+  <p class="tone">Pone adelante lo de trabajar entre Países Bajos y España en dos idiomas, que no es tan común.</p>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">English</span><button class="copy" data-target="e3">Copiar</button></div>
+    <div class="txt" id="e3">Argentine Public Accountant, based in Utrecht.
+
+At Odyssey Hotel Group I handle the accounting of two entities that operate in Spain: reconciliations, journal entries, accounts payable and month-end close. In practice that means English with the team in the Netherlands and Spanish with the people in Spain, every day.
+
+Working between two countries has taught me to ask before assuming, which turns out to be most of the job.</div>
+  </div>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">Español</span><button class="copy" data-target="s3">Copiar</button></div>
+    <div class="txt" id="s3">Contadora Pública argentina, radicada en Utrecht.
+
+En Odyssey Hotel Group llevo la contabilidad de dos entidades que operan en España: conciliaciones, asientos, cuentas por pagar y cierre de mes. En la práctica eso significa inglés con el equipo de Países Bajos y español con la gente de España, todos los días.
+
+Trabajar entre dos países me enseñó a preguntar antes de suponer, que al final resulta ser buena parte del trabajo.</div>
+  </div>
+</div>
+
+<div class="opt">
+  <div class="opt-head"><span class="num">4</span><h2>La personal</h2></div>
+  <p class="tone">Arranca contando qué te gusta del trabajo. Un poco más cálida, sigue siendo sobria.</p>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">English</span><button class="copy" data-target="e4">Copiar</button></div>
+    <div class="txt" id="e4">The part of this job I like most is when everything ties out: either the numbers reconcile or they don't, and finding out why is the interesting part.
+
+I am a Public Accountant working as a Financial Associate at Odyssey Hotel Group in Utrecht, where I look after reconciliations, journal entries, accounts payable and month-end close for two entities operating in Spain, in English and in Spanish.
+
+I enjoy the work and I am in no rush to stop learning it.</div>
+  </div>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">Español</span><button class="copy" data-target="s4">Copiar</button></div>
+    <div class="txt" id="s4">Lo que más me gusta de este trabajo es cuando todo cierra: o los números concilian o no, y averiguar por qué es la parte interesante.
+
+Soy Contadora Pública y trabajo como Financial Associate en Odyssey Hotel Group, en Utrecht, donde me ocupo de las conciliaciones, los asientos, las cuentas por pagar y el cierre de mes de dos entidades que operan en España, en inglés y en español.
+
+Disfruto el trabajo y no tengo ningún apuro por dejar de aprenderlo.</div>
+  </div>
+</div>
+
+<div class="opt">
+  <div class="opt-head"><span class="num">5</span><h2>La mínima</h2></div>
+  <p class="tone">Tres líneas y nada más. Si no querés escribir casi nada, es esta.</p>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">English</span><button class="copy" data-target="e5">Copiar</button></div>
+    <div class="txt" id="e5">Argentine Public Accountant, based in Utrecht.
+
+Financial Associate at Odyssey Hotel Group: reconciliations, journal entries, accounts payable and month-end close for two entities operating in Spain.
+
+English with the team here, Spanish with the team there.</div>
+  </div>
+  <div class="copybox">
+    <div class="copybox-head"><span class="label">Español</span><button class="copy" data-target="s5">Copiar</button></div>
+    <div class="txt" id="s5">Contadora Pública argentina, radicada en Utrecht.
+
+Financial Associate en Odyssey Hotel Group: conciliaciones, asientos, cuentas por pagar y cierre de mes de dos entidades que operan en España.
+
+Inglés con el equipo de acá, español con el equipo de allá.</div>
+  </div>
+</div>
+
+<footer>
+  <p><strong>Qué saqué a propósito.</strong> El número de facturas por mes, la auditoría de Barcelona y los chargebacks no están en ninguna de las cinco. No porque no valgan —valen— sino porque en el "Acerca de" suenan a que te estás vendiendo. Van en la descripción del puesto, que es donde se leen como lo que son: tareas.</p>
+  <p><strong>Si querés mezclar.</strong> Podés armar la tuya tomando el primer párrafo de una y el último de otra. Todas están escritas para que se puedan cortar y pegar entre sí.</p>
+</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('button.copy').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var el = document.getElementById(btn.dataset.target);
+    var text = el.innerText;
+    var done = function(){
+      var old = btn.textContent;
+      btn.textContent = '¡Copiado!';
+      btn.classList.add('done');
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1600);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(text, done); });
+    } else {
+      fallback(text, done);
+    }
+  });
+});
+function fallback(text, done){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch(e) {}
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>
