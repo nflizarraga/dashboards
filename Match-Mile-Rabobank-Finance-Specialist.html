@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mile × Rabobank, Finance Specialist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EEF0F7; --card:#FFFFFF; --ink:#12163A; --soft:#4B5178; --line:#D6DAE8;
+  --navy:#000066; --orange:#FF6600; --ok:#1B7A55; --warn:#B07800; --stop:#B3261E;
+  --track:#DCE0EE;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --grot:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C0F24; --card:#161A36; --ink:#ECEEF8; --soft:#A8AED0; --line:#2A2F55;
+    --navy:#8C9BFF; --ok:#52C194; --warn:#E3B04B; --stop:#F07A70; --track:#2A2F55;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C0F24; --card:#161A36; --ink:#ECEEF8; --soft:#A8AED0; --line:#2A2F55;
+  --navy:#8C9BFF; --ok:#52C194; --warn:#E3B04B; --stop:#F07A70; --track:#2A2F55;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:17.5px;line-height:1.6}
+.wrap{max-width:44rem;margin:0 auto;padding:1.6rem 1.15rem 4rem}
+h1,h2,.g-num,.btn{font-family:var(--grot)}
+h1{font-weight:800;font-size:clamp(2.2rem,9vw,3.3rem);line-height:1;letter-spacing:-.03em;margin:0}
+h2{font-weight:700;font-size:1.4rem;letter-spacing:-.015em;margin:0 0 .5rem}
+p{margin:0 0 .85rem}
+a{color:inherit;text-underline-offset:3px}
+section{margin-top:2.6rem}
+.soft{color:var(--soft)}
+
+.head .co{font-family:var(--grot);font-weight:700;color:var(--orange);font-size:1.1rem;margin:.3rem 0 .8rem}
+.facts{display:flex;flex-wrap:wrap;gap:.4rem .5rem;margin:0;padding:0;list-style:none}
+.facts li{font-family:var(--grot);font-weight:500;font-size:.88rem;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:.2rem .7rem}
+
+/* ---------- el dial ---------- */
+.dial{margin-top:1.8rem;background:var(--navy);color:#fff;border-radius:22px;padding:1.4rem 1.2rem 1.3rem}
+:root[data-theme="dark"] .dial{background:#1D2250}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .dial{background:#1D2250}}
+.dial-q{font-family:var(--grot);font-weight:700;font-size:1.15rem;margin:0 0 .75rem}
+.opts{display:flex;gap:.45rem;flex-wrap:wrap}
+.btn{border:1.5px solid rgba(255,255,255,.45);background:transparent;color:#fff;font-weight:500;font-size:.95rem;padding:.45rem .9rem;border-radius:99px;cursor:pointer}
+.btn[aria-pressed="true"]{background:var(--orange);border-color:var(--orange);font-weight:700}
+.btn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.gauge{display:flex;align-items:center;gap:1.1rem;margin-top:1.2rem}
+.gauge svg{width:150px;height:auto;flex:0 0 auto}
+.arc{transition:stroke-dashoffset .7s cubic-bezier(.3,.8,.3,1),stroke .4s}
+.g-num{font-weight:800;font-size:3.4rem;line-height:.9;letter-spacing:-.04em}
+.g-txt{font-size:.98rem;line-height:1.45;color:rgba(255,255,255,.88);margin:.35rem 0 0}
+@media (max-width:420px){.gauge{flex-direction:column;align-items:flex-start}.gauge svg{width:130px}}
+@media (prefers-reduced-motion:reduce){.arc{transition:none}}
+
+/* ---------- requisitos ---------- */
+.req{border-top:1px solid var(--line);padding:.8rem 0}
+.req:last-child{border-bottom:1px solid var(--line)}
+.req b{font-family:var(--grot);font-weight:700;display:flex;gap:.55rem;align-items:baseline;font-size:1rem}
+.req b::before{content:"";width:.6rem;height:.6rem;border-radius:50%;flex:0 0 auto;background:var(--ok);transform:translateY(-.05rem)}
+.req.w b::before{background:var(--warn)}
+.req.s b::before{background:var(--stop)}
+.req p{margin:.25rem 0 0 1.15rem;font-size:.95rem;color:var(--soft)}
+
+/* ---------- por qué ---------- */
+.why{margin:0;padding:0;list-style:none}
+.why li{padding:.2rem 0 .8rem 1.15rem;position:relative}
+.why li::before{content:"";position:absolute;left:0;top:.62rem;width:.55rem;height:2px;background:var(--orange)}
+.why strong{font-family:var(--grot);font-weight:700}
+
+/* ---------- plata ---------- */
+.pay{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:.4rem 1.1rem}
+.row{display:flex;justify-content:space-between;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.row:last-child{border-bottom:0}
+.row span:last-child{font-family:var(--grot);font-weight:700;white-space:nowrap}
+.row.tot span:last-child{color:var(--orange);font-size:1.15rem}
+
+/* ---------- ojo ---------- */
+.cons p{padding-left:1.15rem;border-left:3px solid var(--line)}
+
+/* ---------- pasos ---------- */
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:2.2rem;margin-bottom:1rem}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:-.15rem;font-family:var(--grot);font-weight:800;font-size:1.45rem;color:var(--orange)}
+ol.steps strong{font-family:var(--grot);font-weight:700}
+
+/* ---------- mail ---------- */
+.mail{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem;margin-top:.6rem}
+.mail pre{white-space:pre-wrap;font-family:var(--serif);font-size:.95rem;margin:0 0 .8rem;line-height:1.55}
+.copy{font-family:var(--grot);font-weight:700;font-size:.9rem;background:var(--navy);color:#fff;border:0;border-radius:99px;padding:.5rem 1rem;cursor:pointer}
+:root[data-theme="dark"] .copy{color:#0C0F24}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .copy{color:#0C0F24}}
+.copy:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.contact{font-size:.93rem;margin-top:1rem}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--soft)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <h1>Finance Specialist</h1>
+  <div class="co">Rabobank, Utrecht</div>
+  <ul class="facts">
+    <li>Beneluxlaan, híbrido</li>
+    <li>36 horas</li>
+    <li>Escala 07</li>
+    <li>JR_00145620</li>
+  </ul>
+</header>
+
+<div class="dial" aria-live="polite">
+  <p class="dial-q">¿Cómo está tu neerlandés hoy?</p>
+  <div class="opts" role="group" aria-label="Nivel de neerlandés">
+    <button class="btn" data-k="alto" aria-pressed="true">Me defiendo bien</button>
+    <button class="btn" data-k="medio" aria-pressed="false">Básico, en curso</button>
+    <button class="btn" data-k="nada" aria-pressed="false">Casi nada</button>
+  </div>
+  <div class="gauge">
+    <svg viewBox="0 0 120 70" role="img" aria-label="Porcentaje de match">
+      <path d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="11" stroke-linecap="round"/>
+      <path class="arc" id="arc" d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="#FF6600" stroke-width="11" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+    </svg>
+    <div>
+      <div class="g-num" id="num">85%</div>
+      <p class="g-txt" id="txt"></p>
+    </div>
+  </div>
+</div>
+
+<section>
+  <h2>Por qué esta te conviene</h2>
+  <ul class="why">
+    <li><strong>Es finanzas, no atención al cliente.</strong> Cuentas a cobrar, datos maestros de proveedores y pagos. Es la otra cara de lo que hacés hoy en Odyssey con AP y los payment runs.</li>
+    <li><strong>Un equipo de 10 personas.</strong> Gente al lado de quien aprender todos los días, que es lo que venís buscando.</li>
+    <li><strong>Un año de formación pago.</strong> Entra por el Early Career Program: capacitación semanal, cómo funciona el banco por dentro y un track técnico a elección.</li>
+    <li><strong>Con tres años de experiencia, llegás arriba del resto.</strong> Piden uno solo. En una camada de starters, vos sos la que ya sabe hacer el trabajo.</li>
+    <li><strong>Ya conocés la casa.</strong> Dos años en Rabobank hasta septiembre de 2025, y el screening de seguridad ya lo pasaste una vez.</li>
+    <li><strong>El aviso habla de crecer dentro de Finance.</strong> Es una puerta de entrada al área contable del banco, no a otra carrera.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Lo que piden, contra lo que tenés</h2>
+  <div class="req"><b>Título HBO en finanzas</b><p>Contadora Pública. Cubre y sobra.</p></div>
+  <div class="req"><b>Más de un año en un entorno financiero</b><p>Tenés tres: dos en Rabobank y uno en Odyssey.</p></div>
+  <div class="req"><b>Procesos de administración financiera</b><p>AP con alto volumen, payment runs, limpieza de cuentas a cobrar y contracargos. Pagos y cobros son tu día a día.</p></div>
+  <div class="req w"><b>Datos maestros de proveedores</b><p>Si hoy das de alta o modificás proveedores en Dynamics, suma directo. Si no, es de lo más rápido de aprender viniendo de AP.</p></div>
+  <div class="req w"><b>Scrum Master, un 20% del tiempo</b><p>No lo hiciste nunca y está bien decirlo. Es organizar prioridades y reuniones cortas del equipo, y el programa de formación lo cubre.</p></div>
+  <div class="req s" id="req-nl"><b>Neerlandés fluido, hablado y escrito</b><p id="nl-p"></p></div>
+  <div class="req"><b>Iniciativa y mejora de procesos</b><p>Las limpiezas de AP y AR que hiciste son exactamente eso, con resultados que podés contar.</p></div>
+</section>
+
+<section>
+  <h2>Qué paga</h2>
+  <div class="pay">
+    <div class="row"><span>Bruto mensual, escala 07</span><span>€3.516 – €5.021</span></div>
+    <div class="row"><span>Mes 13</span><span>+1 sueldo</span></div>
+    <div class="row"><span>Vacaciones</span><span>+8%</span></div>
+    <div class="row"><span>Employee Benefit Budget</span><span>+10%</span></div>
+    <div class="row"><span>Formación</span><span>€1.400 por año</span></div>
+    <div class="row tot"><span>Anual todo incluido</span><span>≈ €53.000 – €76.000</span></div>
+  </div>
+  <p class="soft" style="font-size:.9rem;margin-top:.6rem">Al ser un puesto de entrada, lo realista es arrancar en el tercio bajo de la escala, algo como €55.000 a €60.000 al año, con subas dentro de la misma escala.</p>
+</section>
+
+<section class="cons">
+  <h2>Lo que hay que saber antes</h2>
+  <p><strong>El neerlandés es la única traba de verdad.</strong> Lo piden fluido, y el filtro automático lo mira. Por eso el primer paso es preguntar, no aplicar a ciegas.</p>
+  <p><strong>Contrato de un año</strong>, con posibilidad de indefinido después. Es lo normal en los programas de entrada de Rabobank, pero conviene tenerlo presente.</p>
+  <p><strong>Es un escalón más abajo que la de FOS</strong> en sueldo (escala 07 contra 08), pero está en el camino que querés: contabilidad y finanzas, no compliance.</p>
+</section>
+
+<section>
+  <h2>Cómo lo haría</h2>
+  <ol class="steps">
+    <li><strong>Mandarle hoy un mail a Danny</strong>, que está en el equipo y el aviso lo pone como contacto para preguntas. Preguntar si el día a día se puede hacer en inglés. Te dejo el mail abajo.</li>
+    <li><strong>Aplicar igual</strong>, con el CV armado para pagos y cobros y Rabobank bien arriba. Lo preparamos juntos.</li>
+    <li><strong>Mail corto al recruiter</strong>, Maarten, el mismo día que aplicás.</li>
+  </ol>
+
+  <div class="mail">
+<pre id="mail">Subject: Finance Specialist (JR_00145620), question about Dutch
+
+Hi Danny,
+
+I am interested in the Finance Specialist role in your team and saw you are the contact for questions. I worked at Rabobank for two years until September 2025, and I currently handle accounts payable, payment runs and chargebacks for a hotel group.
+
+One question before I apply: the vacancy asks for fluent Dutch. My English is fluent and my Dutch is [tu nivel]. Is English workable in the team day to day, or is Dutch essential for this role?
+
+Thank you in advance,
+Milena Reniero</pre>
+    <button class="copy" id="copy">Copiar el mail</button>
+  </div>
+
+  <p class="contact">
+    Danny Bhaggoe, equipo DRB: <a href="mailto:Danny.Bhaggoe@rabobank.nl">Danny.Bhaggoe@rabobank.nl</a><br>
+    Maarten Wijnberg, Young Talent Recruiter: <a href="mailto:maarten.wijnberg@rabobank.nl">maarten.wijnberg@rabobank.nl</a>
+  </p>
+</section>
+
+<footer>
+  El porcentaje es un criterio para decidir, no una medición exacta. Análisis del 23 de septiembre de 2026 sobre el <a href="https://rabobank.jobs/nl/vacature/finance-specialist/JR_00145620/">aviso original</a>.
+</footer>
+
+</div>
+<script>
+(function(){
+  var data={
+    alto:{n:85,c:"#3FBF8A",t:"Candidata fuerte. Cumple todo lo duro y le sobra experiencia para un puesto de entrada.",
+      p:"Si te manejás bien, lo cumplís. Ponelo en el CV con un nivel honesto que puedas sostener en una entrevista.",cls:"req"},
+    medio:{n:60,c:"#FFB020",t:"Vale aplicar, pero el neerlandés puede frenarla en el filtro. El mail a Danny antes de aplicar hace la diferencia.",
+      p:"Lo piden fluido y hoy no llegás. Si el equipo trabaja en inglés, deja de pesar tanto. Hay que preguntarlo antes.",cls:"req w"},
+    nada:{n:35,c:"#FF7A6E",t:"Con neerlandés casi nulo, el requisito la deja afuera salvo que el equipo confirme que se puede trabajar en inglés.",
+      p:"Es un requisito explícito. Solo tiene sentido aplicar si Danny confirma que el inglés alcanza.",cls:"req s"}
+  };
+  var arc=document.getElementById("arc"),num=document.getElementById("num"),txt=document.getElementById("txt"),
+      req=document.getElementById("req-nl"),nlp=document.getElementById("nl-p"),btns=document.querySelectorAll(".btn");
+  function set(k){
+    var d=data[k];
+    arc.style.strokeDashoffset=100-d.n; arc.setAttribute("stroke",d.c);
+    num.textContent=d.n+"%"; txt.textContent=d.t; nlp.textContent=d.p; req.className=d.cls;
+    btns.forEach(function(b){b.setAttribute("aria-pressed",b.dataset.k===k?"true":"false")});
+  }
+  btns.forEach(function(b){b.addEventListener("click",function(){set(b.dataset.k)})});
+  requestAnimationFrame(function(){setTimeout(function(){set("alto")},120)});
+
+  document.getElementById("copy").addEventListener("click",function(){
+    var t=document.getElementById("mail").innerText,btn=this;
+    function ok(){btn.textContent="Copiado";setTimeout(function(){btn.textContent="Copiar el mail"},1800)}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fallback)}else{fallback()}
+    function fallback(){var a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy");ok()}catch(e){}document.body.removeChild(a)}
+  });
+})();
+</script>
+</body>
+</html>
