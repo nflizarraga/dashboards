@@ -1,0 +1,121 @@
+:root {
+  --fondo: #f4f3ef;
+  --superficie: #ffffff;
+  --superficie-2: #faf9f6;
+  --borde: #e4e1d8;
+  --texto: #1c1d22;
+  --texto-2: #5d5f68;
+  --texto-3: #8a8c94;
+  --acento: #2f5bd3;
+  --acento-suave: #e8eefc;
+  --peligro: #c2412d;
+  --sombra: 0 1px 2px rgba(28, 29, 34, .04), 0 4px 16px rgba(28, 29, 34, .06);
+  --radio: 14px;
+  --fuente: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #121316;
+    --superficie: #1b1c21;
+    --superficie-2: #202128;
+    --borde: #2c2e36;
+    --texto: #ecebe6;
+    --texto-2: #a6a8b0;
+    --texto-3: #767983;
+    --acento: #8fb0ff;
+    --acento-suave: #222a40;
+    --peligro: #ff8a73;
+    --sombra: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fondo: #121316; --superficie: #1b1c21; --superficie-2: #202128; --borde: #2c2e36;
+  --texto: #ecebe6; --texto-2: #a6a8b0; --texto-3: #767983; --acento: #8fb0ff;
+  --acento-suave: #222a40; --peligro: #ff8a73; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: var(--fuente);
+  background: var(--fondo);
+  color: var(--texto);
+  -webkit-font-smoothing: antialiased;
+}
+body.bv-cargando { visibility: hidden; }
+.bv-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Candado ---------- */
+.bv-candado {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px calc(24px + env(safe-area-inset-bottom));
+}
+.bv-tarjeta {
+  width: 100%;
+  max-width: 360px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 20px;
+  padding: 32px 24px 24px;
+  box-shadow: var(--sombra);
+  text-align: center;
+}
+.bv-icono {
+  width: 56px; height: 56px; margin: 0 auto 16px;
+  display: grid; place-items: center;
+  border-radius: 16px;
+  background: var(--acento-suave);
+  color: var(--acento);
+}
+.bv-tarjeta h1 { font-size: 1.3rem; margin: 0 0 6px; letter-spacing: -.01em; }
+.bv-sub { margin: 0 0 22px; color: var(--texto-2); font-size: .92rem; line-height: 1.45; }
+.bv-campo { position: relative; display: block; }
+.bv-campo input {
+  width: 100%;
+  height: 48px;
+  padding: 0 72px 0 14px;
+  font: inherit;
+  font-size: 16px; /* evita el zoom automático en iPhone */
+  color: var(--texto);
+  background: var(--superficie-2);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+}
+.bv-campo input:focus { outline: 2px solid var(--acento); outline-offset: 1px; border-color: transparent; }
+.bv-ver {
+  position: absolute; right: 6px; top: 6px; height: 36px; padding: 0 10px;
+  font: inherit; font-size: .8rem; color: var(--texto-2);
+  background: none; border: 0; border-radius: 8px; cursor: pointer;
+}
+.bv-ver:hover { color: var(--texto); }
+.bv-check {
+  display: flex; align-items: center; gap: 8px;
+  margin: 14px 2px 18px; font-size: .88rem; color: var(--texto-2); text-align: left; cursor: pointer;
+}
+.bv-check input { width: 17px; height: 17px; accent-color: var(--acento); margin: 0; }
+.bv-boton {
+  width: 100%; height: 48px;
+  font: inherit; font-weight: 600; font-size: 1rem;
+  color: #fff; background: var(--acento);
+  border: 0; border-radius: 12px; cursor: pointer;
+  transition: filter .15s, transform .1s;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .bv-boton { color: #10131c; } }
+.bv-boton:hover { filter: brightness(1.06); }
+.bv-boton:active { transform: scale(.99); }
+.bv-trabajando .bv-boton { opacity: .7; pointer-events: none; }
+.bv-error { margin: 14px 0 0; color: var(--peligro); font-size: .88rem; }
+.bv-sacudir { animation: bv-sacudir .35s; }
+@keyframes bv-sacudir {
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+@media (prefers-reduced-motion: reduce) { .bv-sacudir { animation: none; } }
